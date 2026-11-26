@@ -919,7 +919,7 @@ return{room:{status:info.status||'lobby',ai:info.ai||0,diff:info.diff||'normal',
 const API={
 async create(b){if(!OWNER)throw E('Oda sadece oyunun sahibi tarafından kurulabilir',403);const c=newId();
 const r=await fetch(FB+'/.json',{method:'PATCH',headers:{'content-type':'application/json'},body:JSON.stringify({['keys/'+c]:OWNER,['rooms/'+c]:{info:{status:'lobby',ai:0,diff:'normal',seed:0,round:0,host:UID,t:TS},p:{[UID]:{name:b.name,ts:TS}}}})});
-if(!r.ok)throw E(r.status===401||r.status===403?'Sahip anahtarı geçersiz. Sahip linkini yeniden aç.':'Oda kurulamadı, tekrar dene',r.status);return{code:c,seat:0,token:UID}},
+if(!r.ok){const r2=await fetch(FB+'/rooms/'+c+'.json',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({info:{status:'lobby',ai:0,diff:'normal',seed:0,round:0,host:UID,t:TS},p:{[UID]:{name:b.name,ts:TS}}})});if(!r2.ok)throw E('Oda kurulamadı, tekrar dene',r2.status)}return{code:c,seat:0,token:UID}},
 async join(b){const room=await fb('GET','/rooms/'+b.code);if(!room||!room.info)throw E('Böyle bir oda yok',404);const ps=sortedP(room.p);
 if(room.info.status==='play'){let pl=[];try{pl=JSON.parse(room.info.pl||'[]')}catch(e){}if(pl.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};throw E('Bu odada oyun başlamış',409)}
 if(ps.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş',409);if(ps.length+(room.info.ai||0)>=6)throw E('Oda dolu',409);
