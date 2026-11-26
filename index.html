@@ -527,21 +527,26 @@ function cardVal(c){const m=M[c.name];if(c.blocked)return .1;if(m.type==='char')
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let AC=null;
+let MB=null;
+function sfxBus(){if(MB&&MB.ctx===AC)return MB.in;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;lp.Q.value=.3;const cm=AC.createDynamicsCompressor();cm.threshold.value=-24;cm.ratio.value=3;const g=AC.createGain();g.gain.value=.55;
+const dl=AC.createDelay(.5);dl.delayTime.value=.17;const fb=AC.createGain();fb.gain.value=.28;const wet=AC.createGain();wet.gain.value=.22;const dlp=AC.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1800;
+lp.connect(g);g.connect(cm);cm.connect(AC.destination);lp.connect(dl);dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(wet);wet.connect(cm);MB={ctx:AC,in:lp};return lp}
 function sfx(k){if(!CFG.sound||CFG.fast)return;try{
 if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
-const t0=AC.currentTime;
-const tone=(f,d,type,v,off,f2)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0+off);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+off+d);g.gain.setValueAtTime(0,t0+off);g.gain.linearRampToValueAtTime(v,t0+off+.008);g.gain.exponentialRampToValueAtTime(.0001,t0+off+d);o.connect(g);g.connect(AC.destination);o.start(t0+off);o.stop(t0+off+d+.03)};
-const noise=(d,v,off,fq)=>{const b=AC.createBuffer(1,AC.sampleRate*d,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);const s=AC.createBufferSource();s.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=fq||2400;f.Q.value=.8;const g=AC.createGain();g.gain.value=v;s.connect(f);f.connect(g);g.connect(AC.destination);s.start(t0+off)};
-if(k==='draw')noise(.09,.18,0,3200);
-else if(k==='tap')noise(.04,.12,0,4200);
-else if(k==='play'){noise(.12,.25,0,1800);tone(180,.2,'triangle',.13,0,120)}
-else if(k==='turn'){tone(392,.5,'triangle',.09,0);tone(523,.6,'triangle',.08,.14);tone(784,.8,'sine',.06,.28)}
-else if(k==='hit'){tone(110,.35,'sawtooth',.12,0,55);noise(.25,.3,0,600)}
-else if(k==='good'){tone(659,.25,'sine',.07,0);tone(988,.4,'sine',.06,.1);tone(1319,.5,'sine',.04,.2)}
-else if(k==='win'){[392,523,659,784,1047].forEach((f,i)=>tone(f,.9,'triangle',.08,i*.13))}
-else if(k==='lose'){tone(294,.5,'triangle',.1,0);tone(247,.6,'triangle',.09,.25);tone(196,1,'triangle',.08,.5)}
-else if(k==='shield'){tone(1200,.5,'sine',.06,0,900);tone(1800,.4,'sine',.04,.03)}
-else if(k==='coin'){tone(1568,.18,'square',.03,0);tone(2093,.3,'square',.03,.07)}
+const t0=AC.currentTime,out=sfxBus();
+const tone=(f,d,type,v,off,f2)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0+off);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+off+d);const at=Math.min(.03,d/3);g.gain.setValueAtTime(0,t0+off);g.gain.linearRampToValueAtTime(v,t0+off+at);g.gain.exponentialRampToValueAtTime(.0001,t0+off+d);o.connect(g);g.connect(out);o.start(t0+off);o.stop(t0+off+d+.05)};
+const bell=(f,d,v,off)=>{tone(f,d,'sine',v,off);tone(f*2.01,d*.6,'sine',v*.25,off)};
+const noise=(d,v,off,fq)=>{const n=Math.floor(AC.sampleRate*d),b=AC.createBuffer(1,n,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++){const e=Math.sin(Math.PI*i/n);a[i]=(Math.random()*2-1)*e*e}const s=AC.createBufferSource();s.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=fq||1400;f.Q.value=.6;const g=AC.createGain();g.gain.value=v;s.connect(f);f.connect(g);g.connect(out);s.start(t0+off)};
+if(k==='draw')noise(.14,.07,0,1500);
+else if(k==='tap')tone(520,.07,'sine',.05,0,430);
+else if(k==='play'){noise(.12,.08,0,1100);tone(150,.22,'sine',.12,0,100)}
+else if(k==='turn'){bell(392,.9,.05,0);bell(587,1.1,.045,.16)}
+else if(k==='hit'){tone(95,.45,'sine',.2,0,55);noise(.2,.06,0,500)}
+else if(k==='good'){bell(659,.7,.045,0);bell(880,.9,.04,.1);bell(1175,1.1,.03,.2)}
+else if(k==='win'){[392,494,587,784].forEach((f,i)=>bell(f,1.4,.06,i*.16))}
+else if(k==='lose'){tone(262,.8,'sine',.07,0);tone(220,.9,'sine',.065,.25);tone(175,1.4,'sine',.06,.5)}
+else if(k==='shield'){bell(880,.8,.04,0);bell(1320,.9,.025,.05)}
+else if(k==='coin'){bell(1568,.35,.03,0);bell(2093,.5,.025,.07)}
 }catch(e){}}
 function cardHTML(c,o={}){const m=M[c.name];const w=o.w||88;const cl=['card'];if(c.blocked)cl.push('blk');if(c.dbl)cl.push('dbl');if(o.dis)cl.push('dis');if(o.hid)cl.push('hid');if(o.sel)cl.push('sel');if(w<56)cl.push('xs');
 return `<div class="${cl.join(' ')}" data-id="${c.id}" style="--ac:${COL[m.cat]};--cw:${w}px${o.st||''}"><div class="fr"></div>${m.type==='char'?`<div class="pt${m.pts>=100?' p3':''}">${m.pts}</div>`:`<div class="gem"></div>`}<div class="art"><svg viewBox="0 0 64 64" class="ic">${ICON[c.name]}</svg></div><div class="nm">${c.name}</div>${c.dbl?'<div class="x2">×2</div>':''}</div>`}
