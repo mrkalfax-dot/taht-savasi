@@ -412,6 +412,16 @@ header .t{letter-spacing:.3em}
 #order u{font-size:11px;width:7px;opacity:.45;font-weight:700}
 #order u.rt{font-size:10px;width:9px;opacity:.4}
 .card .nm.l1{font-size:.84em}.card .nm.l2{font-size:.72em}
+
+#table{position:relative}
+#atkBar{position:absolute;left:50%;top:10px;transform:translate(-50%,-12px);opacity:0;pointer-events:none;z-index:9;display:flex;align-items:center;gap:10px;padding:6px 14px;border-radius:18px;background:linear-gradient(180deg,rgba(40,30,20,.96),rgba(18,12,8,.96));border:1.5px solid rgba(228,196,110,.7);box-shadow:0 6px 22px rgba(0,0,0,.6);transition:opacity .2s,transform .25s}
+#atkBar.on{opacity:1;transform:translate(-50%,0)}
+#atkBar.me{border-color:#ff6a55;box-shadow:0 0 0 2px rgba(255,80,60,.35),0 6px 26px rgba(180,20,10,.7)}
+#atkBar .ab-w{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:800;max-width:70px}
+#atkBar .ab-w b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:70px}
+#atkBar .sh{width:30px;height:34px}
+#atkBar .ab-a{font-size:22px;color:#FFE08A}#atkBar.me .ab-a{color:#ff8a78}
+#atkBar .ab-c{display:flex}
 </style>
 </head>
 <body>
@@ -819,12 +829,14 @@ return got.length}
 function duelWait(ms,me){return new Promise(res=>{const d=$('#duel');let done=false;const fin=()=>{if(done)return;done=true;d.onclick=null;clearTimeout(t);res()};const t=setTimeout(fin,ms);setTimeout(()=>{d.onclick=fin},350)})}
 function shieldOf(p){return `<div class="sh">${houseShield(p.house,isMe(p),p.name)}</div>`}
 async function showdown(src,v,cname){
-if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const d=$('#duel');const vm=isMe(v),sm=isMe(src);
-d.className='on'+(vm?' me beat':'');
-d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(src)}<b>${sm?'Sen':esc(src.name)}</b></div><div class="sw">⚔<i>➜</i></div><div class="who v${vm?' me':''}">${shieldOf(v)}<b>${vm?'Sen':esc(v.name)}</b></div></div><div class="dc">${cardHTML({id:'d',name:cname},{w:132})}</div>`;
-sfx(vm?'hit':'play');if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}}
+if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const vm=isMe(v),sm=isMe(src);
+let b=$('#atkBar');if(!b){b=document.createElement('div');b.id='atkBar';$('#table').appendChild(b)}
+b.className=vm?'me':'';
+b.innerHTML=`<div class="ab-w">${shieldOf(src)}<b>${sm?'Sen':esc(src.name)}</b></div><div class="ab-c">${cardHTML({id:'d',name:cname},{w:46})}</div><div class="ab-a">➜</div><div class="ab-w${vm?' me':''}">${shieldOf(v)}<b>${vm?'Sen':esc(v.name)}</b></div>`;
+void b.offsetWidth;b.classList.add('on');
+sfx(vm?'hit':'play');if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}shake()}else hurt(v);
 G.log.push({msg:`${src.name} → ${v.name}: ${cname}`,tone:vm?'bad':''});
-await duelWait((vm?2200:sm?1300:1600)*Math.max(.6,CFG.speed),vm);d.className='';d.innerHTML='';if(G!==g0)throw new Error('abort')}
+await sleep((vm?1500:1100)*Math.max(.6,CFG.speed));b.classList.remove('on');if(G!==g0)throw new Error('abort')}
 async function guessReveal(p,v,name,ok){
 if(!FXON()||CFG.fast)return;const g0=G;const d=$('#duel');const vm=isMe(v),pm=isMe(p);
 d.className='on'+(vm?' me':'');
@@ -1347,7 +1359,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261127-0210';
+const BUILD='20261127-0225';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
