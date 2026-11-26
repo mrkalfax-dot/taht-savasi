@@ -411,6 +411,7 @@ header .t{letter-spacing:.3em}
 #order i.o.cur{transform:scale(1.3);border:1.5px solid #FFE08A;box-shadow:0 0 0 2px #17100a,0 0 10px rgba(255,200,80,.7);animation:none;margin-right:2px;opacity:1}
 #order u{font-size:11px;width:7px;opacity:.45;font-weight:700}
 #order u.rt{font-size:10px;width:9px;opacity:.4}
+.card .nm.l1{font-size:.84em}.card .nm.l2{font-size:.72em}
 </style>
 </head>
 <body>
@@ -603,6 +604,20 @@ Object.assign(ICON,{
 'El Değiştir':`<rect x="7" y="11" width="26" height="36" rx="3" ${FO}/><rect x="31" y="17" width="26" height="36" rx="3" ${FO}/><path d="M18 57 q14 6 26 -4 M44 53 l1 -7 M44 53 l-7 -1"/>`
 });
 
+Object.assign(ICON,{
+'Harakiri':`<path d="M55 9 L59 13 L26 46 L18 46 L18 38 Z" ${FO}/><path d="M11 34 L30 53" stroke-width="4"/><path d="M19 45 L9 56"/><path d="M47 52 q-4 5 0 8 q4 -3 0 -8 Z" ${F}/>`,
+'Casus':`<path d="M7 20 Q32 9 57 20 Q57 42 45 49 Q37 53 32 46 Q27 53 19 49 Q7 42 7 20 Z" ${FO}/><ellipse cx="21" cy="29" rx="6.5" ry="3.8"/><ellipse cx="43" cy="29" rx="6.5" ry="3.8"/>`,
+'Büyü':`<path d="M10 56 L37 29" stroke-width="4.5"/><path d="M44 6 L47.5 15 L57 18.5 L47.5 22 L44 31 L40.5 22 L31 18.5 L40.5 15 Z" ${FO}/><path d="M52 40 v8 M48 44 h8 M14 14 v7 M10.5 17.5 h7"/>`,
+'Kombo':`<text x="32" y="46" font-size="42" font-weight="800" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">×3</text>`,
+'İntikam':`<path d="M47 19 A19 19 0 1 0 50 38"/><path d="M54 10 L50 26 L38 18 Z" ${F}/><path d="M32 22 V45 M25 39 H39"/>`,
+'Salgın':`<circle cx="32" cy="32" r="11" ${FO}/><path d="M43.0 32.0 L51.0 32.0"/><circle cx="54.0" cy="32.0" r="3" ${F}/><path d="M39.8 39.8 L45.4 45.4"/><circle cx="47.6" cy="47.6" r="3" ${F}/><path d="M32.0 43.0 L32.0 51.0"/><circle cx="32.0" cy="54.0" r="3" ${F}/><path d="M24.2 39.8 L18.6 45.4"/><circle cx="16.4" cy="47.6" r="3" ${F}/><path d="M21.0 32.0 L13.0 32.0"/><circle cx="10.0" cy="32.0" r="3" ${F}/><path d="M24.2 24.2 L18.6 18.6"/><circle cx="16.4" cy="16.4" r="3" ${F}/><path d="M32.0 21.0 L32.0 13.0"/><circle cx="32.0" cy="10.0" r="3" ${F}/><path d="M39.8 24.2 L45.4 18.6"/><circle cx="47.6" cy="16.4" r="3" ${F}/><circle cx="28" cy="30" r="2" ${F}/><circle cx="36" cy="35" r="2" ${F}/>`,
+'Savaş':`<path d="M32 5 V59"/><path d="M32 12 L11 8 Q4 22 12 34 L32 30 Z" ${FO}/><path d="M32 12 L53 8 Q60 22 52 34 L32 30 Z" ${FO}/><path d="M24 52 H40"/>`,
+'Ateşkes':`<path d="M8 55 Q34 46 55 12" stroke-width="3"/><path d="M19 49 q-9 -2 -9 -12 q10 0 9 12 Z" ${FO}/><path d="M28 45 q4 -10 14 -9 q-1 10 -14 9 Z" ${FO}/><path d="M36 37 q-6 -9 1 -17 q8 7 -1 17 Z" ${FO}/><path d="M44 29 q5 -8 13 -5 q-3 9 -13 5 Z" ${FO}/>`,
+'Bolluk':`<path d="M9 14 Q54 6 59 42 Q36 58 13 32 Q5 22 9 14 Z" ${FO}/><circle cx="46" cy="46" r="5.5" ${F}/><circle cx="54" cy="54" r="4" ${F}/><path d="M16 22 Q38 22 50 38" stroke-width="1.6"/>`,
+'Arınma':`<path d="M32 6 C44 20 46 30 32 38 C18 30 20 20 32 6 Z" ${FO}/><path d="M13 42 H51 Q49 57 32 57 Q15 57 13 42 Z" ${FO}/>`,
+'Ganimet':`<rect x="9" y="27" width="46" height="26" rx="3" ${FO}/><path d="M9 27 Q9 11 32 11 Q55 11 55 27"/><path d="M9 37 H55"/><rect x="28" y="33" width="8" height="10" rx="1.5" ${F}/>`
+});
+
 const UI={
 crown:`<svg viewBox="0 0 64 48" class="ic" style="stroke-width:3.5"><path d="M6 42 L9 12 L21 26 L32 6 L43 26 L55 12 L58 42 Z" fill="currentColor"/></svg>`,
 shield:`<svg viewBox="0 0 64 64" class="ic" style="stroke-width:6"><path d="M32 6 L53 14 V31 C53 46 43 54 32 59 C21 54 11 46 11 31 V14 Z" fill="currentColor" fill-opacity=".3"/></svg>`,
@@ -665,7 +680,7 @@ else if(k==='shield'){bell(880,.8,.04,0);bell(1320,.9,.025,.05)}
 else if(k==='coin'){bell(1568,.35,.03,0);bell(2093,.5,.025,.07)}
 }catch(e){}}
 function cardHTML(c,o={}){const m=M[c.name];const w=o.w||88;const cl=['card'];if(c.blocked)cl.push('blk');if(c.dbl)cl.push('dbl');if(o.dis)cl.push('dis');if(o.hid)cl.push('hid');if(o.sel)cl.push('sel');if(w<56)cl.push('xs');
-return `<div class="${cl.join(' ')}" data-id="${c.id}" style="--ac:${COL[m.cat]};--cw:${w}px${o.st||''}"><div class="fr"></div>${m.type==='char'?`<div class="pt${m.pts>=100?' p3':''}">${m.pts}</div>`:`<div class="gem"></div>`}<div class="art"><svg viewBox="0 0 64 64" class="ic">${ICON[c.name]}</svg></div><div class="nm">${c.name}</div>${c.dbl?'<div class="x2">×2</div>':''}</div>`}
+return `<div class="${cl.join(' ')}" data-id="${c.id}" style="--ac:${COL[m.cat]};--cw:${w}px${o.st||''}"><div class="fr"></div>${m.type==='char'?`<div class="pt${m.pts>=100?' p3':''}">${m.pts}</div>`:`<div class="gem"></div>`}<div class="art"><svg viewBox="0 0 64 64" class="ic">${ICON[c.name]}</svg></div><div class="nm${c.name.length>11?' l2':c.name.length>8?' l1':''}">${c.name}</div>${c.dbl?'<div class="x2">×2</div>':''}</div>`}
 function backHTML(w){return `<div class="back" style="--cw:${w||88}px">${backSVG}</div>`}
 function leaders(){return[]}
 function renderOpps(){const L=leaders();
@@ -741,7 +756,7 @@ function renderStage(p,c){
 const sc=$('#stageCard'),cap=$('#cap');
 if(!c){sc.classList.remove('on');sc.innerHTML='';cap.innerHTML='';return}
 sc.classList.add('on');sc.style.setProperty('--ac',COL[M[c.name].cat]);sc.innerHTML='<div class="glow"></div>'+cardHTML(c,{w:sc.offsetWidth||100});
-sc.onclick=()=>zoom(c);cap.innerHTML=p?`<b>${esc(nm(p)).toUpperCase()}</b>`:''}
+sc.onclick=()=>zoom(c);cap.innerHTML=p?`<b>${esc(nm(p)).toLocaleUpperCase('tr')}</b>`:''}
 async function say(msg,ms,tone){
 G.log.push({msg,main:true,tone});
 const n=$('#narr');n.textContent=msg;n.style.color=tone==='bad'?'#FF9B8A':tone==='good'?'#9FE0A8':'#F3E6C8';
@@ -865,7 +880,7 @@ if(c.name==='Büyü')return p.hand.filter(x=>x!==c&&eligibleInner(p,x,true)).len
 if(['Harakiri','Köylü','Tüccar'].includes(c.name))return p.hand.some(x=>x!==c);
 if(c.name==='İntikam')return rivals(p).some(q=>q.last&&!['Hazine','İntikam','Büyü','Fedai'].includes(q.last.name)&&!(q.last.name==='Asker'||q.last.name==='Kombo'||q.last.name==='Prenses'));
 return true}
-function whyNot(p,c){if(p.noDraw)return 'Engellisin.';if(c.blocked)return 'Bu kart bloke edildi: oynanamaz, yalnızca atılabilir.';if(c.name==='Hazine')return 'Ödül oynanmaz; elinde tutarsan oyun sonunda puanını ikiye katlar.';
+function whyNot(p,c){if(p.noDraw)return 'Engellisin.';if(c.blocked)return 'Bu kart bloke edildi: oynanamaz, yalnızca atılabilir.';if(c.name==='Hazine')return 'Hazine oynanmaz; elinde tutarsan oyun sonunda puanını ikiye katlar.';
 if(!canPlay(p,c))return 'Şu an oynanamaz (uygun kart yok).';return ''}
 const modalEl=()=>$('#modal');
 function closeModal(){const m=modalEl();m.classList.remove('open');m.innerHTML=''}
@@ -1120,14 +1135,14 @@ rows.sort((a,b)=>b.t-a.t);
 const top=rows.filter(r=>r.t===rows[0].t);
 const m=me();const iWin=top.some(r=>r.p===m);
 if(FXON()){await say('Eller açılıyor…',700)}
-const title=top.length>1?(iWin?'TAHT PAYLAŞILDI':'BERABERLİK'):(iWin?'TAHT SENİN':rows[0].p.name.toUpperCase()+' TAHTA ÇIKTI');
+const title=top.length>1?(iWin?'TAHT PAYLAŞILDI':'BERABERLİK'):(iWin?'TAHT SENİN':rows[0].p.name.toLocaleUpperCase('tr')+' TAHTA ÇIKTI');
 sfx(iWin?'win':'lose');
 const MT=MATCH.total>1,lastR=MATCH.n>=MATCH.total;let mtab='',title2=title,iWin2=iWin;
 if(MT){const cur=rows.map(r=>({n:r.p.name,t:r.t}));MATCH.hist=MATCH.hist.slice(0,MATCH.n-1).concat([cur]);
 if(NET.on&&NET.seat===0&&NET.code){try{fb('PATCH','/rooms/'+NET.code+'/info',{hist:JSON.stringify(MATCH.hist)})}catch(e){}}
 const tot=rows.map(r=>{const per=MATCH.hist.map(h=>{const x=h.find(y=>y.n===r.p.name);return x?x.t:null});return{p:r.p,per,sum:per.reduce((a,b)=>a+(b||0),0)}});
 tot.sort((a,b)=>b.sum-a.sum);const tt=tot.filter(x=>x.sum===tot[0].sum);
-if(lastR){iWin2=tt.some(x=>x.p===m);title2=tt.length>1?(iWin2?'TAHT PAYLAŞILDI':'MAÇ BERABERE'):(iWin2?'MAÇI KAZANDIN':tot[0].p.name.toUpperCase()+' MAÇI KAZANDI')}
+if(lastR){iWin2=tt.some(x=>x.p===m);title2=tt.length>1?(iWin2?'TAHT PAYLAŞILDI':'MAÇ BERABERE'):(iWin2?'MAÇI KAZANDIN':tot[0].p.name.toLocaleUpperCase('tr')+' MAÇI KAZANDI')}
 const cols=MATCH.total;
 mtab=`<div class="mt"><div class="mh"><span class="n"></span><span class="nm">OYUNCU</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${k+1}</span>`).join('')}<span class="tt">TOPLAM</span></div>${tot.map((x,i)=>`<div class="mr ${tt.includes(x)&&lastR?'w':''}"><span class="n">${i+1}</span><span class="nm">${x.p===m?'Sen':esc(x.p.name)}</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${x.per[k]==null?'–':x.per[k]}</span>`).join('')}<span class="tt">${x.sum}</span></div>`).join('')}</div>`}
 $('#result').innerHTML=`<div class="mbox res"><div class="win ${iWin2?'':'lose'}">${title2}</div>${MT?`<div class="sub" style="text-align:center;color:var(--mut);font-size:13px;margin:2px 0 6px">OYUN ${MATCH.n} / ${MATCH.total}${lastR?' · MAÇ BİTTİ':''}${title!==title2?' · bu oyunun kazananı: '+esc(top.length>1?'berabere':top[0].p.name):''}</div>`:''}<div class="div"></div>
@@ -1171,12 +1186,12 @@ function showSetup(){NET.on=false;CFG.fast=false;G=null;showPanel(NET.code?'pLob
 const INTRO=[
 {t:'Sıra sana gelince',p:'Desteden otomatik <b>1 kart çekersin</b>. Sonra elinden <b>1 kart oynarsın</b>: karta dokun, <b>OYNA</b>’ya bas.',il:()=>['Kahin','Kalkan','Casus'].map((n,i)=>`<div style="transform:rotate(${(i-1)*8}deg) translateY(${i===1?-10:0}px)">${cardHTML({id:'i',name:n},{w:76})}</div>`).join('')},
 {t:'Puan elindeki karakterlerdir',p:'Altın rozetli <b>karakterler</b> oyun sonunda <b>elinde kalırsa</b> puandır. Oynarsan yeteneğini kullanırsın ama o puanı kaybedersin. Rakiplerin elleri gizlidir.',il:()=>['Kral','Şövalye'].map(n=>cardHTML({id:'i',name:n},{w:80})).join('')},
-{t:'Taht kimin?',p:'Deste bitince herkes son bir hamle yapar. <b>Elinde en çok puan kalan</b> tahta çıkar. <b>Ödül</b> elindeyse puanın iki katı sayılır. Saldırılardan <b>Şövalye</b>, <b>Kalkan</b>, <b>İttifak</b> ile korun.',il:()=>`<svg viewBox="0 0 120 120" style="width:110px;height:110px">${crest()}</svg>`}];
+{t:'Taht kimin?',p:'Deste bitince herkes son bir hamle yapar. <b>Elinde en çok puan kalan</b> tahta çıkar. <b>Hazine</b> elindeyse puanın iki katı sayılır. Saldırılardan <b>Şövalye</b>, <b>Kalkan</b>, <b>İttifak</b> ile korun.',il:()=>`<svg viewBox="0 0 120 120" style="width:110px;height:110px">${crest()}</svg>`}];
 function showIntro(done){const z=$('#intro');let k=0;
 const paint=()=>{const s=INTRO[k];z.innerHTML=`<div class="mbox"><div class="slide"><div class="il">${s.il()}</div><h4>${s.t}</h4><p>${s.p}</p></div><div class="dots">${INTRO.map((_,i)=>`<i class="${i===k?'on':''}"></i>`).join('')}</div><button class="btn primary" id="introGo">${k<INTRO.length-1?'İLERİ':'SAVAŞA BAŞLA'}</button><button class="btn ghost" id="introSkip">Geç</button></div>`;
 z.classList.add('open');$('#introGo').onclick=()=>{sfx('tap');if(k<INTRO.length-1){k++;paint()}else{z.classList.remove('open');done()}};$('#introSkip').onclick=()=>{z.classList.remove('open');done()}};paint()}
 function openRules(){const r=$('#rules');
-const rows=NAMES.map(n=>{const m=M[n];return `<div class="crow">${cardHTML({id:n,name:n},{w:48})}<div class="t"><b>${n}</b> <i>${m.type==='char'?m.pts+' puan':CATN[m.cat].toLowerCase()} · ${m.count} adet</i><br>${m.text}</div></div>`}).join('');
+const rows=NAMES.map(n=>{const m=M[n];return `<div class="crow">${cardHTML({id:n,name:n},{w:48})}<div class="t"><b>${n}</b> <i>${m.type==='char'?m.pts+' puan':CATN[m.cat].toLocaleLowerCase('tr')} · ${m.count} adet</i><br>${m.text}</div></div>`}).join('');
 r.innerHTML=`<div class="mbox rules"><h3>Nasıl oynanır?</h3><div class="rtab"><button class="on" data-t="a">Kurallar</button><button data-t="b">Kartlar</button></div>
 <div id="rtA"><ul>
 <li><b>Amaç:</b> Oyun sonunda en yüksek puanla tahta çık.</li>
@@ -1332,7 +1347,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261127-0150';
+const BUILD='20261127-0210';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
