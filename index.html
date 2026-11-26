@@ -784,11 +784,11 @@ const EFF={};
 async function takeSay(p,v,cards){await say(isMe(p)?`${gen(v)} elinden ${cards.length} kart aldın`:isMe(v)?`${p.name} elinden ${cards.length} kart aldı`:`${p.name}, ${gen(v)} elinden ${cards.length} kart aldı`,0,isMe(v)?'bad':'');await moveCards(v,p,cards);await sleep(250)}
 const TARG=new Set(['Casus','Hırsız','Kahin','Prens','Köylü','Tüccar','Olta','Engel','Zehir','İhanet','Savaş','El Değiştir','Şifacı','İttifak']);
 const pending=(p,x)=>p.hand.includes(x);
-EFF['Kral']=async({p,m})=>{await draw(p,5*m);p.prot=3;render();sfx('good');
+EFF['Kral']=async({p,m})=>{await draw(p,5*m);p.prot=3*m;render();sfx('good');
 const cs=rivals(p).filter(q=>q.prot);if(cs.length){const v=await choosePlayer(p,cs,'Kral: kimin dokunulmazlığı kalksın?',{ask:1});if(v){v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')}}};
-EFF['Vezir']=async({p,m})=>{await draw(p,2*m);p.prot=1;render()};
-EFF['Şövalye']=async({p,m})=>{p.prot=1;render();sfx('shield');await draw(p,m)};
-EFF['Kalkan']=async({p})=>{p.prot=1;render();sfx('shield');await say(T(p,'Bir tur boyunca korunuyorsun',p.name+' bir tur korunuyor'),700,'good')};
+EFF['Vezir']=async({p,m})=>{await draw(p,2*m);p.prot=m;render()};
+EFF['Şövalye']=async({p,m})=>{p.prot=m;render();sfx('shield');await draw(p,m)};
+EFF['Kalkan']=async({p,m})=>{p.prot=m;render();sfx('shield');await say(T(p,`${m} tur boyunca korunuyorsun`,`${p.name} ${m} tur korunuyor`),700,'good')};
 EFF['Tek Atış']=async({p,m})=>{await draw(p,m)};
 EFF['Çifte Şans']=async({p,m})=>{await draw(p,2*m)};
 EFF['Üçlü Kombo']=async({p,m})=>{await draw(p,3*m)};
@@ -855,7 +855,7 @@ EFF['Şans']=async({p,m})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length)
 for(const q of rs)await hit(p,q,false,'Şans',async()=>{if(!q.hand.length)return;const n=Math.min(2*m,q.hand.length);const cs=await chooseCards(q,q.hand,n,{mode:'low',title:`Şans: ${dat(p)} ${n} kart ver`});await takeSay(p,q,cs);await draw(q,1)})};
 EFF['Olta']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Olta: kimin eline bakacaksın?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Olta',async()=>{if(isLocal(p))await reveal('Olta: '+v.name+' eli',[{p:v}])})};
-EFF['İttifak']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'İttifak: kiminle korunacaksın?',{forced,ask:1});p.prot=2;if(v){v.prot=2;render();sfx('shield');await say(isMe(p)?`Sen ve ${v.name} iki tur korunuyorsunuz`:isMe(v)?`${p.name} ve sen iki tur korunuyorsunuz`:`${p.name} ve ${v.name} iki tur korunuyor`,900,'good')}else render()};
+EFF['İttifak']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'İttifak: kiminle korunacaksın?',{forced,ask:1});p.prot=2*m;if(v){v.prot=2*m;render();sfx('shield');await say(isMe(p)?`Sen ve ${v.name} ${2*m} tur korunuyorsunuz`:isMe(v)?`${p.name} ve sen ${2*m} tur korunuyorsunuz`:`${p.name} ve ${v.name} ${2*m} tur korunuyor`,900,'good')}else render()};
 EFF['Ateşkes']=async({p})=>{G.ceasefire=p;for(const q of G.players)q.prot=Math.max(q.prot|0,1);render();sfx('shield');await say(`Ateşkes! ${T(p,'Senin sıran',gen(p)+' sırası')} gelene kadar herkes korunur, çekilen kartlar atılır`,1200,'good')};
 EFF['Bolluk']=async({p,m})=>{await draw(p,4*m);for(const q of rivals(p))await draw(q,2*m)};
 EFF['İsyan']=async({p,m})=>{const mn=Math.min(...G.players.map(q=>q.hand.length));const ws=G.players.filter(q=>q.hand.length===mn);const n=ws.length>1?2:3;
@@ -945,14 +945,8 @@ G.humanTurn=false;
 if(c)await playCard(p,c,c.dbl&&!NODOUBLE.has(c.name)?2:1);
 render();await sleep(200)}
 async function drawStage(p){
-const top=G.disc.length?G.disc[G.disc.length-1]:null;
-if(!top||G.ceasefire){await draw(p,1);return}
-const d=await decide(p,()=>ask('Kart çek','Desteden gizli bir kart çek ya da atılanların en üstündeki kartı al.',[{label:'Desteden çek',sub:'Ne geleceği belli değil',good:1},{label:`Atılan kartı al: ${top.name}`,sub:M[top.name].type==='char'?M[top.name].pts+' puan':M[top.name].text.slice(0,60)}]).then(i=>({k:'d',i})),
-()=>({k:'d',i:(cardVal(top)>=({easy:9,normal:5.6,hard:4.4}[CFG.diff])&&R()<.9)?1:0}));
-if(d.i!==1){await draw(p,1);return}
-G.disc.pop();for(const q of G.players){const i=q.played.indexOf(top);if(i>=0)q.played.splice(i,1)}
-top.blocked=false;top.dbl=false;p.hand.push(top);G.top=G.disc.length?G.disc[G.disc.length-1]:null;render();sfx('draw');
-await say(T(p,`Atılan kartı aldın: ${top.name}`,`${p.name} atılan kartı aldı: ${top.name}`),900,isMe(p)?'good':'');}
+const n=await draw(p,1);
+if(n)await say(T(p,'Desteden 1 kart çektin',`${p.name} desteden 1 kart çekti`),isMe(p)?500:350)}
 async function run(){
 try{
 while(true){const p=G.ord[G.turnIdx];await turn(p,false);if(G.endTrig)break;G.turnIdx=(G.ord.indexOf(p)+1)%G.ord.length}
