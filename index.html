@@ -798,11 +798,11 @@ const EFF={};
 async function takeSay(p,v,cards){await say(isMe(p)?`${gen(v)} elinden ${cards.length} kart aldın`:isMe(v)?`${p.name} elinden ${cards.length} kart aldı`:`${p.name}, ${gen(v)} elinden ${cards.length} kart aldı`,0,isMe(v)?'bad':'');await moveCards(v,p,cards);await sleep(250)}
 const TARG=new Set(['Casus','Hırsız','Kahin','Prens','Köylü','Tüccar','Olta','Engel','Zehir','İhanet','Savaş','El Değiştir','Şifacı','İttifak']);
 const pending=(p,x)=>p.hand.includes(x);
-EFF['Kral']=async({p,m})=>{await draw(p,5*m);p.prot=3*m;render();sfx('good');
+EFF['Kral']=async({p,m})=>{await draw(p,5*m);p.prot=(p.prot|0)+3*m;render();sfx('good');
 const cs=rivals(p).filter(q=>q.prot);if(cs.length){const v=await choosePlayer(p,cs,'Kral: kimin dokunulmazlığı kalksın?',{ask:1});if(v){v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')}}};
-EFF['Vezir']=async({p,m})=>{await draw(p,2*m);p.prot=m;render()};
-EFF['Şövalye']=async({p,m})=>{p.prot=m;render();sfx('shield');await draw(p,m)};
-EFF['Kalkan']=async({p,m})=>{p.prot=m;render();sfx('shield');await say(T(p,`${m} tur boyunca korunuyorsun`,`${p.name} ${m} tur korunuyor`),700,'good')};
+EFF['Vezir']=async({p,m})=>{await draw(p,2*m);p.prot=(p.prot|0)+m;render()};
+EFF['Şövalye']=async({p,m})=>{p.prot=(p.prot|0)+m;render();sfx('shield');await draw(p,m)};
+EFF['Kalkan']=async({p,m})=>{p.prot=(p.prot|0)+m;render();sfx('shield');await say(T(p,`+${m} tur: toplam ${p.prot} tur korunuyorsun`,`${p.name} +${m} tur: toplam ${p.prot}`),700,'good')};
 EFF['Tek Atış']=async({p,m})=>{await draw(p,m)};
 EFF['Çifte Şans']=async({p,m})=>{await draw(p,2*m)};
 EFF['Üçlü Kombo']=async({p,m})=>{await draw(p,3*m)};
@@ -869,7 +869,7 @@ EFF['Şans']=async({p,m})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length)
 for(const q of rs)await hit(p,q,false,'Şans',async()=>{if(!q.hand.length)return;const n=Math.min(2*m,q.hand.length);const cs=await chooseCards(q,q.hand,n,{mode:'low',title:`Şans: ${dat(p)} ${n} kart ver`});await takeSay(p,q,cs);await draw(q,1)})};
 EFF['Olta']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Olta: kimin eline bakacaksın?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Olta',async()=>{if(isLocal(p))await reveal('Olta: '+v.name+' eli',[{p:v}])})};
-EFF['İttifak']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'İttifak: kiminle korunacaksın?',{forced,ask:1});p.prot=2*m;if(v){v.prot=2*m;render();sfx('shield');await say(isMe(p)?`Sen ve ${v.name} ${2*m} tur korunuyorsunuz`:isMe(v)?`${p.name} ve sen ${2*m} tur korunuyorsunuz`:`${p.name} ve ${v.name} ${2*m} tur korunuyor`,900,'good')}else render()};
+EFF['İttifak']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'İttifak: kiminle korunacaksın?',{forced,ask:1});p.prot=(p.prot|0)+2*m;if(v){v.prot=(v.prot|0)+2*m;render();sfx('shield');await say(isMe(p)?`Sen ve ${v.name} ${2*m} tur korunuyorsunuz`:isMe(v)?`${p.name} ve sen ${2*m} tur korunuyorsunuz`:`${p.name} ve ${v.name} ${2*m} tur korunuyor`,900,'good')}else render()};
 EFF['Ateşkes']=async({p})=>{G.ceasefire=p;for(const q of G.players)q.prot=Math.max(q.prot|0,1);render();sfx('shield');await say(`Ateşkes! ${T(p,'Senin sıran',gen(p)+' sırası')} gelene kadar herkes korunur, çekilen kartlar atılır`,1200,'good')};
 EFF['Bolluk']=async({p,m})=>{await draw(p,4*m);for(const q of rivals(p))await draw(q,2*m)};
 EFF['İsyan']=async({p,m})=>{const mn=Math.min(...G.players.map(q=>q.hand.length));const ws=G.players.filter(q=>q.hand.length===mn);const n=ws.length>1?2:3;
@@ -1031,7 +1031,7 @@ r.innerHTML=`<div class="mbox rules"><h3>Nasıl oynanır?</h3><div class="rtab">
 <li><b>Sıran:</b> 1 kart otomatik çekilir, sonra 1 kart oynarsın. Oynayabileceğin bir kartın varsa oynamak zorundasın. El sınırı yoktur.</li>
 <li><b>Karakter</b> (altın rozetli) oynarsan yeteneği çalışır ve kart atılır. Karakterler <b>oyun sonunda elinde kalırsa</b> puan olur.</li>
 <li><b>Aksiyon</b> oynarsan etkisi çalışır ve kart atılır. Aksiyonlar puan getirmez.</li>
-<li><b>Koruma</b> 🛡 rakamı, kaç tur daha dokunulmaz kaldığını gösterir. Rakiplerde de aynı kalkan görünür.</li>
+<li><b>Koruma</b> 🛡 rakamı, kaç tur daha dokunulmaz kaldığını gösterir. Dokunulmazlıklar birikir: 3 turun varken 2 tur daha eklersen 5 olur. Rakiplerde de aynı kalkan görünür.</li>
 <li><b>Asker / Kombo:</b> Oynadıktan sonra elinde başka Asker veya Kombo varsa zincirleyebilirsin: Asker ×2, iki Asker ×4, Kombo ×3… Sonunda oynadığın kartın etkisi toplam çarpanla çarpılır.</li>
 <li><b>Fedai (Ayna):</b> Elinde Fedai varsa, sana gelen tek hedefli saldırıyı saldırana yansıtabilirsin.</li>
 <li><b>Oyun sonu:</b> Deste bitince son kartı çeken sırasını bitirir. Ardından herkes kart çekmeden bir hamle daha yapar.</li>
