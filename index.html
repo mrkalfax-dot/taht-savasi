@@ -279,14 +279,14 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 <div class="lab">ADIN</div>
 <input id="inName" class="inp" maxlength="16" placeholder="Adını yaz" autocomplete="off">
 <button class="btn primary big" id="createBtn">ODA KUR</button>
-<div class="or">ya da</div>
-<div class="joinrow"><input id="inCode" class="inp code" maxlength="4" placeholder="KOD" autocomplete="off" autocapitalize="characters"><button class="btn" id="joinBtn">KATIL</button></div>
+<div class="joinrow" id="joinRow" style="display:none"><input id="inCode" class="inp code" maxlength="4" placeholder="KOD" autocomplete="off" autocapitalize="characters"><button class="btn" id="joinBtn">KATIL</button></div>
 <div class="err" id="onErr"></div>
 <button class="btn ghost back1">← Geri</button>
 </div>
+<div id="pGate" class="panel hidden"><div class="sub2" id="gateTxt" style="font-size:16px;line-height:1.5;max-width:300px;text-align:center">Bu oyuna sadece davet linkiyle girilir.</div></div>
 <div id="pLobby" class="panel hidden">
-<div class="lab">ODA KODU</div>
-<div class="bigcode" id="lbCode"></div>
+<div class="lab">DAVETLİ ODA</div>
+<div class="bigcode" id="lbCode" style="display:none"></div>
 <button class="btn" id="shareBtn">Davet linkini paylaş</button>
 <div class="lab">OYUNCULAR</div>
 <div id="lbPlayers" class="lbp"></div>
@@ -869,7 +869,7 @@ await dealAll();
 if(!CFG.autoHuman)LS.set('ts_played','1');
 run()}catch(e){if(!(e&&e.message==='abort'))console.error(e)}})();
 return pr}
-function showSetup(){NET.on=false;CFG.fast=false;G=null;showPanel(NET.code?'pLobby':'pMain');closeModal();$('#info').style.display='none';$('#fx').innerHTML='';$('#game').classList.add('hidden');$('#setup').classList.remove('hidden');G=null}
+function showSetup(){NET.on=false;CFG.fast=false;G=null;showPanel(NET.code?'pLobby':(OWNER?'pMain':'pGate'));closeModal();$('#info').style.display='none';$('#fx').innerHTML='';$('#game').classList.add('hidden');$('#setup').classList.remove('hidden');G=null}
 const INTRO=[
 {t:'Sıra sana gelince',p:'Desteden otomatik <b>1 kart çekersin</b>. Sonra elinden <b>1 kart oynarsın</b>: karta dokun, <b>OYNA</b>’ya bas.',il:()=>['Kahin','Kalkan','Casus'].map((n,i)=>`<div style="transform:rotate(${(i-1)*8}deg) translateY(${i===1?-10:0}px)">${cardHTML({id:'i',name:n},{w:76})}</div>`).join('')},
 {t:'Karakterler = puan',p:'Altın rozetli kartlar <b>karakterdir</b>. Oynayınca yeteneği çalışır ve kart <b>Saray’ına</b> girer. Saray’daki puanlar kalıcıdır, kimse dokunamaz.',il:()=>['Kral','Şövalye'].map(n=>cardHTML({id:'i',name:n},{w:80})).join('')},
@@ -899,6 +899,9 @@ const FB='https://taht-savasi-default-rtdb.europe-west1.firebasedatabase.app';co
 const nsleep=ms=>new Promise(r=>setTimeout(r,ms));
 let UID=LS.get('ts_uid');if(!UID){UID=Array.from({length:20},()=>'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random()*36)]).join('');LS.set('ts_uid',UID)}
 const TS={'.sv':'timestamp'};
+(()=>{try{const q=new URLSearchParams(location.search);const k=q.get('sahip');if(k){LS.set('ts_owner',k);fetch(FB+'/owner.json',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(k)}).catch(()=>{});history.replaceState(null,'',location.pathname)}}catch(e){}})();
+const OWNER=LS.get('ts_owner')||'';
+const newId=()=>Array.from({length:12},()=>'abcdefghijkmnpqrstuvwxyz23456789'[Math.floor(Math.random()*32)]).join('');
 function E(m,st){const e=new Error(m);e.status=st;return e}
 async function fb(method,path,body){let last;for(let t=0;t<3;t++){try{const r=await fetch(FB+path+'.json',{method,headers:body===undefined?{}:{'content-type':'application/json'},body:body===undefined?undefined:JSON.stringify(body)});if(!r.ok)throw E('Sunucu hatası '+r.status,r.status);return await r.json()}catch(e){last=e;if(e.status&&e.status<500)break;await nsleep(400*(t+1))}}throw last&&last.status?last:E('Bağlantı sorunu, internetini kontrol et',503)}
 const MY={round:-1,l:[],chain:Promise.resolve()};
@@ -914,11 +917,12 @@ for(const s in ais){moves.push({seat:+s,n:ais[s],data:{k:'ai'}});if(+s===NET.sea
 if(NET.seat>=0&&ls[NET.seat]&&MY.round!==r){MY.round=r;MY.l=ls[NET.seat].slice()}
 return{room:{status:info.status||'lobby',ai:info.ai||0,diff:info.diff||'normal',seed:info.seed||0,round:r},players:pl.map((p,i)=>({seat:i,name:p.name})),moves}}
 const API={
-async create(b){for(let t=0;t<10;t++){const c=Array.from({length:4},()=>LET[Math.floor(Math.random()*LET.length)]).join('');const old=await fb('GET','/rooms/'+c+'/info');if(old&&Date.now()-(old.t||0)<864e5)continue;
-await fb('PUT','/rooms/'+c,{info:{status:'lobby',ai:0,diff:'normal',seed:0,round:0,host:UID,t:TS},p:{[UID]:{name:b.name,ts:TS}}});return{code:c,seat:0,token:UID}}throw E('Oda kurulamadı, tekrar dene',503)},
+async create(b){if(!OWNER)throw E('Oda sadece oyunun sahibi tarafından kurulabilir',403);const c=newId();
+const r=await fetch(FB+'/.json',{method:'PATCH',headers:{'content-type':'application/json'},body:JSON.stringify({['keys/'+c]:OWNER,['rooms/'+c]:{info:{status:'lobby',ai:0,diff:'normal',seed:0,round:0,host:UID,t:TS},p:{[UID]:{name:b.name,ts:TS}}}})});
+if(!r.ok)throw E(r.status===401||r.status===403?'Sahip anahtarı geçersiz. Sahip linkini yeniden aç.':'Oda kurulamadı, tekrar dene',r.status);return{code:c,seat:0,token:UID}},
 async join(b){const room=await fb('GET','/rooms/'+b.code);if(!room||!room.info)throw E('Böyle bir oda yok',404);const ps=sortedP(room.p);
 if(room.info.status==='play'){let pl=[];try{pl=JSON.parse(room.info.pl||'[]')}catch(e){}if(pl.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};throw E('Bu odada oyun başlamış',409)}
-if(ps.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};if(ps.length+(room.info.ai||0)>=6)throw E('Oda dolu',409);
+if(ps.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş',409);if(ps.length+(room.info.ai||0)>=6)throw E('Oda dolu',409);
 let nm=b.name;const has=n=>ps.some(p=>p.name.toLocaleLowerCase('tr')===n.toLocaleLowerCase('tr'));for(let k=2;has(nm);k++)nm=b.name.slice(0,11)+' '+k;
 await fb('PUT','/rooms/'+b.code+'/p/'+UID,{name:nm,ts:TS});return{code:b.code,seat:-1,token:UID}},
 async host(b){const info=await fb('GET','/rooms/'+b.code+'/info');if(!info)throw E('Oda kapandı',404);if(info.host!==UID)throw E('Bunu sadece kurucu yapabilir',403);return info},
@@ -967,7 +971,7 @@ setInterval(()=>{if(!NET.code||document.hidden)return;const waiting=Object.keys(
 setInterval(()=>{if(!NET.code)return;
 if(G&&G.thinking&&!G.thinking.ai&&G.waitSince&&NET.seat===0&&Date.now()-G.waitSince>45000)$('#takeBtn').style.display='block'},4000);
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)NET.sync()});
-function showPanel(id){['pMain','pSolo','pOnline','pLobby'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id))}
+function showPanel(id){['pMain','pSolo','pOnline','pLobby','pGate'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id))}
 function showLobby(){if(G)return;const _r=NET.room||{};const _k=JSON.stringify([NET.code,NET.players,_r.ai,_r.diff]);if(showLobby.k===_k&&!$('#pLobby').classList.contains('hidden')&&!$('#setup').classList.contains('hidden'))return;showLobby.k=_k;$('#setup').classList.remove('hidden');$('#game').classList.add('hidden');showPanel('pLobby');
 $('#lbCode').textContent=NET.code;const host=NET.seat===0;const r=NET.room||{ai:0,diff:'normal'};
 $('#lbPlayers').innerHTML=NET.players.map((p,i)=>`<div>${houseShield(i,p.seat===NET.seat,p.name)}${esc(p.name)}${p.seat===NET.seat?' (sen)':''}${p.seat===0?'<small>KURUCU</small>':''}</div>`).join('')+(r.ai?Array.from({length:r.ai},(_,i)=>`<div style="opacity:.7">${houseShield(NET.players.length+i,false,'Y')}Yapay zekâ<small>YZ</small></div>`).join(''):'');
@@ -994,14 +998,21 @@ document.querySelectorAll('.back1').forEach(b=>b.onclick=()=>showPanel('pMain'))
 $('#onlineBtn').onclick=()=>{sfx('tap');$('#inName').value=LS.get('ts_name')||'';showPanel('pOnline')};
 const nameOk=()=>{const n=$('#inName').value.trim();if(!n){$('#onErr').textContent='Önce adını yaz';return null}LS.set('ts_name',n);return n};
 $('#createBtn').onclick=async()=>{const n=nameOk();if(!n)return;$('#onErr').textContent='';try{const r=await api('create',{name:n});await enterRoom(r.code,r.seat,r.token)}catch(e){$('#onErr').textContent=e.message}};
-$('#joinBtn').onclick=async()=>{const n=nameOk();if(!n)return;const c=$('#inCode').value.trim().toUpperCase();if(c.length!==4){$('#onErr').textContent='4 harfli oda kodunu yaz';return}$('#onErr').textContent='';try{const r=await api('join',{code:c,name:n});await enterRoom(r.code,r.seat,r.token)}catch(e){$('#onErr').textContent=e.message}};
-$('#shareBtn').onclick=async()=>{const url=location.origin+location.pathname+'?oda='+NET.code;const txt='Taht Savaşı\'na gel! Oda kodu: '+NET.code;try{if(navigator.share){await navigator.share({title:'Taht Savaşı',text:txt,url});return}}catch(e){return}try{await navigator.clipboard.writeText(txt+' '+url);toast('Link kopyalandı')}catch(e){toast(url)}};
+$('#joinBtn').onclick=async()=>{const n=nameOk();if(!n)return;const c=$('#inCode').value.trim();if(!c){$('#onErr').textContent='Davet linkiyle gir';return}$('#onErr').textContent='';try{const r=await api('join',{code:c,name:n});await enterRoom(r.code,r.seat,r.token)}catch(e){$('#onErr').textContent=e.message}};
+$('#shareBtn').onclick=async()=>{const url=location.origin+location.pathname+'?oda='+NET.code;const txt='Taht Savaşı\'na davetlisin! Bu linkten gir:';try{if(navigator.share){await navigator.share({title:'Taht Savaşı',text:txt,url});return}}catch(e){return}try{await navigator.clipboard.writeText(txt+' '+url);toast('Link kopyalandı')}catch(e){toast(url)}};
 $('#lbStart').onclick=async()=>{try{$('#lbStart').disabled=true;await api('start',{code:NET.code,token:NET.token});await NET.sync()}catch(e){$('#lbErr').textContent=e.message;$('#lbStart').disabled=false}};
-$('#lbLeave').onclick=()=>{leaveRoom();showPanel('pMain')};
+$('#lbLeave').onclick=()=>{leaveRoom();showPanel(OWNER?'pMain':'pGate')};
 $('#takeBtn').onclick=async()=>{const p=G&&G.thinking;if(!p)return;const i=idxOf(p);const seat=Object.keys(NET.seatMap||{}).find(k=>NET.seatMap[k]===i);NET.hideTake();try{await api('move',{code:NET.code,token:NET.token,n:p.ni||0,forSeat:+seat,data:{k:'ai'}});await NET.sync()}catch(e){toast(e.message)}};
 (async()=>{const qs=new URLSearchParams(location.search).get('oda');let sv=null;try{sv=JSON.parse(LS.get('ts_room')||'null')}catch(e){}
-if(sv&&sv.code&&(!qs||qs.toUpperCase()===sv.code)){try{const r=await api('join',{code:sv.code,name:LS.get('ts_name')||'Oyuncu'});await enterRoom(r.code,r.seat,r.token)}catch(e){if(e.status===404||e.status===409)LS.set('ts_room','')}}
-else if(qs){$('#inName').value=LS.get('ts_name')||'';$('#inCode').value=qs.toUpperCase();showPanel('pOnline')}})();
+const gate=t=>{if(t)$('#gateTxt').textContent=t;showPanel('pGate')};
+if(!OWNER){showPanel('pGate')}
+const code=qs?qs.trim():(sv&&sv.code);
+if(code){try{if(sv&&sv.code===code){const r=await api('join',{code,name:LS.get('ts_name')||'Oyuncu'});await enterRoom(r.code,r.seat,r.token);return}
+const room=await fb('GET','/rooms/'+code);if(!room||!room.info)throw E('Bu davet artık geçerli değil.',404);
+if(room.info.status!=='lobby'||Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş. Yeni oyun için davet linkini iste.',409);
+$('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn').textContent='ODAYA KATIL';$('#createBtn').onclick=()=>$('#joinBtn').click();$('#pOnline .back1').style.display='none';showPanel('pOnline')}
+catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerli değil.');else showPanel('pMain')}}
+try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
 $('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;
 $('#btnSnd').onclick=()=>{CFG.sound=!CFG.sound;$('#btnSnd').innerHTML=CFG.sound?UI.snd:UI.mute;$('#btnSnd').classList.toggle('on',CFG.sound)};
 $('#btnFast').onclick=()=>{CFG.speed=CFG.speed<.6?.8:.42;$('#btnFast').classList.toggle('on',CFG.speed<.6)};
