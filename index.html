@@ -1299,6 +1299,16 @@ window.addEventListener('resize',()=>{if(G)render()});
 let _lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-_lt<350&&!/INPUT|TEXTAREA/.test((e.target||{}).tagName))e.preventDefault();_lt=n},{passive:false});
 window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
+
+/* otomatik güncelleme */
+const BUILD='20261127-0115';
+(function(){let bar=null;
+async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
+const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
+const go=()=>{location.replace(location.pathname+location.search.replace(/[?&]_v=[^&]*/,'')+(location.search?'&':'?')+'_v='+m[1]+location.hash)};
+if(!busy){go();return}
+if(bar)return;bar=document.createElement('div');bar.textContent='Yeni sürüm hazır · dokun, yenile';bar.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 8px);z-index:99999;background:#F3DC8C;color:#2a1c06;font:800 14px system-ui;padding:10px 16px;border-radius:20px;box-shadow:0 4px 18px #000a';bar.onclick=go;document.body.appendChild(bar)}catch(e){}}
+chk();document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk()});setInterval(chk,120000)})();
 </script>
 </body>
 </html>
