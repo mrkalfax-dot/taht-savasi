@@ -683,7 +683,7 @@ return{w,step:0,start:0,grid:true,cols}}
 function renderHand(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
 const n=m.hand.length,g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
 if(g.grid){const sT=H.scrollTop;H.style.height='';H.innerHTML=hs.map(c=>cardHTML(c,{w:g.w,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})).join('');
-const f=H.firstElementChild;if(f){const rh=f.getBoundingClientRect().height+6;if(n>g.cols*2){H.style.maxHeight='none';const need=H.scrollHeight;const room=Math.round($('#app').getBoundingClientRect().bottom-H.getBoundingClientRect().top-6);H.style.maxHeight=Math.max(Math.round(rh*2.2),Math.min(need,room,Math.round(rh*2.6+6)))+'px'}else H.style.maxHeight='none';H.scrollTop=sT}}
+const f=H.firstElementChild;if(f){const rh=f.getBoundingClientRect().height+6;if(n>g.cols*2){H.style.maxHeight='none';const need=H.scrollHeight;const room=Math.round($('#app').getBoundingClientRect().bottom-$('#me').getBoundingClientRect().bottom-($('#hcount').offsetHeight||0)-10);H.style.maxHeight=Math.max(Math.round(rh*2.2),Math.min(need,room))+'px'}else H.style.maxHeight='none';H.scrollTop=sT}}
 else{H.style.maxHeight='';H.style.height=Math.round(g.w*1.42+30)+'px';
 H.innerHTML=hs.map((c,i)=>{const d=i-mid;const st=`;left:${(g.start+i*g.step).toFixed(1)}px;--rot:${(d*(n>6?2.2:3)).toFixed(1)}deg;--ty:${(d*d*1.5).toFixed(1)}px;z-index:${i+1}`;
 return cardHTML(c,{w:g.w,st,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})}).join('')}
