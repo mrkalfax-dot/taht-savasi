@@ -173,6 +173,10 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 #info .tx i{font-style:normal;font-size:9.5px;letter-spacing:.18em;font-weight:800;display:block;margin-bottom:2px}
 #info .tx .w{color:#ff8a7a;font-weight:700;font-size:12.5px;margin-top:3px}
 #info .btn{padding:13px 20px;font-size:17px;flex:none;letter-spacing:.12em}
+#info .acts{display:flex;flex-direction:column;gap:7px;flex:none;align-items:stretch}
+#info .acts .btn{width:100%;text-align:center}
+#info .acts #cancelBtn{padding:8px 14px;font-size:13px;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,230,160,.3);color:#e8dcc0;box-shadow:none}
+#info .acts #playBtn{padding:15px 22px;font-size:18px}
 #fx{position:absolute;inset:0;z-index:40;pointer-events:none;overflow:hidden}
 .gh{position:absolute;will-change:transform;transform-origin:center}
 .bp{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;box-shadow:0 0 6px currentColor}
@@ -201,6 +205,8 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 .mbox .sub{color:#d8c9a8;font-size:14px;line-height:1.45;text-align:center}
 .mbox .div{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:2px 0}
 .grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.mbox.pick{overflow:hidden}.mbox.pick .grid{overflow-y:auto;flex:1 1 auto;min-height:0;padding:8px 2px;-webkit-overflow-scrolling:touch}.mbox.pick .sub,.mbox.pick h3,.mbox.pick .btn{flex:none}
+.mbox.pick .btn.primary:not(:disabled){animation:glow 1.6s ease-in-out infinite}
 .pc{position:relative;border-radius:12px;cursor:pointer;padding:4px;transition:transform .15s}
 .pc.on{transform:translateY(-6px)}
 .pc.on .card{box-shadow:0 0 0 2px #ffe6a0,0 0 22px rgba(255,200,80,.6)}
@@ -402,7 +408,7 @@ def('Olta','act',0,2,'⚓','draw','Bir rakip seç, elindeki kartları gör.',{at
 def('İttifak','act',0,2,'⇄','prot','Bir oyuncu seç: iki tur boyunca ikiniz de saldırılardan korunursunuz.');
 def('Hazine','act',0,1,'◆','spe','Oynanmaz. Oyun sonunda elindeyse kazandığın puanlar iki katına çıkar.');
 def('Kana Susamış','act',0,1,'☠','atk','Sen hariç herkes elinden 2 kart atar.',{atk:1});
-def('Büyü','act',0,2,'✧','spe','Elindeki iki kartın etkisini birleştirerek kullan.');
+def('Büyü','act',0,2,'✧','spe','Elindeki iki kartın etkisini birleştirerek kullan. Asker/Kombo seçersen çarpanları zincirlenir; seçtiklerin başka kartları da oynatabilir.');
 def('İntikam','act',0,1,'↺','rea','Bir rakibin son oynadığı kartın etkisini istediğin oyuncuya karşı oyna. Kendi lehine de kullanabilirsin. Dokunulmazlığı olana uygulanamaz.');
 def('Zehir','act',0,1,'☣','atk','Seçtiğin rakip, elindeki puanlı bir kartını atar. Atılan kart etkisiz olur.',{atk:1});
 def('Deprem','act',0,1,'≋','atk','Sen dahil herkes 2 kartını atar.',{atk:1});
@@ -426,7 +432,7 @@ def('Yer Değiştir','act',0,2,'⇅','spe','İstediğin iki oyuncunun sıradaki 
 def('El Değiştir','act',0,1,'⇋','atk','Seçeceğin rakiple elindeki bütün kartları değiştir.',{atk:1});
 const NAMES=Object.keys(M);
 const ATK=new Set(NAMES.filter(n=>M[n].atk));
-const NODOUBLE=new Set(['Hazine','Büyü','Prenses','Ateşkes','Kaos','İntikam','Darbe','Yer Değiştir','El Değiştir','Fedai','Yardım']);
+const NODOUBLE=new Set(['Hazine','Prenses','Ateşkes','Kaos','İntikam','Darbe','Yer Değiştir','El Değiştir','Fedai','Yardım']);
 const CHAIN={Asker:2,Kombo:3};
 const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'TEPKİ',spe:'ÖZEL'};
 const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
@@ -592,11 +598,12 @@ if(!c){el.style.display='none';el.innerHTML='';return}
 const hr=$('#handWrap').getBoundingClientRect(),ar=$('#app').getBoundingClientRect();
 el.style.bottom=(ar.bottom-hr.top+Math.round(handGeom(m.hand.length).w*.2)+12)+'px';el.style.display='flex';
 const mt=M[c.name];const ok=G.humanTurn&&canPlay(m,c);const why=G.humanTurn?whyNot(m,c):'Sıra sende değil';
-el.innerHTML=`<div class="tx"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]}</i><b>${c.name}</b>${mt.text}${why&&!ok?`<div class="w">${why}</div>`:''}</div>${ok?'<button class="btn primary" id="playBtn">OYNA</button>':''}`;
+el.innerHTML=`<div class="tx"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]}</i><b>${c.name}</b>${mt.text}${why&&!ok?`<div class="w">${why}</div>`:''}</div><div class="acts">${ok?'<button class="btn primary" id="playBtn">OYNA</button>':''}<button class="btn" id="cancelBtn">Vazgeç</button></div>`;
+const cb=$('#cancelBtn');if(cb)cb.onclick=e=>{e.stopPropagation();G.sel=null;renderHand();updateInfo()};
 const pb=$('#playBtn');if(pb)pb.onclick=e=>{e.stopPropagation();commitPlay(c)}}
 function commitPlay(c){if(G.waitRes&&G.humanTurn&&canPlay(me(),c)){const r=G.waitRes;G.waitRes=null;G.sel=null;r(c)}}
 function selectCard(id){const m=me();const c=m.hand.find(x=>x.id===id);if(!c)return;
-if(G.sel===id){if(G.humanTurn&&canPlay(m,c)){commitPlay(c);return}G.sel=null}else G.sel=id;
+G.sel=G.sel===id?null:id;
 sfx('tap');renderHand();updateInfo()}
 (function(){let st=null,lp=null;const h=document.addEventListener.bind(document);
 const cardAt=(x,e)=>{const m=me();const n=m.hand.length;if(!n)return null;const g=handGeom(n);if(g.grid){const el=e&&document.elementFromPoint(e.clientX,e.clientY);const ce=el&&el.closest&&el.closest('#hand .card');return ce?m.hand.find(k=>k.id==ce.dataset.id)||null:null}const hr=$('#hand').getBoundingClientRect();let i=g.step?Math.floor((x-hr.left-g.start)/g.step):0;i=Math.max(0,Math.min(n-1,i));return sortedHand(m)[i]};
@@ -607,7 +614,7 @@ lp=setTimeout(()=>{if(st&&G&&!st.scrub){const k=me().hand.find(x=>x.id===st.id);
 h('pointermove',e=>{if(!st||!G)return;if(Math.abs(e.clientX-st.x)>8){if(handGeom(me().hand.length).grid){clearTimeout(lp);return}st.scrub=true;clearTimeout(lp)}if(Math.abs(e.clientY-st.y)>10)clearTimeout(lp);
 if(st.scrub&&e.clientY-st.y>-40){const c=cardAt(e.clientX,e);if(c&&c.id!==st.id){st.id=c.id;setPeek(c.id);sfx('tap')}}});
 h('pointerup',e=>{clearTimeout(lp);if(!st||!G)return;const s0=st;st=null;setPeek(null);if(s0.done)return;const dy=e.clientY-s0.y;const m=me();const c=m.hand.find(x=>x.id===s0.id);if(!c)return;
-if(dy<-50&&!handGeom(m.hand.length).grid){G.sel=c.id;if(G.humanTurn&&canPlay(m,c))commitPlay(c);else{renderHand();updateInfo()}return}
+if(dy<-50&&!handGeom(m.hand.length).grid){G.sel=c.id;sfx('tap');renderHand();updateInfo();return}
 if(s0.scrub){G.sel=c.id;sfx('tap');renderHand();updateInfo();return}
 if(Math.abs(dy)<14)selectCard(c.id)});
 h('pointercancel',()=>{clearTimeout(lp);st=null;if(G)setPeek(null)});
@@ -724,7 +731,7 @@ const k=Math.min(n,pool.length);
 const cs=k>=pool.length?pool.slice():await chooseCards(p,pool,k,{mode:'low',title:o.title||`${p.name}: ${k} kart at`,sub:o.sub});
 await discardCards(p,cs)}
 const dblOk=x=>!x.blocked&&!NODOUBLE.has(x.name);
-function eligibleInner(p,c,forAsker){if(c.blocked)return false;if(['Hazine','Büyü'].includes(c.name))return false;
+function eligibleInner(p,c,forAsker){if(c.blocked)return false;if(c.name==='Hazine')return false;
 if(c.name==='İntikam'&&!rivals(p).some(q=>q.last&&!['Hazine','İntikam','Büyü','Asker','Prenses'].includes(q.last.name)))return false;return true}
 function canPlay(p,c){if(c.blocked||c.name==='Hazine')return false;
 if(c.name==='Prenses'||c.name==='Asker'||c.name==='Kombo')return p.hand.some(x=>x!==c&&eligibleInner(p,x,true));
@@ -739,7 +746,7 @@ function closeModal(){const m=modalEl();m.classList.remove('open');m.innerHTML='
 function ask(title,text,buttons){return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${text?`<p class="sub">${text}</p>`:''}<div class="div"></div>${buttons.map((b,i)=>`<button class="pbtn ${b.good?'good':''}" data-i="${i}" ${b.off?'disabled':''}><span>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</span></button>`).join('')}</div>`;m.classList.add('open');m.querySelectorAll('.pbtn').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(+b.dataset.i)})})}
 function pickPlayer(title,cands){return new Promise(res=>{G.targeting={cands,res};narrHTML(`${esc(title)}<small>Parlayan rakibe dokun</small>`);renderOpps();sfx('turn')})}
 function pickCards(title,cards,n,o={}){return new Promise(res=>{const sel=[];const m=modalEl();const w=cards.length>6?72:84;
-const paint=()=>{m.innerHTML=`<div class="mbox"><h3>${title}</h3>${o.sub?`<p class="sub">${o.sub}</p>`:''}<div class="grid">${cards.map((c,i)=>`<div class="pc ${sel.includes(c)?'on':''}" data-i="${i}">${sel.includes(c)&&n>1?`<span class="ord">${sel.indexOf(c)+1}</span>`:''}${cardHTML(c,{w})}</div>`).join('')}</div><p class="sub" style="font-size:12px;color:var(--mut)">Basılı tutarak kartı büyütebilirsin</p><button class="btn primary" id="okb" ${o.any||sel.length===n?'':'disabled'}>Onayla · ${sel.length}${o.any?'':'/'+n}</button></div>`;m.classList.add('open');
+const paint=()=>{m.innerHTML=`<div class="mbox pick"><h3>${title}</h3>${o.sub?`<p class="sub">${o.sub}</p>`:''}<div class="grid">${cards.map((c,i)=>`<div class="pc ${sel.includes(c)?'on':''}" data-i="${i}">${sel.includes(c)&&n>1?`<span class="ord">${sel.indexOf(c)+1}</span>`:''}${cardHTML(c,{w})}</div>`).join('')}</div><button class="btn primary" id="okb" ${o.any||sel.length===n?'':'disabled'}>${o.any||sel.length===n?'ONAYLA':'Kart seç'} · ${sel.length}${o.any?'':'/'+n}</button><p class="sub" style="font-size:12px;color:var(--mut)">Kartlara dokunarak seç, sonra ONAYLA'ya bas · basılı tut: büyüt</p></div>`;m.classList.add('open');
 m.querySelectorAll('.pc').forEach(el=>{const c=cards[+el.dataset.i];let t=null,lp=false;
 el.onpointerdown=()=>{lp=false;t=setTimeout(()=>{lp=true;zoom(c)},480)};el.onpointerup=el.onpointerleave=()=>clearTimeout(t);
 el.onclick=()=>{if(lp)return;const k=sel.indexOf(c);if(k>=0)sel.splice(k,1);else{if(sel.length>=n){if(n===1)sel.length=0;else return}sel.push(c)}sfx('tap');paint()}});
@@ -926,7 +933,7 @@ return s+R()*noise}
 function aiPick(p){const cs=p.hand.filter(c=>canPlay(p,c));if(!cs.length)return null;const sc=cs.map(c=>[c,aiScore(p,c)]);sc.sort((a,b)=>b[1]-a[1]);return sc[0][0]}
 function waitPlay(p){return new Promise(res=>{G.waitRes=res;const any=p.hand.some(c=>canPlay(p,c));
 if(!any){narrHTML('Oynanabilir kartın yok<small>Sıra geçiyor</small>');setTimeout(()=>{if(G.waitRes===res){G.waitRes=null;res(null)}},CFG.fast?0:1400)}
-else narrHTML(G.tutor?'Bir karta dokun, sonra OYNA<small>Parmağını kartların üzerinde kaydırarak hepsini görebilirsin</small>':'Bir kart seç')})}
+else narrHTML(G.tutor?'Bir karta dokun, sonra OYNA<small>Dokununca kart yalnızca açılır, OYNA’ya basana kadar oynanmaz</small>':'Bir kart seç<small>Dokun: önizle · OYNA: oyna</small>')})}
 async function turn(p,final){
 G.cur=p;G.sel=null;p.prot=Math.max(0,(p.prot|0)-1);if(G.ceasefire===p)G.ceasefire=null;STATS.turns++;
 const isH=isLocal(p);let skip=false;
@@ -1029,7 +1036,7 @@ r.innerHTML=`<div class="mbox rules"><h3>Nasıl oynanır?</h3><div class="rtab">
 <li><b>Fedai (Ayna):</b> Elinde Fedai varsa, sana gelen tek hedefli saldırıyı saldırana yansıtabilirsin.</li>
 <li><b>Oyun sonu:</b> Deste bitince son kartı çeken sırasını bitirir. Ardından herkes kart çekmeden bir hamle daha yapar.</li>
 <li><b>Puan:</b> Elinde kalan karakterlerin puan toplamı. Hazine elindeyse toplam iki katına çıkar. Eşitlikte taht paylaşılır.</li>
-<li><b>İpucu:</b> Parmağını elindeki kartların üzerinde kaydırırsan altındaki kart büyür; yukarı kaydırırsan oynanır; basılı tutarsan ayrıntısı açılır. Rakibe dokunursan son oynadıklarını görürsün.</li>
+<li><b>İpucu:</b> Parmağını elindeki kartların üzerinde kaydırırsan altındaki kart büyür; dokununca kart yalnızca açılır, oynamak için OYNA düğmesine basman gerekir; basılı tutarsan ayrıntısı açılır. Rakibe dokunursan son oynadıklarını görürsün.</li>
 </ul></div><div id="rtB" class="hidden">${rows}</div><button class="btn primary" id="rx">Kapat</button></div>`;
 r.classList.add('open');$('#rx').onclick=()=>r.classList.remove('open');
 r.querySelectorAll('.rtab button').forEach(b=>b.onclick=()=>{r.querySelectorAll('.rtab button').forEach(x=>x.classList.toggle('on',x===b));$('#rtA').classList.toggle('hidden',b.dataset.t!=='a');$('#rtB').classList.toggle('hidden',b.dataset.t!=='b')})}
