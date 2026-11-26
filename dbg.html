@@ -1,0 +1,25 @@
+<!doctype html><meta charset=utf-8><pre id=o></pre><script>
+const FB='https://taht-savasi-default-rtdb.europe-west1.firebasedatabase.app';const o=document.getElementById('o');const L=t=>o.textContent+=t+'\n';
+const K=new URLSearchParams(location.search).get('k');const TS={'.sv':'timestamp'};
+(async()=>{const t=async(n,m,p,b,exp)=>{try{const r=await fetch(FB+p+'.json',{method:m,headers:{'content-type':'application/json'},body:b===undefined?undefined:JSON.stringify(b)});L((r.ok===exp?'OK  ':'BAD ')+n+' '+r.status)}catch(e){L('ERR '+n+' '+e)}};
+const c='t'+Date.now();
+await t('host key','PUT','/keys/'+c,K,true);
+await t('host info','PUT','/rooms/'+c+'/info',{status:'lobby',ai:0,host:'H',t:TS},true);
+await t('host p','PUT','/rooms/'+c+'/p/H',{name:'Host',ts:TS},true);
+await t('guest join','PUT','/rooms/'+c+'/p/G',{name:'Guest',ts:TS},true);
+await t('guest read room','GET','/rooms/'+c,undefined,true);
+await t('guest hijack info','PATCH','/rooms/'+c+'/info',{host:'G'},false);
+await t('host settings','PATCH','/rooms/'+c+'/info',{ai:1,t:TS},true);
+await t('host clear m','DELETE','/rooms/'+c+'/m',undefined,true);
+await t('host start','PATCH','/rooms/'+c+'/info',{status:'play',round:1,seed:5,pl:'[]',t:TS},true);
+await t('guest move','PUT','/rooms/'+c+'/m/1_1',{r:1,s:1,l:'[]'},true);
+await t('host move','PUT','/rooms/'+c+'/m/1_0',{r:1,s:0,l:'[]'},true);
+await t('late stranger join','PUT','/rooms/'+c+'/p/X',{name:'X',ts:TS},false);
+const c2='s'+Date.now();
+await t('stranger key','PUT','/keys/'+c2,'wrong',false);
+await t('stranger room','PUT','/rooms/'+c2+'/info',{status:'lobby',host:'X',t:TS},false);
+await t('stranger owner overwrite','PUT','/owner','hack',false);
+await t('stranger list rooms','GET','/rooms',undefined,false);
+await t('stranger read keys','GET','/keys',undefined,false);
+L('DONE');})();
+</script>
