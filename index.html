@@ -713,9 +713,11 @@ for(const c of cards){rm(v.hand,c);c.blocked=false;c.dbl=false;G.deck.push(c)}sh
 if(!FXON())return;render();const to=rectOf($('#deck .pc2'));
 await Promise.all(cards.map((c,i)=>fly(c,false,srcs[i],to,{delay:i*120,dur:520})));render()}
 async function discardN(p,n,filter,o={}){
-for(let i=0;i<n;i++){const pool=p.hand.filter(filter||(()=>true));if(!pool.length)break;
-const [c]=o.random?[pool[R()*pool.length|0]]:await chooseCards(p,pool,1,{mode:'low',title:o.title||`${p.name}: bir kart at`,sub:o.sub});
-await discardCards(p,[c])}}
+const pool=p.hand.filter(filter||(()=>true));if(!pool.length)return;
+if(o.random){for(let i=0;i<n;i++){const pl=p.hand.filter(filter||(()=>true));if(!pl.length)break;await discardCards(p,[pl[R()*pl.length|0]])}return}
+const k=Math.min(n,pool.length);
+const cs=k>=pool.length?pool.slice():await chooseCards(p,pool,k,{mode:'low',title:o.title||`${p.name}: ${k} kart at`,sub:o.sub});
+await discardCards(p,cs)}
 const dblOk=x=>!x.blocked&&!NODOUBLE.has(x.name);
 function eligibleInner(p,c,forAsker){if(c.blocked)return false;if(['Hazine','Büyü'].includes(c.name))return false;
 if(c.name==='İntikam'&&!rivals(p).some(q=>q.last&&!['Hazine','İntikam','Büyü','Asker','Prenses'].includes(q.last.name)))return false;return true}
