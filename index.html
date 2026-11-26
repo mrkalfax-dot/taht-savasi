@@ -899,7 +899,7 @@ const FB='https://taht-savasi-default-rtdb.europe-west1.firebasedatabase.app';co
 const nsleep=ms=>new Promise(r=>setTimeout(r,ms));
 let UID=LS.get('ts_uid');if(!UID){UID=Array.from({length:20},()=>'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random()*36)]).join('');LS.set('ts_uid',UID)}
 const TS={'.sv':'timestamp'};
-(()=>{try{const q=new URLSearchParams(location.search);const k=q.get('sahip');if(k){LS.set('ts_owner',k);fetch(FB+'/owner.json',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(k)}).catch(()=>{});history.replaceState(null,'',location.pathname)}}catch(e){}})();
+(()=>{try{const q=new URLSearchParams(location.search);const k=q.get('sahip');if(k){LS.set('ts_owner',k);fetch(FB+'/owner.json',{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify(k)}).catch(()=>{})}}catch(e){}})();
 const OWNER=LS.get('ts_owner')||'';
 const newId=()=>Array.from({length:12},()=>'abcdefghijkmnpqrstuvwxyz23456789'[Math.floor(Math.random()*32)]).join('');
 function E(m,st){const e=new Error(m);e.status=st;return e}
