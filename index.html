@@ -368,7 +368,7 @@ header .t{letter-spacing:.3em}
 .gcard.flip .gf{transform:rotateY(180deg)}.gcard.flip .gb{transform:rotateY(360deg)}
 .gcard.sus{animation:gshake .5s ease-in-out infinite;filter:drop-shadow(0 0 22px rgba(255,200,80,.65))}
 @keyframes gshake{0%,100%{transform:rotate(-3deg) translateX(-3px)}50%{transform:rotate(3deg) translateX(3px)}}
-.gres{height:70px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:56px;font-weight:900;letter-spacing:.08em}
+.gres{height:70px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:48px;white-space:nowrap;font-weight:900;letter-spacing:.08em}
 .gres i{width:12px;height:12px;border-radius:50%;background:#FFD866;animation:gd 1s infinite}.gres i:nth-child(2){animation-delay:.2s}.gres i:nth-child(3){animation-delay:.4s}
 @keyframes gd{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.2)}}
 .gres.yes{color:#6FE08A;text-shadow:0 0 28px rgba(80,230,120,.8),0 3px 0 #04210c;animation:gpop .45s cubic-bezier(.3,.7,.3,1.5)}
@@ -384,6 +384,9 @@ header .t{letter-spacing:.3em}
 @keyframes chd{to{transform:translateY(6px)}}
 #game.chain #hand .card:not(.dis){animation:glow 1s ease-in-out infinite}
 #info .tx b .mxb{margin-left:8px;padding:1px 10px;border-radius:14px;background:#FFD866;color:#2a1806;font-size:18px;font-weight:900;vertical-align:1px}
+
+#stageCard{position:relative}
+#stageCard .mxc{position:absolute;right:-14px;top:-14px;z-index:9;min-width:44px;height:44px;border-radius:22px;background:linear-gradient(180deg,#FFE08A,#C9962F);color:#2a1806;font:900 24px/44px Palatino Linotype,Georgia,serif;text-align:center;border:3px solid #fff3c4;box-shadow:0 0 18px rgba(255,200,80,.9);padding:0 8px;animation:gpop .4s cubic-bezier(.3,.7,.3,1.5)}
 </style>
 </head>
 <body>
@@ -512,7 +515,7 @@ def('Yer Değiştir','act',0,2,'⇅','spe','İstediğin iki oyuncunun sıradaki 
 def('El Değiştir','act',0,1,'⇋','atk','Seçeceğin rakiple elindeki bütün kartları değiştir.',{atk:1});
 const NAMES=Object.keys(M);
 const ATK=new Set(NAMES.filter(n=>M[n].atk));
-const NODOUBLE=new Set(['Hazine','Prenses','Ateşkes','Kaos','İntikam','Darbe','Yer Değiştir','El Değiştir','Fedai','Yardım']);
+const NODOUBLE=new Set(['Hazine','Ateşkes','Kaos','Darbe','Yer Değiştir','El Değiştir','Fedai','Yardım']);
 const CHAIN={Asker:2,Kombo:3};
 const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'TEPKİ',spe:'ÖZEL'};
 const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
@@ -910,19 +913,16 @@ const bestBy=(p,cs)=>cs.map(x=>[x,aiScore(p,x)]).sort((a,b)=>b[1]-a[1])[0][0];
 const top2=(p,cs)=>cs.map(x=>[x,aiScore(p,x)]).sort((a,b)=>b[1]-a[1]).slice(0,2).map(z=>z[0]);
 const multFor=(c,f)=>(NODOUBLE.has(c.name)&&!CHAIN[c.name])?1:f;
 function chainPick(o,nm){return new Promise(res=>{G.chain={ids:new Set(o.map(c=>c.id)),mult:nm};G.chainRes=c=>res({k:'c',ids:[c.id]});G.humanTurn=true;G.sel=null;narrHTML('Kartını seç');render();sfx('good')})}
-async function chainPlay(p,m,f){const nm=m*f;const o=p.hand.filter(x=>eligibleInner(p,x,true));if(!o.length)return fizzle(p);
-const d=await decide(p,()=>chainPick(o,nm),()=>{const a=o.filter(x=>M[x.name].type==='act'||CHAIN[x.name]);return{k:'c',ids:[bestBy(p,a.length?a:o).id]}});
+async function pickPlay(p,nm,pref){const o=p.hand.filter(x=>eligibleInner(p,x,true));if(!o.length)return false;
+const d=await decide(p,()=>chainPick(o,nm),()=>{const a=pref?o.filter(x=>M[x.name].type==='act'||CHAIN[x.name]):[];return{k:'c',ids:[bestBy(p,a.length?a:o).id]}});
 G.chain=null;G.chainRes=null;if(isLocal(p)){G.humanTurn=false;narrHTML('');render()}
-const c=d.ids.map(id=>o.find(x=>x.id===id))[0];
-if(c)await playCard(p,c,multFor(c,nm),true)}
+const c=d.ids.map(id=>o.find(x=>x.id===id))[0];if(!c)return false;
+await playCard(p,c,multFor(c,nm),true);return true}
+async function chainPlay(p,m,f){if(!await pickPlay(p,m*f,true))return fizzle(p)}
 EFF['Asker']=async({p,m})=>chainPlay(p,m,2);
 EFF['Kombo']=async({p,m})=>chainPlay(p,m,3);
-EFF['Prenses']=async({p,m})=>{const o=p.hand.filter(x=>eligibleInner(p,x,true));if(!o.length)return fizzle(p);
-const picks=await chooseCards(p,o,2,{title:'Prenses: ×2 oynanacak iki kartı sırayla seç',sub:'İkisi de hemen, seçtiğin sırayla oynanır.',aiSel:cs=>top2(p,cs)});
-for(const c of picks){if(pending(p,c)&&eligibleInner(p,c,true))await playCard(p,c,multFor(c,2*m),true)}};
-EFF['Büyü']=async({p,m})=>{const o=p.hand.filter(x=>eligibleInner(p,x,true));if(!o.length)return fizzle(p);
-const picks=await chooseCards(p,o,2,{title:'Büyü: iki kartı oynama sırasıyla seç',sub:'Önce seçtiğin oynanır.',aiSel:cs=>top2(p,cs)});
-for(const c of picks){if(pending(p,c)&&eligibleInner(p,c,true))await playCard(p,c,multFor(c,m),true)}};
+EFF['Prenses']=async({p,m})=>{if(!await pickPlay(p,2*m,false))return fizzle(p);await pickPlay(p,2*m,false)};
+EFF['Büyü']=async({p,m})=>{if(!await pickPlay(p,m,false))return fizzle(p);await pickPlay(p,m,false)};
 EFF['Casus']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Casus: kimin eline bakacaksın?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Casus',async()=>{const c=await chooseCards(p,v.hand,m,{mode:'high',title:`${v.name} elinden ${m} kart çal`,sub:'Elini gördün, birini seç.'});await takeSay(p,v,c)})};
 EFF['Hırsız']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Hırsız: kimden çalacaksın?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
@@ -938,15 +938,15 @@ await hit(p,v,true,'Köylü',()=>giveGet(p,v,1*m,'Köylü'))};
 EFF['Tüccar']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Tüccar: kime kart vereceksin?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Tüccar',()=>giveGet(p,v,2*m,'Tüccar'))};
 EFF['Prens']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Prens: kimin elini göreceksin?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'Prens',async()=>{const c=await chooseCards(p,v.hand,2,{mode:'high',title:`${v.name} elinden 2 kart çal`,sub:'Çaldıkların ×2 ile hemen oynanır.'});await takeSay(p,v,c);
+await hit(p,v,true,'Prens',async()=>{const c=await chooseCards(p,v.hand,Math.min(2*m,v.hand.length),{mode:'high',title:`${v.name} elinden ${Math.min(2*m,v.hand.length)} kart çal`});await takeSay(p,v,c);
 for(const x of c){if(pending(p,x)&&eligibleInner(p,x,true))await playCard(p,x,multFor(x,2*m),true)}})};
 EFF['Büyücü']=async({p,forced})=>{const cs=rivals(p).filter(q=>q.prot);if(!cs.length)return fizzle(p,'dokunulmaz rakip yok');const v=await choosePlayer(p,cs,'Büyücü: kimin dokunulmazlığı kalksın?',{forced,ask:1});if(!v)return fizzle(p);
 v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')};
 EFF['Şifacı']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Şifacı: kim 3 kart çeksin?',{forced,ask:1,mode:'low'});if(!v)return fizzle(p,'hedef yok');await say(T(v,'Desteden 3 kart çekiyorsun',`${v.name} desteden 3 kart çekiyor`),600);await draw(v,3*m)};
-EFF['Kahin']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Kahin: kimin elini tahmin edeceksin?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
+EFF['Kahin']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Kahin: kimin elini tahmin edeceksin?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Kahin',async()=>{const name=(await decide(p,()=>pickName('Hangi kart elinde?').then(n=>({k:'n',n})),()=>{const pool=[];for(const n of NAMES)for(let i=0;i<M[n].count;i++)pool.push(n);return{k:'n',n:pool[R()*pool.length|0]}})).n;
 const has=v.hand.some(c=>c.name===name);await guessReveal(p,v,name,has);
-if(has){const c=await chooseCards(p,v.hand,2,{mode:'high',title:`Doğru bildin! ${v.name} elinden 2 kart al`});await takeSay(p,v,c)}else if(!FXON())await say(T(v,`Elinde ${name} yok!`,`${p.name} bilemedi`),0)})};
+if(has){const kn=Math.min(2*m,v.hand.length);const c=await chooseCards(p,v.hand,kn,{mode:'high',title:`Doğru bildin! ${v.name} elinden ${kn} kart al`});await takeSay(p,v,c)}else if(!FXON())await say(T(v,`Elinde ${name} yok!`,`${p.name} bilemedi`),0)})};
 EFF['Kraliçe']=async({p,m})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length);if(!rs.length)return fizzle(p,'hedef yok');
 if(isLocal(p))await reveal('Kraliçe: rakiplerin elleri',rs.map(q=>({p:q})));
 for(const q of rs)if(isMe(q))await showdown(p,q,'Kraliçe');
@@ -975,8 +975,15 @@ EFF['Ateşkes']=async({p})=>{G.ceasefire=p;for(const q of G.players)q.prot=Math.
 EFF['Bolluk']=async({p,m})=>{await draw(p,4*m);for(const q of rivals(p))await draw(q,2*m)};
 EFF['İsyan']=async({p,m})=>{const mn=Math.min(...G.players.map(q=>q.hand.length));const ws=G.players.filter(q=>q.hand.length===mn);const n=ws.length>1?2:3;
 for(const q of ws){await say(T(q,`En az kart sende: ${n*m} kart çekiyorsun`,`${q.name} en az kartlı: ${n*m} kart çekiyor`),300);await draw(q,n*m)}};
-EFF['Ganimet']=async({p,m})=>{const names=[];for(let k=0;k<m;k++){while(G.deck.length){const c=G.deck[G.deck.length-1];names.push(c.name);const isC=M[c.name].type==='char';await draw(p,1);if(isC)break}}
-await say(`Ganimet: ${names.join(', ')||'deste boş'}`,Math.min(3000,900+names.length*450),'good')};
+async function ganimetShow(p,c,ok){
+if(!FXON()||CFG.fast)return;const g0=G;const d=$('#duel');
+d.className='on';
+d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(p)}<b>${isMe(p)?'Sen':esc(p.name)}</b></div></div><div class="gcard"><div class="gf">${backHTML(132)}</div><div class="gb">${cardHTML(c,{w:132})}</div></div><div class="gres"></div>`;
+sfx('draw');await sleep(450*Math.max(.6,CFG.speed));if(G!==g0)throw new Error('abort');
+const gc=d.querySelector('.gcard'),gr=d.querySelector('.gres');gc.classList.add('flip');sfx('draw');await sleep(420);
+gr.className='gres '+(ok?'yes':'no');gr.textContent=ok?'PUANLI ✓':'GEÇ ✗';sfx(ok?'good':'tap');
+await sleep((ok?1100:650)*Math.max(.6,CFG.speed));d.className='';d.innerHTML='';if(G!==g0)throw new Error('abort')}
+EFF['Ganimet']=async({p,m})=>{for(let k=0;k<m;k++){while(G.deck.length&&!p.noDraw){const c=G.deck[G.deck.length-1];const isC=M[c.name].type==='char';await ganimetShow(p,c,isC);await draw(p,1);if(isC)break}}};
 EFF['Kana Susamış']=async({p,m})=>{for(const q of rivals(p))await hit(p,q,false,'Kana Susamış',()=>discardN(q,2*m,null,{title:'Kana Susamış: 2 kart at'}))};
 EFF['Ödül']=async({p,m})=>{await discardN(p,m,null,{title:'Ödül: 1 kart feda et'});for(const q of rivals(p))await hit(p,q,false,'Ödül',()=>discardN(q,m,null,{title:'Ödül: 1 kart feda et'}));await draw(p,3*m)};
 EFF['Deprem']=async({p,m})=>{await discardN(p,2*m,null,{title:'Deprem: 2 kart at'});for(const q of rivals(p))await hit(p,q,false,'Deprem',()=>discardN(q,2*m,null,{title:'Deprem: 2 kart at'}))};
@@ -995,9 +1002,9 @@ const cur=G.ord[G.turnIdx];const i=G.ord.indexOf(a),j=G.ord.indexOf(b);[G.ord[i]
 await say(`Yer değiştirdi: ${nm(a)} ↔ ${nm(b)}`,1100,'good')};
 EFF['Kaos']=async({p})=>{const pool=[],ps=[];for(const q of rivals(p)){if(q.prot||!q.hand.length)continue;if(await tryReact(p,q,false,'Kaos'))continue;ps.push([q,q.hand.length]);pool.push(...q.hand);q.hand=[]}
 shuffle(pool);for(const [q,n] of ps){q.hand=pool.splice(0,n);q.hand.forEach(c=>{c.blocked=false;c.dbl=false})}render();shake();await say('Rakiplerin elleri karıştırıldı',1000)};
-EFF['İntikam']=async({p,forced})=>{const bad=['Hazine','İntikam','Büyü','Asker','Kombo','Prenses','Fedai'];const cands=rivals(p).filter(q=>q.last&&!bad.includes(q.last.name));const v=await choosePlayer(p,cands,'İntikam: kimin son kartı?',{forced,ask:1});if(!v)return fizzle(p);
+EFF['İntikam']=async({p,m,forced})=>{const bad=['Hazine','İntikam','Büyü','Asker','Kombo','Prenses','Fedai'];const cands=rivals(p).filter(q=>q.last&&!bad.includes(q.last.name));const v=await choosePlayer(p,cands,'İntikam: kimin son kartı?',{forced,ask:1});if(!v)return fizzle(p);
 const n=v.last.name;let t=null;if(TARG.has(n)){t=await choosePlayer(p,rivals(p),`İntikam: ${n} kime uygulansın?`,{unprot:1,ask:1});if(!t)return fizzle(p,'hedef yok')}
-await say(T(p,`${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor`),1100);await EFF[n]({p,m:1,forced:t})};
+await say(T(p,`${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor`),1100);await EFF[n]({p,m,forced:t})};
 async function playCard(p,c,m=1,inner=false){
 const src=anchorOf(p,c);
 rm(p.hand,c);c.blocked=false;c.dbl=false;STATS.played[c.name]=(STATS.played[c.name]||0)+1;
@@ -1009,7 +1016,7 @@ if(FXON()){
 const sr=rectOf($('#stageCard'));
 await fly(c,isMe(p),src,sr,{dur:560,arc:-60});
 if(!isMe(p))await flipAt(c,sr);
-renderStage(p,c);burst(sr.x,sr.y,COL[mt.cat],ATK.has(c.name)?24:16);
+renderStage(p,c);if(m>1)$('#stageCard').insertAdjacentHTML('beforeend',`<div class="mxc">×${m}</div>`);burst(sr.x,sr.y,COL[mt.cat],ATK.has(c.name)?24:16);
 await sleep(isMe(p)?600:900)}
 if(G.ceasefire&&G.ceasefire!==p&&c.name!=='Ateşkes'){await say('Ateşkes! Bu kartın etkisi geçersiz',900,'good')}
 else try{CURM=m;await EFF[c.name]({p,m,card:c,forced:null})}catch(e){if(!(e&&e.message==='abort'))STATS.errors.push(c.name+': '+(e&&e.stack||e));throw e}
