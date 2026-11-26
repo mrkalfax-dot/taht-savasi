@@ -212,6 +212,30 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 .crow .t{font-size:13.5px;line-height:1.35;color:#e2d6bc}
 .crow .t b{font-size:15px;color:var(--gold2)}
 .crow .t i{font-style:normal;color:var(--mut);font-size:12px}
+#duel{position:absolute;inset:0;z-index:58;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:radial-gradient(ellipse at center,rgba(20,8,4,.92),rgba(0,0,0,.97));padding:20px;text-align:center}
+#duel.on{display:flex;animation:dIn .22s ease-out}
+#duel.me{background:radial-gradient(ellipse at center,rgba(90,10,6,.85),rgba(10,0,0,.96));box-shadow:inset 0 0 120px rgba(220,30,20,.55)}
+#duel.me.beat{animation:dIn .22s ease-out,dBeat .9s ease-in-out infinite}
+#duel .dh{font-size:22px;font-weight:800;letter-spacing:.08em;color:var(--gold2);text-shadow:0 2px 0 #000,0 0 18px rgba(255,200,80,.4);line-height:1.25;max-width:330px}
+#duel.me .dh{color:#FF8A70;text-shadow:0 2px 0 #000,0 0 22px rgba(255,60,30,.7)}
+#duel .vs{display:flex;align-items:center;gap:14px;margin:4px 0}
+#duel .who{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px;font-size:14px;color:#F3E6C8;font-weight:700}
+#duel .who .sh{width:56px;height:64px}
+#duel .sw{font-size:30px;color:#E0442F;text-shadow:0 0 14px rgba(255,60,30,.8);animation:swp .7s ease-in-out infinite alternate}
+#duel .dc{animation:dCard .45s cubic-bezier(.3,.7,.3,1.25)}
+#duel .dt{font-size:14px;color:#E9DCC0;max-width:300px;line-height:1.4;font-style:italic}
+#duel .dk{font-size:12px;color:var(--mut);margin-top:6px;letter-spacing:.1em}
+#duel .stamp{position:relative;display:inline-block}
+#duel .stamp:after{content:attr(data-s);position:absolute;left:50%;top:46%;transform:translate(-50%,-50%) rotate(-14deg);padding:4px 12px;border:3px solid currentColor;border-radius:6px;font-size:20px;font-weight:900;letter-spacing:.12em;background:rgba(0,0,0,.55);animation:stp .35s cubic-bezier(.3,.7,.3,1.5) .25s both}
+#duel .stamp.bad{color:#FF5A43}#duel .stamp.good{color:#7FE08F}
+#duel .cards{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+@keyframes dIn{from{opacity:0}to{opacity:1}}
+@keyframes dBeat{0%,100%{box-shadow:inset 0 0 120px rgba(220,30,20,.45)}50%{box-shadow:inset 0 0 170px rgba(255,40,20,.8)}}
+@keyframes dCard{from{transform:scale(.4) rotate(-8deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+@keyframes swp{from{transform:scale(.9) rotate(-8deg)}to{transform:scale(1.15) rotate(8deg)}}
+@keyframes stp{from{transform:translate(-50%,-50%) rotate(-14deg) scale(2.4);opacity:0}to{transform:translate(-50%,-50%) rotate(-14deg) scale(1);opacity:1}}
+#logBox .li{padding:7px 4px;border-bottom:1px solid rgba(201,162,74,.15);font-size:14px;text-align:left;color:#E9DCC0}
+#logBox .li.bad{color:#FF9B8A}#logBox .li.good{color:#9FE0A8}#logBox .li.t{color:var(--gold);font-size:12px;letter-spacing:.08em;text-align:center}
 #zoom{z-index:60}
 #zoom .zw{display:flex;flex-direction:column;align-items:center;gap:16px;max-width:320px;text-align:center;animation:mb .25s cubic-bezier(.3,.7,.3,1.2)}
 #zoom .zt b{display:block;font-size:24px;color:var(--gold2);margin-bottom:4px}
@@ -304,7 +328,7 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 <header>
 <svg class="logo" viewBox="0 0 120 120" id="logoSvg"></svg>
 <div class="t" id="htitle">TAHT SAVAŞI</div>
-<button class="ib" id="btnFast" aria-label="Hızlı"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Çık"></button>
+<button class="ib" id="btnFast" aria-label="Hızlı"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Çık"></button>
 </header>
 <section id="opps"></section>
 <section id="table">
@@ -327,6 +351,7 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 <div id="result" class="ov"></div>
 <div id="intro" class="ov"></div>
 <div id="zoom" class="ov"></div>
+<div id="duel"></div>
 </div>
 <script>
 'use strict';
@@ -376,7 +401,7 @@ const NODOUBLE=new Set(['Ödül','Büyü','Asker','Prenses','Ateşkes','Kaos']);
 const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'TEPKİ',spe:'ÖZEL'};
 const HOUSES=[{n:'Bjorn',c:'#8E2A22',c2:'#4a120d'},{n:'Astrid',c:'#2D5A8C',c2:'#142a45'},{n:'Ragnar',c:'#3E6B3A',c2:'#1c351a'},{n:'Freya',c:'#6A3A85',c2:'#341b44'},{n:'Ivar',c:'#9A5A1E',c2:'#4d2b0c'}];
 const AINAMES=HOUSES.map(h=>h.n);
-const CFG={opps:3,diff:'normal',fast:false,autoHuman:false,speed:.8,sound:true};
+const CFG={opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};
 const STATS={played:{},errors:[],turns:0};
 const F='fill="currentColor"',FO='fill="currentColor" fill-opacity=".2"';
 const grain=y=>`<path d="M32 ${y} q-10 -2 -11 -11 q10 2 11 11 Z" ${FO}/><path d="M32 ${y} q10 -2 11 -11 q-10 2 -11 11 Z" ${FO}/>`;
@@ -545,7 +570,7 @@ if(!c){sc.classList.remove('on');sc.innerHTML='';cap.innerHTML='';return}
 sc.classList.add('on');sc.style.setProperty('--ac',COL[M[c.name].cat]);sc.innerHTML='<div class="glow"></div>'+cardHTML(c,{w:sc.offsetWidth||100});
 sc.onclick=()=>zoom(c);cap.innerHTML=p?`<b>${esc(nm(p)).toUpperCase()}</b>`:''}
 async function say(msg,ms,tone){
-G.log.push({msg,main:true});
+G.log.push({msg,main:true,tone});
 const n=$('#narr');n.textContent=msg;n.style.color=tone==='bad'?'#FF9B8A':tone==='good'?'#9FE0A8':'#F3E6C8';
 n.classList.remove('pop');void n.offsetWidth;n.classList.add('pop');
 if(ms)await sleep(ms)}
@@ -599,6 +624,28 @@ await Promise.all(got.map((c,i)=>{const to=anchorOf(p,c);return fly(c,isMe(p),fr
 got.forEach(c=>G.hide.delete(c.id));render()}
 if(G.endTrig&&G.lastDrawer===p&&!G.endAnnounced){G.endAnnounced=true;await say(`Deste bitti! Son kartı ${T(p,'sen çektin',p.name+' çekti')}`,1300,'bad')}
 return got.length}
+
+// --- Düello sahnesi: kim kime ne yaptı, herkes görsün ---
+function duelWait(ms,me){return new Promise(res=>{const d=$('#duel');let done=false;const fin=()=>{if(done)return;done=true;d.onclick=null;clearTimeout(t);res()};const t=setTimeout(fin,ms);setTimeout(()=>{d.onclick=fin},350)})}
+function shieldOf(p){return `<div class="sh">${houseShield(p.house,isMe(p),p.name)}</div>`}
+async function showdown(src,v,cname){
+if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const d=$('#duel');const vm=isMe(v),sm=isMe(src);const mt=M[cname];
+const head=vm?`${esc(src.name)} SANA SALDIRIYOR!`:sm?`${esc(v.name).toLocaleUpperCase('tr')} HEDEFİNDE`:`${esc(src.name)} → ${esc(v.name)}`;
+d.className='on'+(vm?' me beat':'');
+d.innerHTML=`<div class="dh">${head}</div><div class="vs"><div class="who">${shieldOf(src)}${sm?'Sen':esc(src.name)}</div><div class="sw">⚔</div><div class="who">${shieldOf(v)}${vm?'Sen':esc(v.name)}</div></div><div class="dc">${cardHTML({id:'d',name:cname},{w:118})}</div><div class="dt">${mt?esc(mt.text):''}</div><div class="dk">${vm?'Dokun · devam':''}</div>`;
+sfx(vm?'hit':'play');if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}}
+G.log.push({msg:`${src.name} → ${v.name}: ${cname}`,tone:vm?'bad':''});
+await duelWait((vm?2600:sm?1500:1900)*Math.max(.6,CFG.speed),vm);d.className='';d.innerHTML='';if(G!==g0)throw new Error('abort')}
+async function cardNews(from,to,cards){
+if(!FXON()||CFG.fast||!cards.length)return;const lost=isMe(from),got=isMe(to);if(!lost&&!got)return;const g0=G;const d=$('#duel');
+const who=lost?to:from;const head=lost?`${esc(who.name)} ELİNDEN ${cards.length>1?cards.length+' KART':'KARTINI'} ALDI`:`${esc(who.name)} ELİNDEN ALDIN`;
+d.className='on'+(lost?' me':'');
+d.innerHTML=`<div class="dh">${head}</div><div class="cards">${cards.map(c=>`<div class="stamp ${lost?'bad':'good'} dc" data-s="${lost?'ÇALINDI':'SENİN'}">${cardHTML(c,{w:cards.length>2?78:104})}</div>`).join('')}</div><div class="dk">Dokun · devam</div>`;
+sfx(lost?'hit':'coin');if(lost){try{navigator.vibrate&&navigator.vibrate(90)}catch(e){}}
+G.log.push({msg:lost?`${who.name} senden aldı: ${cards.map(c=>c.name).join(', ')}`:`${who.name} elinden aldın: ${cards.map(c=>c.name).join(', ')}`,tone:lost?'bad':'good'});
+await duelWait(2300*Math.max(.6,CFG.speed));d.className='';d.innerHTML='';if(G!==g0)throw new Error('abort')}
+function openLog(){const m=modalEl();const L=(G&&G.log||[]).slice(-40).reverse();
+m.innerHTML=`<div class="mbox"><h3>Son olaylar</h3><div id="logBox" style="max-height:60vh;overflow:auto">${L.map(x=>`<div class="li ${x.tone||''} ${x.msg.startsWith('—')?'t':''}">${esc(x.msg)}</div>`).join('')||'<div class="li">Henüz bir şey olmadı</div>'}</div><button class="btn ghost" id="okb">Kapat</button></div>`;m.classList.add('open');m.querySelector('#okb').onclick=closeModal}
 async function moveCards(from,to,cards,o={}){
 if(!cards.length)return;
 const srcs=cards.map(c=>anchorOf(from,c));
@@ -606,7 +653,7 @@ for(const c of cards){rm(from.hand,c);c.blocked=false;to.hand.push(c);if(FXON())
 if(!FXON())return;render();
 const face=isMe(from)||isMe(to);sfx('draw');
 await Promise.all(cards.map((c,i)=>{const t=anchorOf(to,c);return fly(c,face,srcs[i],t,{delay:i*140,dur:580,arc:-50}).then(()=>{G.hide.delete(c.id);render()})}));
-cards.forEach(c=>G.hide.delete(c.id));render()}
+cards.forEach(c=>G.hide.delete(c.id));render();await cardNews(from,to,cards)}
 async function discardCards(p,cards){
 if(!cards.length)return;
 const srcs=cards.map(c=>anchorOf(p,c));
@@ -678,6 +725,7 @@ if(ok.length===1){await say(`Hedef: ${ok[0].name}`,500);return ok[0]}
 const d=await decide(p,()=>pickPlayer(title,ok).then(q=>({k:'p',i:idxOf(q)})),aiF);
 return G.players[d.i]}
 async function tryReact(src,v,single,cname){
+await showdown(src,v,cname);
 if(FXON())await arrow(src,v,v.prot?'#7FA3C9':'#E0442F');
 if(v.prot){sfx('shield');await say(T(v,`Korunuyorsun — ${cname} etkisiz`,`${v.name} korunuyor — ${cname} etkisiz`),900,'good');return true}
 const opts=v.hand.filter(c=>c.name==='Fedai'||(single&&c.name==='Şövalye')).filter((c,i,a)=>a.findIndex(x=>x.name===c.name)===i);
@@ -1015,9 +1063,9 @@ if(room.info.status!=='lobby'||Date.now()-(room.info.t||0)>12*36e5)throw E('Bu d
 $('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn').textContent='ODAYA KATIL';$('#createBtn').onclick=()=>$('#joinBtn').click();$('#pOnline .back1').style.display='none';showPanel('pOnline')}
 catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerli değil.');else showPanel('pMain')}}
 try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
-$('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;
+$('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;$('#btnLog').onclick=openLog;$('#btnLog').innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg>';
 $('#btnSnd').onclick=()=>{CFG.sound=!CFG.sound;$('#btnSnd').innerHTML=CFG.sound?UI.snd:UI.mute;$('#btnSnd').classList.toggle('on',CFG.sound)};
-$('#btnFast').onclick=()=>{CFG.speed=CFG.speed<.6?.8:.42;$('#btnFast').classList.toggle('on',CFG.speed<.6)};
+$('#btnFast').onclick=()=>{CFG.speed=CFG.speed<.6?1:.5;$('#btnFast').classList.toggle('on',CFG.speed<.6)};
 $('#btnQuit').onclick=async()=>{if(NET.on){const i=await ask('Odadan çıkılsın mı?','Oyun arkadaşların için sürer. Kurucu, senin yerine yapay zekâyı oynatabilir. Aynı telefondan tekrar girersen kaldığın yerden devam edersin.',[{label:'Devam et',good:1},{label:'Odadan çık'}]);if(i===1){leaveRoom();showSetup()}return}
 const i=await ask('Savaştan çekilsin mi?','Bu oyun kaybolur.',[{label:'Devam et',good:1},{label:'Ana menüye dön'}]);if(i===1)showSetup()};
 (()=>{const e=$('#ember');for(let i=0;i<18;i++){const d=document.createElement('i');d.style.cssText=`left:${Math.random()*100}%;--dx:${(Math.random()*80-40)}px;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s`;e.appendChild(d)}})();
