@@ -378,6 +378,13 @@ header .t{letter-spacing:.3em}
 #table{position:relative}
 #chainBar{display:none;position:absolute;left:50%;top:8px;transform:translateX(-50%);z-index:8;align-items:center;gap:8px;padding:4px 16px 4px 14px;border-radius:30px;background:linear-gradient(180deg,#3b2a10,#1d1409);border:2.5px solid #FFE08A;box-shadow:0 0 0 4px rgba(255,200,80,.2),0 0 28px rgba(255,200,80,.85);color:#FFE9A8;animation:chb 1s ease-in-out infinite}
 #chainBar.on{display:flex}
+#explain{display:none;position:absolute;left:8px;right:8px;bottom:6px;z-index:9;padding:10px 12px;border-radius:16px;background:linear-gradient(180deg,#2c2113,#17100a);border:2px solid #E7C873;box-shadow:0 8px 30px rgba(0,0,0,.7);color:#F3E6C8;animation:chd .25s ease-out}
+#explain.on{display:block}
+#explain .eh{font-size:13px;color:#BFA878;margin-bottom:2px}#explain .eh b{color:#FFE08A;font-size:15px}
+#explain .en{font-size:21px;font-weight:900;color:#FFE08A;margin-bottom:3px}
+#explain .et{font-size:16.5px;line-height:1.35;margin-bottom:9px}
+#explain .eb{display:flex;gap:8px}#explain button{flex:1;min-height:46px;border-radius:12px;font-size:17px;font-weight:800;border:0}
+#explain .go{background:linear-gradient(180deg,#F3DC8C,#C9A24A);color:#2a1c06}#explain .au{flex:.6;background:#2b2417;color:#BFA878;border:1px solid #5a4a2a;font-size:13px}
 #chainBar b{font-size:34px;font-weight:900;line-height:1;text-shadow:0 0 14px rgba(255,200,80,.9)}
 #chainBar span{font-size:20px;animation:chd .7s ease-in-out infinite alternate}
 @keyframes chb{50%{box-shadow:0 0 0 7px rgba(255,200,80,.1),0 0 38px rgba(255,200,80,1)}}
@@ -435,14 +442,14 @@ header .t{letter-spacing:.3em}
 <div id="game" class="hidden" style="display:flex;flex-direction:column;flex:1;min-height:0">
 <header>
 <div class="t" id="htitle">TAHT SAVAŞI</div>
-<button class="ib" id="btnFast" aria-label="Hızlı"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Çık"></button>
+<button class="ib" id="btnStep" aria-label="Adım adım"></button><button class="ib" id="btnFast" aria-label="Hızlı"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Çık"></button>
 </header>
 <section id="opps"></section>
 <div id="order"></div>
 <section id="table">
 <div class="pile" id="deck"></div>
 <div id="stage"><div id="stageCard"></div><div id="cap"></div></div>
-<div id="chainBar"></div>
+<div id="chainBar"></div><div id="explain"></div>
 <div class="pile" id="disc"></div>
 </section>
 <div id="narr"></div>
@@ -1005,6 +1012,15 @@ shuffle(pool);for(const [q,n] of ps){q.hand=pool.splice(0,n);q.hand.forEach(c=>{
 EFF['İntikam']=async({p,m,forced})=>{const bad=['Hazine','İntikam','Büyü','Asker','Kombo','Prenses','Fedai'];const cands=rivals(p).filter(q=>q.last&&!bad.includes(q.last.name));const v=await choosePlayer(p,cands,'İntikam: kimin son kartı?',{forced,ask:1});if(!v)return fizzle(p);
 const n=v.last.name;let t=null;if(TARG.has(n)){t=await choosePlayer(p,rivals(p),`İntikam: ${n} kime uygulansın?`,{unprot:1,ask:1});if(!t)return fizzle(p,'hedef yok')}
 await say(T(p,`${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor`),1100);await EFF[n]({p,m,forced:t})};
+function explainStep(p,c,m){
+if(CFG.fast||NET.on||CFG.autoHuman||!FXON()||LS.get('ts_step')==='0')return Promise.resolve();
+const mt=M[c.name],e=$('#explain');
+e.innerHTML=`<div class="eh"><b>${esc(nm(p))}</b> oynadı${m>1?' · etki ×'+m:''}</div><div class="en">${c.name}</div><div class="et">${mt.text}</div><div class="eb"><button class="go">ANLADIM ▶</button><button class="au">Otomatik<br>devam et</button></div>`;
+e.classList.add('on');
+return new Promise((res,rej)=>{const g=G;const done=()=>{e.classList.remove('on');res()};
+e.querySelector('.go').onclick=()=>{sfx('tap');done()};
+e.querySelector('.au').onclick=()=>{LS.set('ts_step','0');done()};
+G.expl=done})}
 async function playCard(p,c,m=1,inner=false){
 const src=anchorOf(p,c);
 rm(p.hand,c);c.blocked=false;c.dbl=false;STATS.played[c.name]=(STATS.played[c.name]||0)+1;
@@ -1017,7 +1033,7 @@ const sr=rectOf($('#stageCard'));
 await fly(c,isMe(p),src,sr,{dur:560,arc:-60});
 if(!isMe(p))await flipAt(c,sr);
 renderStage(p,c);if(m>1)$('#stageCard').insertAdjacentHTML('beforeend',`<div class="mxc">×${m}</div>`);burst(sr.x,sr.y,COL[mt.cat],ATK.has(c.name)?24:16);
-await sleep(isMe(p)?600:900)}
+await sleep(isMe(p)?600:900);if(!isMe(p)&&!inner)await explainStep(p,c,m)}
 if(G.ceasefire&&G.ceasefire!==p&&c.name!=='Ateşkes'){await say('Ateşkes! Bu kartın etkisi geçersiz',900,'good')}
 else try{CURM=m;await EFF[c.name]({p,m,card:c,forced:null})}catch(e){if(!(e&&e.message==='abort'))STATS.errors.push(c.name+': '+(e&&e.stack||e));throw e}
 {
@@ -1102,6 +1118,7 @@ const deck=[];let id=0;for(const n of NAMES)for(let i=0;i<M[n].count;i++)deck.pu
 const players=spec?spec.players.map(x=>({name:x.name,ai:!!x.ai,house:x.house})):[{name:(LS.get('ts_name')||'Sen'),ai:false,house:0},...AINAMES.slice(0,CFG.opps).map((n,i)=>({name:n,ai:true,house:i}))];
 if(CFG.autoHuman&&!spec)players[0].ai=true;
 players.forEach(p=>{Object.assign(p,{hand:[],saray:[],played:[],prot:0,noDraw:false,last:null,ni:0})});
+{const e=document.getElementById('explain');if(e)e.classList.remove('on')}
 G={meIdx:spec?spec.meIdx:0,players,ord:players.slice(),deck,disc:[],log:[],hide:new Set(),top:null,turnIdx:R()*players.length|0,firstTurn:true,cur:null,endTrig:false,final:false,over:false,ceasefire:null,humanTurn:false,thinking:null,targeting:null,sel:null,tutor:!LS.get('ts_played')};
 return G}
 async function dealAll(){
@@ -1272,6 +1289,7 @@ catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerl
 try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
 $('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;$('#btnLog').onclick=openLog;$('#btnLog').innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg>';
 $('#btnSnd').onclick=()=>{CFG.sound=!CFG.sound;$('#btnSnd').innerHTML=CFG.sound?UI.snd:UI.mute;$('#btnSnd').classList.toggle('on',CFG.sound)};
+{const b=$('#btnStep');b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z"/></svg>';const sync=()=>b.classList.toggle('on',LS.get('ts_step')!=='0');sync();b.onclick=()=>{LS.set('ts_step',LS.get('ts_step')==='0'?'1':'0');sync();toast(LS.get('ts_step')==='0'?'Otomatik: rakip hamleleri kendiliğinden akar':'Adım adım: rakip kartını anlatır, sen ANLADIM dersin');if(LS.get('ts_step')==='0'){const e=$('#explain');if(G&&G.expl&&e.classList.contains('on'))G.expl()}}}
 $('#btnFast').onclick=()=>{CFG.speed=CFG.speed<.6?1:.5;$('#btnFast').classList.toggle('on',CFG.speed<.6)};
 $('#btnQuit').onclick=async()=>{if(NET.on){const i=await ask('Odadan çıkılsın mı?','Oyun arkadaşların için sürer. Kurucu, senin yerine yapay zekâyı oynatabilir. Aynı telefondan tekrar girersen kaldığın yerden devam edersin.',[{label:'Devam et',good:1},{label:'Odadan çık'}]);if(i===1){leaveRoom();showSetup()}return}
 const i=await ask('Savaştan çekilsin mi?','Bu oyun kaybolur.',[{label:'Devam et',good:1},{label:'Ana menüye dön'}]);if(i===1)showSetup()};
