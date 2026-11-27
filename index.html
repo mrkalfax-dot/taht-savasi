@@ -470,8 +470,9 @@ header .t{flex:1}
 #mpanel .ib{width:100%;height:46px;border-radius:12px;justify-content:flex-start;gap:12px;padding:0 12px;background:rgba(255,255,255,.03);border:1px solid #4d3b26;box-shadow:none;font:700 15px var(--serif);color:#F3E6C8}
 #mpanel .ib svg,#mpanel .ib .ic{width:20px!important;height:20px!important;flex:none;color:#F3DC8C}
 #mpanel .ib::after{content:attr(aria-label);flex:1;text-align:left}
-#mpanel #btnStep::before,#mpanel #btnFast::before,#mpanel #btnSnd::before{content:'Kapalı';order:3;font-size:12px;color:#8a7a5a;font-weight:800}
-#mpanel #btnStep.on::before,#mpanel #btnFast.on::before,#mpanel #btnSnd.on::before{content:'Açık';color:#8ee59a}
+#mpanel #btnStep::before,#mpanel #btnFast::before{content:'Kapalı';order:3;font-size:12px;color:#8a7a5a;font-weight:800}
+#mpanel #btnStep.on::before,#mpanel #btnFast.on::before{content:'Açık';color:#8ee59a}
+#mpanel #btnSnd::before{content:attr(data-lv);order:3;font-size:12px;font-weight:800;color:#8ee59a}#mpanel #btnSnd:not(.on)::before{color:#8a7a5a}
 #mpanel #btnQuit{color:#ff9a8a;border-color:#5a2a20}
 /* rakip koruması */
 .avw.prot:before{content:'';position:absolute;left:50%;top:50%;width:150%;height:150%;transform:translate(-50%,-52%);z-index:0;pointer-events:none;
@@ -736,7 +737,7 @@ const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'
 const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
 const AINAMES=HOUSES.map(h=>h.n);
 let MATCH={total:1,n:1,hist:[]};
-const CFG={total:1,opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};
+const CFG={vol:1,total:1,opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};
 const STATS={played:{},errors:[],turns:0};
 const F='fill="currentColor"',FO='fill="currentColor" fill-opacity=".2"';
 const grain=y=>`<path d="M32 ${y} q-10 -2 -11 -11 q10 2 11 11 Z" ${FO}/><path d="M32 ${y} q10 -2 11 -11 q-10 2 -11 11 Z" ${FO}/>`;
@@ -847,30 +848,34 @@ function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 let AC=null;
 let MB=null;
-function sfxBus(){if(MB&&MB.ctx===AC)return MB.in;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=2600;lp.Q.value=.3;const cm=AC.createDynamicsCompressor();cm.threshold.value=-24;cm.ratio.value=3;const g=AC.createGain();g.gain.value=.55;
-const dl=AC.createDelay(.5);dl.delayTime.value=.17;const fb=AC.createGain();fb.gain.value=.28;const wet=AC.createGain();wet.gain.value=.22;const dlp=AC.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1800;
-lp.connect(g);g.connect(cm);cm.connect(AC.destination);lp.connect(dl);dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(wet);wet.connect(cm);MB={ctx:AC,in:lp};return lp}
+function sfxBus(){if(MB&&MB.ctx===AC)return MB.in;const lp=AC.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1900;lp.Q.value=.2;
+const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=70;const cm=AC.createDynamicsCompressor();cm.threshold.value=-30;cm.knee.value=12;cm.ratio.value=4;cm.attack.value=.004;cm.release.value=.2;
+const g=AC.createGain();g.gain.value=.42*(CFG.vol??1);const dl=AC.createDelay(.5);dl.delayTime.value=.13;const fb=AC.createGain();fb.gain.value=.16;const wet=AC.createGain();wet.gain.value=.12;const dlp=AC.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1200;
+lp.connect(hp);hp.connect(g);g.connect(cm);cm.connect(AC.destination);hp.connect(dl);dl.connect(dlp);dlp.connect(fb);fb.connect(dl);dlp.connect(wet);wet.connect(g);MB={ctx:AC,in:lp,g};return lp}
+const SFXGAP={tap:90,sel:90,draw:130,swoosh:450,coin:160,discard:200,shield:250,play:120,good:300,hit:250,turn:800,block:300,reflect:300};
+const SFXLOW=new Set(['tap','draw','swoosh','coin','sel','discard']);let SFXT={},SFXQ=[];
 function sfx(k){if(!CFG.sound||CFG.fast)return;try{
+const now=performance.now();if(now-(SFXT[k]||0)<(SFXGAP[k]||100))return;SFXQ=SFXQ.filter(t=>now-t<1000);if(SFXQ.length>=5&&SFXLOW.has(k))return;SFXT[k]=now;SFXQ.push(now);
 if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume();
-const t0=AC.currentTime,out=sfxBus();
-const tone=(f,d,type,v,off,f2)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0+off);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+off+d);const at=Math.min(.03,d/3);g.gain.setValueAtTime(0,t0+off);g.gain.linearRampToValueAtTime(v,t0+off+at);g.gain.exponentialRampToValueAtTime(.0001,t0+off+d);o.connect(g);g.connect(out);o.start(t0+off);o.stop(t0+off+d+.05)};
-const bell=(f,d,v,off)=>{tone(f,d,'sine',v,off);tone(f*2.01,d*.6,'sine',v*.25,off)};
-const noise=(d,v,off,fq)=>{const n=Math.floor(AC.sampleRate*d),b=AC.createBuffer(1,n,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++){const e=Math.sin(Math.PI*i/n);a[i]=(Math.random()*2-1)*e*e}const s=AC.createBufferSource();s.buffer=b;const f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=fq||1400;f.Q.value=.6;const g=AC.createGain();g.gain.value=v;s.connect(f);f.connect(g);g.connect(out);s.start(t0+off)};
-if(k==='draw')noise(.14,.07,0,1500);
-else if(k==='tap')tone(520,.07,'sine',.05,0,430);
-else if(k==='play'){noise(.12,.08,0,1100);tone(150,.22,'sine',.12,0,100)}
-else if(k==='turn'){bell(392,.9,.05,0);bell(587,1.1,.045,.16)}
-else if(k==='hit'){tone(95,.45,'sine',.2,0,55);noise(.2,.06,0,500)}
-else if(k==='good'){bell(659,.7,.045,0);bell(880,.9,.04,.1);bell(1175,1.1,.03,.2)}
-else if(k==='win'){[392,494,587,784].forEach((f,i)=>bell(f,1.4,.06,i*.16))}
-else if(k==='lose'){tone(262,.8,'sine',.07,0);tone(220,.9,'sine',.065,.25);tone(175,1.4,'sine',.06,.5)}
-else if(k==='shield'){bell(880,.8,.04,0);bell(1320,.9,.025,.05)}
-else if(k==='sel'){noise(.05,.05,0,2600);tone(330,.09,'triangle',.05,0,280)}
-else if(k==='swoosh'){noise(.28,.035,0,700)}
-else if(k==='discard'){noise(.18,.05,0,900);tone(180,.15,'sine',.04,.03,120)}
-else if(k==='block'){[0,.09].forEach(o=>{tone(620,.18,'triangle',.05,o,560);tone(930,.12,'sine',.025,o)});noise(.1,.04,0,3000)}
-else if(k==='reflect'){[1047,1319,1568,2093].forEach((f,i)=>bell(f,.6,.022,i*.05))}
-else if(k==='coin'){bell(1568,.35,.03,0);bell(2093,.5,.025,.07)}
+const t0=AC.currentTime+.005,out=sfxBus();
+const tone=(f,d,type,v,off=0,f2)=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type||'sine';o.frequency.setValueAtTime(f,t0+off);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t0+off+d);const at=Math.min(.02,d/4);g.gain.setValueAtTime(0,t0+off);g.gain.linearRampToValueAtTime(v,t0+off+at);g.gain.exponentialRampToValueAtTime(.0001,t0+off+d);o.connect(g);g.connect(out);o.start(t0+off);o.stop(t0+off+d+.05)};
+const bell=(f,d,v,off=0)=>{tone(f,d,'sine',v,off);tone(f*2,d*.4,'sine',v*.12,off)};
+const noise=(d,v,off=0,fq=1000,type='lowpass')=>{const n=Math.floor(AC.sampleRate*d),b=AC.createBuffer(1,n,AC.sampleRate),a=b.getChannelData(0);for(let i=0;i<n;i++){const e=Math.sin(Math.PI*i/n);a[i]=(Math.random()*2-1)*e*e}const sr=AC.createBufferSource();sr.buffer=b;const f=AC.createBiquadFilter();f.type=type;f.frequency.value=fq;const g=AC.createGain();g.gain.value=v;sr.connect(f);f.connect(g);g.connect(out);sr.start(t0+off)};
+if(k==='tap')noise(.03,.03,0,1600,'bandpass');
+else if(k==='sel'){tone(380,.09,'sine',.045,0,300);noise(.025,.02,0,1400,'bandpass')}
+else if(k==='draw')noise(.11,.04,0,1100);
+else if(k==='play'){tone(150,.2,'sine',.08,0,105);noise(.07,.03,0,700)}
+else if(k==='turn'){bell(330,.9,.03,0);bell(494,1,.026,.14)}
+else if(k==='hit'){tone(92,.38,'sine',.11,0,58);noise(.14,.03,0,380)}
+else if(k==='good'){bell(523,.6,.026,0);bell(659,.7,.022,.1)}
+else if(k==='win'){[392,494,587,784].forEach((f,i)=>bell(f,1.2,.034,i*.15))}
+else if(k==='lose'){tone(262,.7,'sine',.045,0);tone(220,.8,'sine',.04,.22);tone(175,1.2,'sine',.038,.44)}
+else if(k==='shield')bell(660,.6,.022,0);
+else if(k==='coin')bell(988,.3,.016,0);
+else if(k==='swoosh')noise(.2,.016,0,600);
+else if(k==='discard'){noise(.14,.035,0,800);tone(170,.12,'sine',.025,.02,120)}
+else if(k==='block'){tone(520,.12,'triangle',.028,0,470);tone(520,.12,'triangle',.024,.1,470)}
+else if(k==='reflect'){[784,988,1175].forEach((f,i)=>bell(f,.45,.015,i*.06))}
 }catch(e){}}
 function cardHTML(c,o={}){const m=M[c.name];const w=o.w||88;const cl=['card','k-'+m.cat];if(c.blocked)cl.push('blk');if(c.dbl)cl.push('dbl');if(o.dis)cl.push('dis');if(o.hid)cl.push('hid');if(o.sel)cl.push('sel');if(w<56)cl.push('xs');
 return `<div class="${cl.join(' ')}" data-id="${c.id}" style="--ac:${COL[m.cat]};--cw:${w}px${o.st||''}"><div class="fr"></div>${m.type==='char'?`<div class="pt${m.pts>=100?' p3':''}">${m.pts}</div>`:`<div class="gem"></div>`}<div class="art"><svg viewBox="0 0 64 64" class="ic">${ICON[c.name]}</svg></div><div class="nm${c.name.length>11?' l2':c.name.length>8?' l1':''}">${c.name}</div>${c.dbl?'<div class="x2">×2</div>':''}</div>`}
@@ -1585,7 +1590,9 @@ $('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn')
 catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerli değil.');else showPanel('pMain')}}
 try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
 $('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;$('#btnLog').onclick=openLog;$('#btnLog').innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg>';
-$('#btnSnd').onclick=()=>{CFG.sound=!CFG.sound;$('#btnSnd').innerHTML=CFG.sound?UI.snd:UI.mute;$('#btnSnd').classList.toggle('on',CFG.sound)};
+{const LV=[['Normal',1],['Kısık',.45],['Kapalı',0]];let li=+(LS.get('ts_snd')||0);if(!(li>=0&&li<3))li=0;
+const ap=()=>{const [lab,v]=LV[li];CFG.sound=v>0;CFG.vol=v||1;const b=$('#btnSnd');b.innerHTML=CFG.sound?UI.snd:UI.mute;b.classList.toggle('on',CFG.sound);b.dataset.lv=lab;if(MB&&MB.g)MB.g.gain.value=.42*(CFG.vol||1)};ap();
+$('#btnSnd').onclick=()=>{li=(li+1)%3;LS.set('ts_snd',String(li));ap();if(CFG.sound)sfx('sel')}}
 {const b=$('#btnStep');b.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5v14l11-7z"/></svg>';const sync=()=>b.classList.toggle('on',LS.get('ts_step')!=='0');sync();b.onclick=()=>{LS.set('ts_step',LS.get('ts_step')==='0'?'1':'0');sync();toast(LS.get('ts_step')==='0'?'Otomatik: rakip hamleleri kendiliğinden akar':'Adım adım: rakip kartını anlatır, sen ANLADIM dersin');if(LS.get('ts_step')==='0'){const e=$('#explain');if(G&&G.expl&&e.classList.contains('on'))G.expl()}}}
 $('#btnFast').onclick=()=>{CFG.speed=CFG.speed<.6?1:.5;$('#btnFast').classList.toggle('on',CFG.speed<.6)};
 $('#btnQuit').onclick=async()=>{if(NET.on){const i=await ask('Odadan çıkılsın mı?','Oyun arkadaşların için sürer. Kurucu, senin yerine yapay zekâyı oynatabilir. Aynı telefondan tekrar girersen kaldığın yerden devam edersin.',[{label:'Devam et',good:1},{label:'Odadan çık'}]);if(i===1){leaveRoom();showSetup()}return}
@@ -1598,7 +1605,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-014331';
+const BUILD='20261128-015026';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
