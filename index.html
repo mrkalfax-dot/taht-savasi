@@ -429,6 +429,13 @@ header .t{letter-spacing:.3em}
 #pickTip .pt-i svg{width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
 #pickTip b{display:block;font-size:20px;color:#FFE08A}#pickTip i{display:block;font-style:normal;font-size:11px;letter-spacing:.08em;color:#BFA878;margin-bottom:3px}
 #pickTip p{margin:0;font-size:16px;line-height:1.3}#pickTip p em{color:#FFE08A;font-style:normal;font-weight:900}
+
+html,body{background:#0b0806}
+#app{position:fixed;left:0;right:0;top:0;bottom:0;height:auto!important}
+#game:not(.hidden){display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
+#table{flex:1 1 0!important;min-height:150px}
+#handWrap{flex:0 1 auto!important;min-height:0;display:flex;flex-direction:column;margin-top:0!important;padding-bottom:2px!important}
+#hand.grid{flex:0 1 auto;min-height:0;max-height:none}
 </style>
 </head>
 <body>
@@ -729,13 +736,13 @@ $('#game').classList.toggle('myturn',!!G.humanTurn);$('#game').classList.toggle(
 updateInfo()}
 function sortedHand(m){return m.hand.slice().sort((a,b)=>(M[b.name].pts-M[a.name].pts)||(M[a.name].type===M[b.name].type?(a.name<b.name?-1:a.name>b.name?1:a.id-b.id):0))}
 function handGeom(n){const W=($('#hand').clientWidth||360);
-const cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;
+let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(cols===6&&(W-14-30)/6<62)cols=5;if(cols===5&&n>5&&(W-14-24)/5<58)cols=4;
 const w=Math.max(40,Math.min(n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
 return{w,step:0,start:0,grid:true,cols}}
 function renderHand(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
 const n=m.hand.length,g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
 if(g.grid){const sT=H.scrollTop;H.style.height='';H.innerHTML=hs.map(c=>cardHTML(c,{w:g.w,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})).join('');
-const f=H.firstElementChild;if(f){const rh=f.getBoundingClientRect().height+6;if(n>g.cols*2){H.style.maxHeight='none';const need=H.scrollHeight;const room=Math.round($('#app').getBoundingClientRect().bottom-$('#me').getBoundingClientRect().bottom-($('#hcount').offsetHeight||0)-10);H.style.maxHeight=Math.max(Math.round(rh*2.2),Math.min(need,room))+'px'}else H.style.maxHeight='none';H.scrollTop=sT}}
+H.style.maxHeight='';H.scrollTop=sT}
 else{H.style.maxHeight='';H.style.height=Math.round(g.w*1.42+30)+'px';
 H.innerHTML=hs.map((c,i)=>{const d=i-mid;const st=`;left:${(g.start+i*g.step).toFixed(1)}px;--rot:${(d*(n>6?2.2:3)).toFixed(1)}deg;--ty:${(d*d*1.5).toFixed(1)}px;z-index:${i+1}`;
 return cardHTML(c,{w:g.w,st,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})}).join('')}
@@ -1373,7 +1380,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261127-0240';
+const BUILD='20261127-224900';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
