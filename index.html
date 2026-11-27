@@ -433,7 +433,7 @@ header .t{letter-spacing:.3em}
 html,body{background:#0b0806}
 #app{position:fixed;left:0;right:0;top:0;bottom:0;height:auto!important}
 #game:not(.hidden){display:flex;flex-direction:column;flex:1 1 auto;min-height:0}
-#table{flex:1 1 0!important;min-height:150px}
+#table{flex:1 1 0!important;min-height:150px;max-height:none!important}
 #handWrap{flex:0 1 auto!important;min-height:0;display:flex;flex-direction:column;margin-top:0!important;padding-bottom:2px!important}
 #hand.grid{flex:0 1 auto;min-height:0;max-height:none}
 
@@ -442,7 +442,7 @@ html,body{background:#0b0806}
 #hand.grid .card{transition:transform .14s ease,filter .2s ease,box-shadow .2s}
 #hand.grid .card:active:not(.sel){transform:scale(.96)}
 .mbox.pick .pc{transition:transform .12s ease}.mbox.pick .pc:active{transform:scale(.95)}
-@media(max-height:700px){.pile .pc2{zoom:.82}.pile .cnt b{font-size:14px}}
+
 
 /* === premium yüzeyler === */
 .card{box-shadow:0 0 0 .1em var(--goldD),0 .08em 0 .1em #1a1009,0 .55em 1.1em rgba(0,0,0,.75),0 .15em .3em rgba(0,0,0,.6)}
@@ -460,6 +460,37 @@ body:after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml;
 .btn.primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(120,80,20,.55),0 6px 16px rgba(0,0,0,.55)}
 .mbox{box-shadow:inset 0 1px 0 rgba(255,228,160,.15),0 20px 50px rgba(0,0,0,.8)}
 #handWrap{background:linear-gradient(180deg,transparent,rgba(0,0,0,.28) 30%,rgba(0,0,0,.4))}
+
+#order{display:none!important}
+header{position:relative;justify-content:space-between}
+header .t{flex:1}
+#btnMenu{width:42px;height:42px;color:#F3DC8C}
+#mpanel{display:none;position:absolute;right:10px;top:calc(100% + 4px);z-index:70;min-width:230px;padding:8px;border-radius:16px;background:linear-gradient(180deg,#2c2113,#140e08);border:1.5px solid #c9a24a;box-shadow:0 14px 40px rgba(0,0,0,.85);flex-direction:column;gap:4px;animation:chd .18s ease-out}
+#mpanel.open{display:flex}
+#mpanel .ib{width:100%;height:46px;border-radius:12px;justify-content:flex-start;gap:12px;padding:0 12px;background:rgba(255,255,255,.03);border:1px solid #4d3b26;box-shadow:none;font:700 15px var(--serif);color:#F3E6C8}
+#mpanel .ib svg,#mpanel .ib .ic{width:20px!important;height:20px!important;flex:none;color:#F3DC8C}
+#mpanel .ib::after{content:attr(aria-label);flex:1;text-align:left}
+#mpanel #btnStep::before,#mpanel #btnFast::before,#mpanel #btnSnd::before{content:'Kapalı';order:3;font-size:12px;color:#8a7a5a;font-weight:800}
+#mpanel #btnStep.on::before,#mpanel #btnFast.on::before,#mpanel #btnSnd.on::before{content:'Açık';color:#8ee59a}
+#mpanel #btnQuit{color:#ff9a8a;border-color:#5a2a20}
+/* rakip koruması */
+.avw.prot:before{content:'';position:absolute;left:50%;top:50%;width:150%;height:150%;transform:translate(-50%,-52%);z-index:0;pointer-events:none;
+background:radial-gradient(ellipse at 50% 40%,rgba(140,190,255,.35),rgba(80,140,230,.12) 55%,transparent 70%);
+-webkit-mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 72'><path d='M32 2 L60 12 V34 C60 54 46 64 32 70 C18 64 4 54 4 34 V12 Z' fill='black'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 72'><path d='M32 2 L60 12 V34 C60 54 46 64 32 70 C18 64 4 54 4 34 V12 Z' fill='black'/></svg>") center/contain no-repeat}
+.avw.prot:after{content:'';position:absolute;left:50%;top:50%;width:150%;height:150%;transform:translate(-50%,-52%);z-index:0;pointer-events:none;
+background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 72'><path d='M32 3 L59 12.5 V34 C59 53 45.5 63 32 69 C18.5 63 5 53 5 34 V12.5 Z' fill='none' stroke='%239CC8FF' stroke-width='2.6'/></svg>") center/contain no-repeat;filter:drop-shadow(0 0 6px rgba(120,180,255,.9));animation:protP 2.2s ease-in-out infinite}
+@keyframes protP{50%{opacity:.6}}
+.avw>*{position:relative;z-index:1}.avw .st{z-index:4}
+.avw .st i.sh{min-width:40px;height:27px;border-width:2px}.avw .st i.sh svg{width:17px;height:17px}.avw .st i.sh b{font-size:15px}
+
+#table{container-type:size}
+#stageCard{--sw:clamp(80px,min(38cqw,calc(70cqh / 1.42)),210px)!important}
+.pile{--pw:clamp(50px,min(24cqw,calc(50cqh / 1.42)),120px);width:calc(var(--pw) + 8px)!important}
+.pile .pc2{width:var(--pw)!important;height:calc(var(--pw) * 1.42)!important}
+.pile .back,.pile .card{--cw:var(--pw)!important}
+.pile .empty{width:var(--pw)!important;height:calc(var(--pw) * 1.42)!important}
+.pile .cnt b{font-size:clamp(14px,5cqh,22px)}
+.avw.prot:before,.avw.prot:after{width:128%;height:128%;transform:translate(-50%,-58%)}.opp .avw.prot{margin-bottom:5px}
 </style>
 </head>
 <body>
@@ -510,7 +541,7 @@ body:after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml;
 <div id="game" class="hidden" style="display:flex;flex-direction:column;flex:1;min-height:0">
 <header>
 <div class="t" id="htitle">TAHT SAVAŞI</div>
-<button class="ib" id="btnStep" aria-label="Adım adım"></button><button class="ib" id="btnFast" aria-label="Hızlı"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Çık"></button>
+<button class="ib gear" id="btnMenu" aria-label="Ayarlar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/><circle cx="12" cy="12" r="6.6"/></svg></button><div id="mpanel"><button class="ib" id="btnStep" aria-label="Adım adım"></button><button class="ib" id="btnFast" aria-label="Hızlı animasyon"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Son olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Oyundan çık"></button></div>
 </header>
 <section id="opps"></section>
 <div id="order"></div>
@@ -765,8 +796,8 @@ $('#game').classList.toggle('myturn',!!G.humanTurn);$('#game').classList.toggle(
 updateInfo()}
 function sortedHand(m){return m.hand.slice().sort((a,b)=>(M[b.name].pts-M[a.name].pts)||(M[a.name].type===M[b.name].type?(a.name<b.name?-1:a.name>b.name?1:a.id-b.id):0))}
 function handGeom(n){const W=($('#hand').clientWidth||360);
-let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(cols===6&&(W-14-30)/6<62)cols=5;if(cols===5&&n>5&&(W-14-24)/5<58)cols=4;
-const w=Math.max(40,Math.min(n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
+let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(n>3&&n<=6&&innerHeight/W>1.9)cols=3;if(cols===6&&(W-14-30)/6<62)cols=5;if(cols===5&&n>5&&(W-14-24)/5<58)cols=4;
+const w=Math.max(40,Math.min(cols<=3?118:n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
 return{w,step:0,start:0,grid:true,cols}}
 function renderHand(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
 const n=m.hand.length,g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
@@ -1443,7 +1474,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261127-234333';
+const BUILD='20261128-002959';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1454,6 +1485,11 @@ chk();document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk(
 
 (()=>{const m=document.getElementById('modal');if(!m)return;let was=false;new MutationObserver(()=>{const o=m.classList.contains('open');if(o&&!was)sfx('swoosh');was=o}).observe(m,{attributes:true,attributeFilter:['class']});
 document.addEventListener('click',e=>{if(e.target.closest('.ib,.seg button'))sfx('tap')},true)})();
+
+(()=>{const b=document.getElementById('btnMenu'),p=document.getElementById('mpanel');if(!b||!p)return;
+b.onclick=e=>{e.stopPropagation();p.classList.toggle('open')};
+p.addEventListener('click',e=>{const t=e.target.closest('.ib');if(!t)return;if(!['btnStep','btnFast','btnSnd'].includes(t.id))setTimeout(()=>p.classList.remove('open'),0)});
+document.addEventListener('click',e=>{if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==b)p.classList.remove('open')})})();
 </script>
 </body>
 </html>
