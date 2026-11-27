@@ -571,6 +571,12 @@ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
 .card.xs .art{top:46%!important}
 .card.sel{box-shadow:0 0 0 .14em #8ee59a,0 0 1.2em rgba(120,230,140,.45),0 .9em 1.6em #000c!important}
 .card .nm.l1{font-size:.9em!important}.card .nm.l2{font-size:.78em!important}
+#hand .hempty{min-height:150px;margin:6px 10px;border-radius:16px;border:1.5px dashed rgba(217,180,90,.35);background:rgba(0,0,0,.22);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#d9c49a;text-align:center;padding:12px}
+#hand .hempty .ic{width:46px;height:46px;color:#b8975a;stroke-width:2.4}#hand .hempty b{font-size:18px;color:#f3e2b8}#hand .hempty span{font-size:13px;color:#a8977a}
+
+.hempty{margin:10px 14px;padding:18px 16px;border-radius:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;background:linear-gradient(180deg,rgba(42,29,16,.85),rgba(18,11,5,.9));box-shadow:inset 0 0 0 1.5px #8a6a2c,0 8px 18px #000a}
+.hempty .hei{width:30px;height:34px;flex:none;color:#8a7a5a;display:flex}.hempty .hei svg{width:30px!important;height:34px!important;position:static!important;display:block}
+.hempty b{font-size:18px;color:#f3dc8c}.hempty span{font-size:15px;color:#f3e6c8;line-height:1.3}.hempty small{font-size:13px;color:#a0927a;line-height:1.3}
 </style>
 </head>
 <body>
@@ -887,12 +893,13 @@ let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(n>3&&n<=6&&innerHeight/W>1.9)col
 const w=Math.max(40,Math.min(cols<=3?118:n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
 return{w,step:0,start:0,grid:true,cols}}
 function renderHand(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
-const n=m.hand.length,g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
+const n=m.hand.length;if(!n){const H0=$('#hand');H0.classList.remove('grid','hs');H0.style.height='';H0.style.maxHeight='';H0.innerHTML=`<div class="hempty"><div class="hei">${UI.shield}</div><b>Elinde kart yok</b><span>${G.emptyWhy||'Kartların atıldı ya da verildi.'}</span><small>Sıran gelince desteden kart çekip oyuna devam edeceksin.</small></div>`;return}G.emptyWhy=null;const g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
 if(g.grid){const sT=H.scrollTop;H.style.height='';H.innerHTML=hs.map(c=>cardHTML(c,{w:g.w,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})).join('');
 H.style.maxHeight='';H.scrollTop=sT}
 else{H.style.maxHeight='';H.style.height=Math.round(g.w*1.42+30)+'px';
 H.innerHTML=hs.map((c,i)=>{const d=i-mid;const st=`;left:${(g.start+i*g.step).toFixed(1)}px;--rot:${(d*(n>6?2.2:3)).toFixed(1)}deg;--ty:${(d*d*1.5).toFixed(1)}px;z-index:${i+1}`;
 return cardHTML(c,{w:g.w,st,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})}).join('')}
+if(!n){H.classList.remove('grid');H.style.height='';H.style.maxHeight='';H.innerHTML=`<div class="hempty"><svg viewBox="0 0 64 64" class="ic"><rect x="14" y="10" width="30" height="42" rx="4" stroke-dasharray="4 4"/><rect x="22" y="14" width="30" height="42" rx="4" stroke-dasharray="4 4"/></svg><b>Elin boş</b><span>${G.deck.length?'Sıran gelince desteden kart çekeceksin':'Oyun sonuna kadar kartın yok'}</span></div>`}
 const hc=$('#hcount');hc.textContent=`${n} KART`;hc.classList.remove('over')}
 const hiNum=t=>esc(t).replace(/(×?\d+)/g,'<em>$1</em>');
 function updateInfo(){const el=$('#info');if(!el||!G)return;const m=me();const c=G.sel!=null&&m.hand.find(x=>x.id===G.sel);
@@ -1187,7 +1194,7 @@ EFF['Zehir']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Zehir
 await hit(p,v,true,'Zehir',async()=>{for(let i=0;i<m;i++){if(!v.hand.some(c=>M[c.name].type==='char')){await say(T(v,'Elinde puanlı kart yok',`${gen(v)} elinde puanlı kart yok`),700);break}
 await discardN(v,1,c=>M[c.name].type==='char',{title:'Zehir: puanlı bir kartını at'})}})};
 EFF['İhanet']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'İhanet: kimin eli boşalsın?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'İhanet',async()=>{await say(T(v,`${v.hand.length} kartının hepsi atılıyor`,`${gen(v)} ${v.hand.length} kartının hepsi atılıyor`),700,isMe(v)?'bad':'');await discardCards(v,v.hand.slice())})};
+await hit(p,v,true,'İhanet',async()=>{await say(T(v,`${v.hand.length} kartının hepsi atılıyor`,`${gen(v)} ${v.hand.length} kartının hepsi atılıyor`),isMe(v)?1800:700,isMe(v)?'bad':'');if(isMe(v))G.emptyWhy=`${esc(p.name)} sana İhanet oynadı, bütün kartların atıldı.`;await discardCards(v,v.hand.slice())})};
 EFF['Şans']=async({p,m})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length);if(!rs.length)return fizzle(p,'hedef yok');
 for(const q of rs)await hit(p,q,false,'Şans',async()=>{if(!q.hand.length)return;const n=Math.min(2*m,q.hand.length);const cs=await chooseCards(q,q.hand,n,{mode:'low',title:`Şans: ${dat(p)} ${n} kart ver`});await takeSay(p,q,cs);await draw(q,1)})};
 EFF['Olta']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Olta: kimin eline bakacaksın?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
@@ -1561,7 +1568,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-011137';
+const BUILD='20261128-011901';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
