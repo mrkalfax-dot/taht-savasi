@@ -1598,7 +1598,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-013759';
+const BUILD='20261128-014103';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1618,7 +1618,8 @@ document.addEventListener('click',e=>{if(p.classList.contains('open')&&!p.contai
 (()=>{const set=()=>{try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0}catch(e){}const sa=window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;const port=innerHeight>=innerWidth;const vv=window.visualViewport;const h=Math.round(sa&&port&&screen.height>innerHeight&&screen.height-innerHeight<120?screen.height:Math.min(innerHeight,vv?vv.height:1e9));if(Math.abs((set.h||0)-h)>2){set.h=h;document.documentElement.style.setProperty('--apph',h+'px')}};
 set();addEventListener('resize',set);if(window.visualViewport)visualViewport.addEventListener('resize',set);addEventListener('scroll',()=>{if(scrollY)window.scrollTo(0,0)},{passive:true});document.addEventListener('focusout',()=>setTimeout(set,250));setInterval(()=>{if(scrollY)set()},1500);addEventListener('orientationchange',()=>setTimeout(set,300));document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(set,200)})})();
 
-(()=>{if(!/[?&]tani=1/.test(location.search))return;const d=document.createElement('div');d.id='tani';
+(()=>{let tc=0,tt=0;document.addEventListener('click',e=>{if(!e.target.closest('#htitle'))return;const n=Date.now();tc=n-tt<700?tc+1:1;tt=n;if(tc>=5){tc=0;try{localStorage.setItem('ts_tani',localStorage.getItem('ts_tani')==='1'?'0':'1')}catch(_){}location.reload()}},true)})();
+(()=>{let on=/[?&]tani=1/.test(location.search);try{on=on||localStorage.getItem('ts_tani')==='1'}catch(_){}if(!on)return;const d=document.createElement('div');d.id='tani';
 d.style.cssText='position:fixed;left:0;right:0;top:0;bottom:0;z-index:999999;pointer-events:none;border:4px solid #0f0;box-sizing:border-box';
 const t=document.createElement('div');t.style.cssText='position:fixed;left:50%;top:40%;transform:translateX(-50%);z-index:1000000;background:#000;color:#0f0;font:600 15px monospace;padding:12px;border:2px solid #0f0;white-space:pre';
 const p=document.createElement('div');p.style.cssText='position:fixed;left:0;right:0;bottom:0;height:0;padding-bottom:env(safe-area-inset-bottom);padding-top:env(safe-area-inset-top)';document.body.appendChild(p);
