@@ -597,6 +597,8 @@ html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
 
 #game>header{z-index:60!important}
 #mpanel{background:#1c140c!important;box-shadow:0 0 0 1px #000,0 18px 50px #000e!important}
+
+#opps.x1 .pbadge,#opps.x2 .pbadge{right:auto;left:50%;transform:translateX(-50%);bottom:-6px;padding:0 4px 0 3px}#opps.x1 .pbadge b,#opps.x2 .pbadge b{font-size:10.5px}#opps.x1 .cbadge,#opps.x2 .cbadge{left:-4px;bottom:auto;top:2px;width:17px;height:17px}
 </style>
 </head>
 <body>
@@ -1117,7 +1119,7 @@ m.querySelector('#okb').onclick=()=>{sfx('tap');closeModal();res(sel.slice())}};
 function reveal(title,groups){if(CFG.fast)return Promise.resolve();return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${groups.map(g=>`<div class="div"></div><div class="sub"><b style="color:var(--gold2)">${g.p.name}</b> · ${g.p.hand.length} kart</div><div class="grid">${g.p.hand.map(c=>cardHTML(c,{w:62})).join('')||'<span class="sub">(boş)</span>'}</div>`).join('')}<button class="btn primary" id="okb">Tamam</button></div>`;m.classList.add('open');m.querySelector('#okb').onclick=()=>{closeModal();res()}})}
 function pickName(title){return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3><div class="names">${NAMES.map(n=>`<button data-n="${n}">${cardHTML({id:'n',name:n},{w:50})}${n}</button>`).join('')}</div></div>`;m.classList.add('open');m.querySelectorAll('.names button').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(b.dataset.n)})})}
 function showOpp(p){const m=modalEl();const played=p.played.slice(-6).reverse();const i=p.house;
-m.innerHTML=`<div class="mbox"><div style="display:flex;align-items:center;gap:12px;justify-content:center"><div style="width:44px;height:50px">${houseShield(i,isMe(p),p.name)}</div><div style="text-align:left"><h3 style="text-align:left">${p.name}</h3><div class="sub" style="text-align:left">Elinde ${p.hand.length} kart${p.prot?' · korunuyor':''}</div></div></div><div class="div"></div><div class="lab" style="text-align:center">SON OYNADIKLARI</div><div class="grid">${played.map(c=>cardHTML(c,{w:58})).join('')||'<span class="sub">Henüz yok</span>'}</div><button class="btn primary" id="okb">Kapat</button></div>`;
+m.innerHTML=`<div class="mbox"><div style="display:flex;align-items:center;gap:12px;justify-content:center"><div style="width:46px;height:54px">${isMe(p)?crestSVG(esc((p.name||'S')[0].toLocaleUpperCase('tr')),'#a87a20'):crestSVG(esc((p.name||'?')[0].toLocaleUpperCase('tr')),OPPC[i%OPPC.length])}</div><div style="text-align:left"><h3 style="text-align:left">${p.name}</h3><div class="sub" style="text-align:left">Elinde ${p.hand.length} kart${p.prot?` · 🛡 ${p.prot} tur korunuyor`:''}${p.noDraw?' · engelli':''}</div></div></div><div class="div"></div><div class="lab" style="text-align:center">SON OYNADIKLARI</div><div class="grid">${played.map(c=>cardHTML(c,{w:58})).join('')||'<span class="sub">Henüz yok</span>'}</div><button class="btn primary" id="okb">Kapat</button></div>`;
 m.classList.add('open');m.querySelector('#okb').onclick=closeModal}
 async function decide(p,localFn,aiFn){
 if(p.ai)return aiFn();
@@ -1460,7 +1462,8 @@ r.innerHTML=`<div class="mbox rules"><h3>Nasıl oynanır?</h3><div class="rtab">
 <li><b>Fedai (Ayna):</b> Elinde Fedai varsa, sana gelen tek hedefli saldırıyı saldırana yansıtabilirsin.</li>
 <li><b>Oyun sonu:</b> Deste bitince son kartı çeken sırasını bitirir. Ardından herkes kart çekmeden bir hamle daha yapar.</li>
 <li><b>Puan:</b> Elinde kalan karakterlerin puan toplamı. Hazine elindeyse toplam iki katına çıkar. Eşitlikte taht paylaşılır.</li>
-<li><b>İpucu:</b> Parmağını elindeki kartların üzerinde kaydırırsan altındaki kart büyür; dokununca kart yalnızca açılır, oynamak için OYNA düğmesine basman gerekir; basılı tutarsan ayrıntısı açılır. Rakibe dokunursan son oynadıklarını görürsün.</li>
+<li><b>Maç:</b> Başlarken 1, 3, 5 veya 7 oyun seçebilirsin. Her oyunun puanı tabloya yazılır, en sonda toplamı en yüksek olan maçı kazanır.</li>
+<li><b>İpucu:</b> Kart çoksa elini parmağınla yukarı aşağı kaydır. Karta dokununca bilgisi açılır; oynamak için <b>OYNA</b>’ya, vazgeçmek için ✕’e bas. Kart seçme ekranlarında karta basılı tutarsan ne yaptığını görürsün. Rakibe dokunursan son oynadıklarını görürsün. Sağ üstteki ⚙ menüsünden adım adım anlatımı, hızı ve sesi ayarlayabilirsin.</li>
 </ul></div><div id="rtB" class="hidden">${rows}</div><button class="btn primary" id="rx">Kapat</button></div>`;
 r.classList.add('open');$('#rx').onclick=()=>r.classList.remove('open');
 r.querySelectorAll('.rtab button').forEach(b=>b.onclick=()=>{r.querySelectorAll('.rtab button').forEach(x=>x.classList.toggle('on',x===b));$('#rtA').classList.toggle('hidden',b.dataset.t!=='a');$('#rtB').classList.toggle('hidden',b.dataset.t!=='b')})}
@@ -1585,7 +1588,7 @@ if(!OWNER){showPanel('pGate')}
 const code=qs?qs.trim():(sv&&sv.code);
 if(code){try{if(sv&&sv.code===code){const r=await api('join',{code,name:LS.get('ts_name')||'Oyuncu'});await enterRoom(r.code,r.seat,r.token);return}
 const room=await fb('GET','/rooms/'+code);if(!room||!room.info)throw E('Bu davet artık geçerli değil.',404);
-if(room.info.status!=='lobby'||Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş. Yeni oyun için davet linkini iste.',409);
+if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş. Yeni oyun için davet linkini iste.',409);if(room.info.status!=='lobby')throw E('Bu odada oyun başladı, şu an katılamazsın. Oyun bitince kurucudan yeni davet linki iste.',409);
 $('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn').textContent='ODAYA KATIL';$('#createBtn').onclick=()=>$('#joinBtn').click();$('#pOnline .back1').style.display='none';showPanel('pOnline')}
 catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerli değil.');else showPanel('pMain')}}
 try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
@@ -1605,7 +1608,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-015026';
+const BUILD='20261128-021026';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
