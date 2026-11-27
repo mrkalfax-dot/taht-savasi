@@ -436,6 +436,13 @@ html,body{background:#0b0806}
 #table{flex:1 1 0!important;min-height:150px}
 #handWrap{flex:0 1 auto!important;min-height:0;display:flex;flex-direction:column;margin-top:0!important;padding-bottom:2px!important}
 #hand.grid{flex:0 1 auto;min-height:0;max-height:none}
+
+.ib,.seg button,.btn,#explain button{transition:transform .12s ease,filter .12s ease,background .2s}
+.ib:active,.seg button:active,#explain button:active{transform:scale(.92);filter:brightness(1.2)}
+#hand.grid .card{transition:transform .14s ease,filter .2s ease,box-shadow .2s}
+#hand.grid .card:active:not(.sel){transform:scale(.96)}
+.mbox.pick .pc{transition:transform .12s ease}.mbox.pick .pc:active{transform:scale(.95)}
+@media(max-height:700px){.pile .pc2{zoom:.82}.pile .cnt b{font-size:14px}}
 </style>
 </head>
 <body>
@@ -1380,7 +1387,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261127-224900';
+const BUILD='20261127-225014';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
