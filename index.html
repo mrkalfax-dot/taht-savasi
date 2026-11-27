@@ -577,6 +577,10 @@ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
 .hempty{margin:10px 14px;padding:18px 16px;border-radius:18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;background:linear-gradient(180deg,rgba(42,29,16,.85),rgba(18,11,5,.9));box-shadow:inset 0 0 0 1.5px #8a6a2c,0 8px 18px #000a}
 .hempty .hei{width:30px;height:34px;flex:none;color:#8a7a5a;display:flex}.hempty .hei svg{width:30px!important;height:34px!important;position:static!important;display:block}
 .hempty b{font-size:18px;color:#f3dc8c}.hempty span{font-size:15px;color:#f3e6c8;line-height:1.3}.hempty small{font-size:13px;color:#a0927a;line-height:1.3}
+
+#app{bottom:auto!important;height:var(--apph,100lvh)!important;padding-bottom:0!important}
+#hand.grid{padding-bottom:calc(env(safe-area-inset-bottom) + 10px)!important}
+#handWrap{padding-bottom:0!important}
 </style>
 </head>
 <body>
@@ -1568,7 +1572,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-011901';
+const BUILD='20261128-011957';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1584,6 +1588,9 @@ document.addEventListener('click',e=>{if(e.target.closest('.ib,.seg button'))sfx
 b.onclick=e=>{e.stopPropagation();p.classList.toggle('open')};
 p.addEventListener('click',e=>{const t=e.target.closest('.ib');if(!t)return;if(!['btnStep','btnFast','btnSnd'].includes(t.id))setTimeout(()=>p.classList.remove('open'),0)});
 document.addEventListener('click',e=>{if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==b)p.classList.remove('open')})})();
+
+(()=>{const set=()=>{const sa=window.navigator.standalone||matchMedia('(display-mode: standalone)').matches;const h=sa&&innerHeight<innerWidth===false?Math.max(innerHeight,screen.height):Math.max(innerHeight,document.documentElement.clientHeight);document.documentElement.style.setProperty('--apph',h+'px');if(typeof G!=='undefined'&&G&&typeof renderHand==='function')try{renderHand()}catch(e){}};
+set();addEventListener('resize',set);addEventListener('orientationchange',()=>setTimeout(set,300));document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(set,200)})})();
 </script>
 </body>
 </html>
