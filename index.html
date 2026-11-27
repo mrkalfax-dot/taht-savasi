@@ -581,6 +581,8 @@ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
 #app{bottom:auto!important;height:var(--apph,100lvh)!important;padding-bottom:0!important}
 #hand.grid{padding-bottom:calc(env(safe-area-inset-bottom) + 10px)!important}
 #handWrap{padding-bottom:0!important}
+
+html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
 </style>
 </head>
 <body>
@@ -1572,7 +1574,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-011957';
+const BUILD='20261128-012432';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1589,8 +1591,8 @@ b.onclick=e=>{e.stopPropagation();p.classList.toggle('open')};
 p.addEventListener('click',e=>{const t=e.target.closest('.ib');if(!t)return;if(!['btnStep','btnFast','btnSnd'].includes(t.id))setTimeout(()=>p.classList.remove('open'),0)});
 document.addEventListener('click',e=>{if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==b)p.classList.remove('open')})})();
 
-(()=>{const set=()=>{const sa=window.navigator.standalone||matchMedia('(display-mode: standalone)').matches;const h=sa&&innerHeight<innerWidth===false?Math.max(innerHeight,screen.height):Math.max(innerHeight,document.documentElement.clientHeight);document.documentElement.style.setProperty('--apph',h+'px');if(typeof G!=='undefined'&&G&&typeof renderHand==='function')try{renderHand()}catch(e){}};
-set();addEventListener('resize',set);addEventListener('orientationchange',()=>setTimeout(set,300));document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(set,200)})})();
+(()=>{const set=()=>{try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0}catch(e){}const h=window.innerHeight;document.documentElement.style.setProperty('--apph',h+'px');if(typeof G!=='undefined'&&G&&typeof renderHand==='function')try{renderHand()}catch(e){}};
+set();addEventListener('resize',set);addEventListener('scroll',()=>{if(scrollY)window.scrollTo(0,0)},{passive:true});document.addEventListener('focusout',()=>setTimeout(set,250));setInterval(()=>{if(scrollY||document.body.scrollTop)set()},1500);addEventListener('orientationchange',()=>setTimeout(set,300));document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(set,200)})})();
 </script>
 </body>
 </html>
