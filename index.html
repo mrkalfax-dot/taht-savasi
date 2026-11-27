@@ -583,6 +583,16 @@ background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' 
 #handWrap{padding-bottom:0!important}
 
 html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
+
+.atkArc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;transition:opacity .3s}.atkArc.out{opacity:0}
+.atkArc .ln{animation:atkDash .5s linear infinite}@keyframes atkDash{to{stroke-dashoffset:-26}}
+.atkTok{position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;padding:7px;color:#fff6dc;background:radial-gradient(circle at 40% 35%,color-mix(in srgb,var(--ac) 70%,#fff3),color-mix(in srgb,var(--ac) 45%,#000) 75%);box-shadow:0 0 0 2px #f3d27a,0 0 16px var(--ac),0 4px 8px #000a;pointer-events:none;transition:opacity .3s;z-index:2}
+.atkTok.me{box-shadow:0 0 0 2px #ff8a78,0 0 18px #ff4a30,0 4px 8px #000a}
+.atkTok .ic{width:100%;height:100%;stroke-width:4}
+.atkTok.hit{animation:tokHit .35s ease-out}.atkTok.out{opacity:0}
+@keyframes tokHit{50%{filter:brightness(1.8)}}
+#hud.hurt{animation:hudHurt .7s ease-out}@keyframes hudHurt{0%,100%{box-shadow:inset 0 0 0 1.5px #c9a24a,0 8px 18px #000a}30%{box-shadow:inset 0 0 0 2.5px #ff5a40,0 0 22px #ff3a20aa}}
+#atkBar{display:none!important}
 </style>
 </head>
 <body>
@@ -1003,14 +1013,25 @@ return got.length}
 function duelWait(ms,me){return new Promise(res=>{const d=$('#duel');let done=false;const fin=()=>{if(done)return;done=true;d.onclick=null;clearTimeout(t);res()};const t=setTimeout(fin,ms);setTimeout(()=>{d.onclick=fin},350)})}
 function shieldOf(p){return `<div class="sh">${houseShield(p.house,isMe(p),p.name)}</div>`}
 async function showdown(src,v,cname){
-if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const vm=isMe(v),sm=isMe(src);
-let b=$('#atkBar');if(!b){b=document.createElement('div');b.id='atkBar';$('#table').appendChild(b)}
-b.className=vm?'me':'';
-b.innerHTML=`<div class="ab-w">${shieldOf(src)}<b>${sm?'Sen':esc(src.name)}</b></div><div class="ab-c">${cardHTML({id:'d',name:cname},{w:46})}</div><div class="ab-a">➜</div><div class="ab-w${vm?' me':''}">${shieldOf(v)}<b>${vm?'Sen':esc(v.name)}</b></div>`;
-void b.offsetWidth;b.classList.add('on');
-sfx(vm?'hit':'play');if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}shake()}else hurt(v);
+if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const vm=isMe(v);
+const a=avatarOf(src),b=avatarOf(v);const col=vm?'#ff6a55':'#f3d27a';const fx=$('#fx');
+const mx=(a.x+b.x)/2,my=Math.min(a.y,b.y)-Math.max(40,Math.abs(a.x-b.x)*.25);
+const W=fx.clientWidth,H=fx.clientHeight;const ns='http://www.w3.org/2000/svg';
+const sv=document.createElementNS(ns,'svg');sv.setAttribute('class','atkArc');sv.setAttribute('viewBox',`0 0 ${W} ${H}`);
+const d=`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`;
+sv.innerHTML=`<path d="${d}" fill="none" stroke="${col}" stroke-opacity=".25" stroke-width="7" stroke-linecap="round"/><path class="ln" d="${d}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="6 7"/>`;
+fx.appendChild(sv);
+const mt=M[cname];const tok=document.createElement('div');tok.className='atkTok'+(vm?' me':'');tok.style.setProperty('--ac',COL[mt.cat]);
+tok.innerHTML=`<svg viewBox="0 0 64 64" class="ic">${ICON[cname]}</svg>`;fx.appendChild(tok);
+const T=Math.round(650*Math.max(.6,CFG.speed)),t0=performance.now();sfx('swoosh');
+await new Promise(res=>{const step=now=>{let t=Math.min(1,(now-t0)/T);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;const u=1-e;
+const x=u*u*a.x+2*u*e*mx+e*e*b.x,y=u*u*a.y+2*u*e*my+e*e*b.y;tok.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) scale(${.8+.4*Math.sin(Math.PI*e)})`;
+if(t<1&&G===g0)requestAnimationFrame(step);else res()};requestAnimationFrame(step)});
+tok.classList.add('hit');sfx(vm?'hit':'play');
+if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}shake();const h=$('#hud');if(h){h.classList.remove('hurt');void h.offsetWidth;h.classList.add('hurt')}}else hurt(v);
+try{burst(b.x,b.y,vm?'#ff5a40':COL[mt.cat],14)}catch(e){}
 G.log.push({msg:`${src.name} → ${v.name}: ${cname}`,tone:vm?'bad':''});
-await sleep((vm?1500:1100)*Math.max(.6,CFG.speed));b.classList.remove('on');if(G!==g0)throw new Error('abort')}
+await sleep(Math.round((vm?650:420)*Math.max(.6,CFG.speed)));sv.classList.add('out');tok.classList.add('out');setTimeout(()=>{sv.remove();tok.remove()},300);if(G!==g0)throw new Error('abort')}
 async function guessReveal(p,v,name,ok){
 if(!FXON()||CFG.fast)return;const g0=G;const d=$('#duel');const vm=isMe(v),pm=isMe(p);
 d.className='on'+(vm?' me':'');
@@ -1574,7 +1595,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-012432';
+const BUILD='20261128-012607';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
