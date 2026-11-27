@@ -593,6 +593,9 @@ html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
 @keyframes tokHit{50%{filter:brightness(1.8)}}
 #hud.hurt{animation:hudHurt .7s ease-out}@keyframes hudHurt{0%,100%{box-shadow:inset 0 0 0 1.5px #c9a24a,0 8px 18px #000a}30%{box-shadow:inset 0 0 0 2.5px #ff5a40,0 0 22px #ff3a20aa}}
 #atkBar{display:none!important}
+
+#game>header{z-index:60!important}
+#mpanel{background:#1c140c!important;box-shadow:0 0 0 1px #000,0 18px 50px #000e!important}
 </style>
 </head>
 <body>
@@ -1595,7 +1598,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-012607';
+const BUILD='20261128-012852';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
