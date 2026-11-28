@@ -980,6 +980,10 @@ html.rot body{position:fixed!important;inset:auto!important;left:0!important;top
 html.rot #app{padding:0!important;max-width:none!important;width:100%!important}
 html.rot,html.rot *{touch-action:none!important}
 html.rot #rot{display:none!important}
+
+.lbp.two{display:grid!important;grid-template-columns:1fr 1fr;gap:6px}.lbp.two>*{margin:0!important;min-width:0}.lbp.two>.lbai{grid-column:1/-1}
+
+#setup:has(#pLobby:not(.hidden)) .fan{display:none!important}#setup:has(#pLobby:not(.hidden)) .hero{transform:scale(.72);margin:-14px 0 -18px!important}.lbp.two>:first-child{grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -1015,7 +1019,7 @@ html.rot #rot{display:none!important}
 <div class="lab">DAVETLİ ODA</div>
 <div class="bigcode" id="lbCode" style="display:none"></div>
 <button class="btn" id="shareBtn">Davet linkini paylaş</button>
-<div class="lab">OYUNCULAR</div>
+<div class="lab">OYUNCULAR <span id="lbTot"></span></div>
 <div id="lbPlayers" class="lbp"></div>
 <div id="lbHost">
 <div class="lab">YAPAY ZEKÂ RAKİP</div><div class="seg" id="segAi"></div>
@@ -1144,7 +1148,7 @@ const ATK=new Set(NAMES.filter(n=>M[n].atk));
 const NODOUBLE=new Set(['Hazine','Kaos','Darbe','Fedai']);
 const CHAIN={Asker:2,Kombo:3};
 const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'TEPKİ',spe:'ÖZEL'};
-const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
+const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'},{n:'Aslan',c:'#B08A1E',c2:'#5a440a'},{n:'Kurt',c:'#4E5A66',c2:'#232a31'},{n:'Ayı',c:'#7A4A2A',c2:'#3b2211'},{n:'Şahin',c:'#1F7A78',c2:'#0d3a39'},{n:'Kaplan',c:'#C0601A',c2:'#5e2c08'}];
 const AINAMES=HOUSES.map(h=>h.n);
 let MATCH={total:1,n:1,hist:[]};
 const CFG={vol:1,total:1,opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};try{localStorage.setItem('ts_step','0')}catch(e){}
@@ -1936,11 +1940,11 @@ await fb('PUT','/rooms/'+c+'/info',{status:'lobby',ai:0,diff:'normal',total:1,mr
 await fb('PUT','/rooms/'+c+'/p/'+UID,{name:b.name,ts:TS});return{code:c,seat:0,token:UID}},
 async join(b){const room=await fb('GET','/rooms/'+b.code);if(!room||!room.info)throw E('Böyle bir oda yok',404);const ps=sortedP(room.p);
 if(room.info.status==='play'){let pl=[];try{pl=JSON.parse(room.info.pl||'[]')}catch(e){}if(pl.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};throw E('Bu odada oyun başlamış',409)}
-if(ps.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş',409);if(ps.length+(room.info.ai||0)>=6)throw E('Oda dolu',409);
+if(ps.some(p=>p.tok===UID))return{code:b.code,seat:-1,token:UID};if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş',409);if(ps.length+(room.info.ai||0)>=10)throw E('Oda dolu',409);
 let nm=b.name;const has=n=>ps.some(p=>p.name.toLocaleLowerCase('tr')===n.toLocaleLowerCase('tr'));for(let k=2;has(nm);k++)nm=b.name.slice(0,11)+' '+k;
 await fb('PUT','/rooms/'+b.code+'/p/'+UID,{name:nm,ts:TS});return{code:b.code,seat:-1,token:UID}},
 async host(b){const info=await fb('GET','/rooms/'+b.code+'/info');if(!info)throw E('Oda kapandı',404);if(info.host!==UID)throw E('Bunu sadece kurucu yapabilir',403);return info},
-async settings(b){const info=await API.host(b);const p=sortedP(await fb('GET','/rooms/'+b.code+'/p'));const o={t:TS};if(b.ai!=null)o.ai=Math.max(0,Math.min(6-p.length,b.ai|0));if(b.total!=null)o.total=[1,3,5,7].includes(b.total|0)?(b.total|0):1;if(b.diff)o.diff=['easy','normal','hard'].includes(b.diff)?b.diff:'normal';await fb('PATCH','/rooms/'+b.code+'/info',o);return{}},
+async settings(b){const info=await API.host(b);const p=sortedP(await fb('GET','/rooms/'+b.code+'/p'));const o={t:TS};if(b.ai!=null)o.ai=Math.max(0,Math.min(10-p.length,b.ai|0));if(b.total!=null)o.total=[1,3,5,7].includes(b.total|0)?(b.total|0):1;if(b.diff)o.diff=['easy','normal','hard'].includes(b.diff)?b.diff:'normal';await fb('PATCH','/rooms/'+b.code+'/info',o);return{}},
 async start(b){const info=await API.host(b);const p=sortedP(await fb('GET','/rooms/'+b.code+'/p'));if(p.length+(info.ai||0)<2)throw E('En az 2 oyuncu gerekli',400);
 const round=(info.round||0)+1;const tot=info.total||1;const mr=((info.mr||0)>=tot||(info.mr||0)<1)?1:(info.mr||0)+1;await fb('DELETE','/rooms/'+b.code+'/m');await fb('PATCH','/rooms/'+b.code+'/info',{status:'play',mr,hist:mr===1?'':(info.hist||''),seed:Math.floor(Math.random()*2147483646)+1,round,pl:JSON.stringify(p.map(x=>({tok:x.tok,name:x.name}))),t:TS});return{}},
 async restart(b){return API.start(b)},
@@ -1989,10 +1993,10 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)NET.sync()
 function showPanel(id){['pMain','pSolo','pOnline','pLobby','pGate'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id))}
 function showLobby(){if(G)return;const _r=NET.room||{};const _k=JSON.stringify([NET.code,NET.players,_r.ai,_r.diff,_r.total]);if(showLobby.k===_k&&!$('#pLobby').classList.contains('hidden')&&!$('#setup').classList.contains('hidden'))return;showLobby.k=_k;$('#setup').classList.remove('hidden');$('#game').classList.add('hidden');showPanel('pLobby');
 $('#lbCode').textContent=NET.code;const host=NET.seat===0;const r=NET.room||{ai:0,diff:'normal'};
-$('#lbPlayers').innerHTML=NET.players.map((p,i)=>`<div>${houseShield(i,p.seat===NET.seat,p.name)}<span class="nm">${esc(p.name)}${p.seat===NET.seat?' (sen)':''}</span>${p.seat===0?'<small>KURUCU</small>':''}</div>`).join('')+(r.ai?Array.from({length:r.ai},(_,i)=>`<div style="opacity:.7">${houseShield(NET.players.length+i,false,'Y')}Yapay zekâ<small>YZ</small></div>`).join(''):'');
+$('#lbPlayers').innerHTML=NET.players.map((p,i)=>`<div>${houseShield(i,p.seat===NET.seat,p.name)}<span class="nm">${esc(p.name)}${p.seat===NET.seat?' (sen)':''}</span>${p.seat===0?'<small>KURUCU</small>':''}</div>`).join('')+(r.ai?`<div class="lbai" style="opacity:.8">${houseShield(NET.players.length,false,'Y')}<span class="nm">+ ${r.ai} yapay zekâ rakip</span><small>YZ</small></div>`:'');$('#lbPlayers').classList.toggle('two',NET.players.length+(r.ai?1:0)>4);$('#lbPlayers').dataset.tot=NET.players.length+(r.ai|0);$('#lbTot').textContent='· '+(NET.players.length+(r.ai|0))+' / 10';
 $('#lbHost').classList.toggle('hidden',!host);$('#lbWait').classList.toggle('hidden',host);
-const maxAi=Math.max(0,6-NET.players.length);
-const sa=$('#segAi');sa.innerHTML='';for(let i=0;i<=Math.min(4,maxAi);i++){const b=document.createElement('button');b.textContent=i;if(r.ai===i)b.className='on';b.onclick=()=>NET_set({ai:i});sa.appendChild(b)}
+const maxAi=Math.max(0,10-NET.players.length);
+const sa=$('#segAi');sa.innerHTML='';for(let i=0;i<=Math.min(9,maxAi);i++){const b=document.createElement('button');b.textContent=i;if(r.ai===i)b.className='on';b.onclick=()=>NET_set({ai:i});sa.appendChild(b)}
 const st2=$('#segTot2');st2.innerHTML='';[1,3,5,7].forEach(k=>{const b=document.createElement('button');b.textContent=k;if((r.total||1)===k)b.className='on';b.onclick=()=>NET_set({total:k});st2.appendChild(b)});
 const sd=$('#segDiff2');sd.innerHTML='';[['easy','Kolay'],['normal','Normal'],['hard','Zor']].forEach(([k,t])=>{const b=document.createElement('button');b.textContent=t;if(r.diff===k)b.className='on';b.onclick=()=>NET_set({diff:k});sd.appendChild(b)});
 $('#lbStart').disabled=NET.players.length+(r.ai||0)<2}
@@ -2002,7 +2006,7 @@ NET.connect();await NET.sync();if(!LS.get('ts_intro')&&!G){LS.set('ts_intro','1'
 function leaveRoom(){NET.code=null;NET.on=false;NET.room=null;LS.set('ts_room','');try{NET.sub&&NET.sub.close&&NET.sub.close()}catch(e){}NET.sub=null;MY.round=-1;MY.l=[];}
 (function init(){
 const seg=(id,items,get,set)=>{const el=$(id);items.forEach(([k,t])=>{const b=document.createElement('button');b.textContent=t;if(get()===k)b.className='on';b.onclick=()=>{set(k);sfx('tap');el.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};el.appendChild(b)})};
-seg('#segOpp',[1,2,3,4,5].map(i=>[i,String(i)]),()=>CFG.opps,v=>CFG.opps=v);
+seg('#segOpp',[1,2,3,4,5,6,7,8,9].map(i=>[i,String(i)]),()=>CFG.opps,v=>CFG.opps=v);
 seg('#segTot',[1,3,5,7].map(i=>[i,String(i)]),()=>CFG.total,v=>CFG.total=v);
 seg('#segDiff',[['easy','Kolay'],['normal','Normal'],['hard','Zor']],()=>CFG.diff,v=>CFG.diff=v);
 
@@ -2047,7 +2051,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-161018';
+const BUILD='20261128-204906';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
