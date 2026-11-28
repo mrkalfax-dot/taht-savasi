@@ -908,6 +908,49 @@ html.L #narr{animation:none}html.L #narr.pop{animation:narrF .45s ease!important
 html.L #game.crowd #htitle{opacity:0;pointer-events:none}
 
 .gh.gflip{perspective:800px}.gh.gflip .gin{position:relative;width:100%;height:100%;transform-style:preserve-3d}.gh.gflip .gfa,.gh.gflip .gba{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}.gh.gflip .gba{transform:rotateY(180deg)}.gh.gflip .gfa>*,.gh.gflip .gba>*{width:100%!important;height:100%!important}
+
+/* ===== Oyuncu etiketi v3: küçük arma, büyük isim, simgeler altta yan yana ===== */
+html.L #opps .opp{display:grid!important;grid-template-columns:var(--D) auto!important;grid-template-rows:auto auto;column-gap:7px!important;row-gap:3px!important;align-items:center!important;justify-items:start!important;padding:5px 10px 5px 6px!important;border-radius:14px!important;background:linear-gradient(180deg,rgba(44,29,14,.94),rgba(18,10,4,.94))!important;box-shadow:inset 0 0 0 1px rgba(201,162,74,.5),inset 0 1px 0 rgba(255,220,150,.15),0 6px 12px rgba(0,0,0,.6)!important;transform-origin:50% 50%!important}
+html.L #opps .opp .avw{grid-row:1/3!important;grid-column:1!important;margin:0!important;width:var(--D)!important;height:var(--D)!important;box-shadow:0 0 0 1.5px #b88a32,0 0 0 3px #2a1a0a,0 3px 6px rgba(0,0,0,.7)!important}
+html.L #opps .opp .onm{grid-column:2!important;grid-row:1!important;margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;font:700 14.5px var(--serif)!important;line-height:1.12!important;text-align:left!important;color:#f6e9cc!important;align-self:end!important}
+html.L #opps .opp.sm .onm{font-size:13px!important}html.L #opps .opp .onm.tight{font-size:12px!important}
+html.L #opps .opp .chips{grid-column:2;grid-row:2;display:flex;gap:4px;align-items:center;align-self:start}
+html.L #opps .opp .chips .fan,html.L #opps .opp .chips .pbadge{position:static!important;transform:none!important;margin:0!important;height:17px!important;min-width:0!important;padding:0 5px 0 4px!important;box-sizing:border-box;box-shadow:none!important;top:auto!important;left:auto!important;right:auto!important}
+html.L #opps .opp .chips .fan span,html.L #opps .opp .chips .pbadge b{font-size:10.5px!important}
+html.L #opps .opp .chips .fan:before{width:6px!important;height:9px!important}
+html.L #opps .opp .chips .pbadge svg{width:9px!important;height:9px!important}
+html.L #opps .opp .chips .ngl{display:flex;align-items:center;gap:2px;height:17px;padding:0 5px 0 4px;border-radius:9px;background:linear-gradient(180deg,#7a1a10,#3a0804);border:1.5px solid #ff8a70;color:#ffd0c6;box-sizing:border-box}
+html.L #opps .opp .chips .ngl svg{width:9px;height:9px}html.L #opps .opp .chips .ngl b{font:800 8.5px Inter,system-ui;letter-spacing:.06em}
+html.L #opps .opp.nod .onm{color:#ffd6cc!important;background:none!important;border:0!important}html.L #opps .opp.nod .onm:after{display:none!important}
+html.L #opps .opp .avw .crs{width:84%!important;height:96%!important}
+html.L #opps .opp.turn{transform:translate(-50%,-50%) scale(1.05)!important;box-shadow:inset 0 0 0 1.5px #ffe08a,0 0 18px rgba(255,200,90,.55),0 6px 12px rgba(0,0,0,.6)!important}
+html.L #opps .opp.turn .onm{color:#ffe08a!important;background:none!important}
+html.L #opps .opp.turn .avw{box-shadow:0 0 0 2px #ffe08a,0 0 12px rgba(255,200,90,.8)!important}
+html.L #opps .opp.tgt{box-shadow:inset 0 0 0 1.5px #8ee59a,0 0 16px rgba(120,230,140,.6),0 6px 12px rgba(0,0,0,.6)!important}
+html.L #opps .opp .think{position:absolute!important;left:auto!important;right:6px!important;top:-8px!important;transform:none!important}
+
+html.L #opps .opp{padding:5px 7px!important;column-gap:6px!important;row-gap:4px!important}
+html.L #opps .opp .avw{grid-row:1!important}
+html.L #opps .opp .onm{align-self:center!important}
+html.L #opps .opp .chips{grid-column:1/3!important;grid-row:2!important;justify-self:stretch;justify-content:center}
+html.L #opps .opp .chips .ngl{width:17px;padding:0!important;justify-content:center}
+
+html.L #opps .opp{grid-template-columns:var(--D) auto!important;justify-items:center!important;padding:5px 9px 6px!important}
+html.L #opps .opp .onm{grid-column:1/3!important;grid-row:1!important;justify-self:center!important;text-align:center!important;font-size:15px!important;white-space:nowrap!important;display:block!important;overflow:hidden!important;text-overflow:ellipsis!important;-webkit-line-clamp:unset!important}
+html.L #opps .opp.sm .onm{font-size:13.5px!important}html.L #opps .opp .onm.tight{font-size:12px!important}
+html.L #opps .opp .avw{grid-row:2!important;grid-column:1!important;justify-self:end!important}
+html.L #opps .opp .chips{grid-column:2!important;grid-row:2!important;justify-self:start!important;justify-content:flex-start!important}
+
+html.L #opps .opp .chips{flex-wrap:wrap;row-gap:3px;gap:3px!important}
+
+html.L #opps .opp{padding:5px 7px 6px!important}
+html.L #opps .opp .chips .fan,html.L #opps .opp .chips .pbadge{padding:0 4px 0 3px!important;gap:2px!important}
+html.L #opps .opp .chips .fan span,html.L #opps .opp .chips .pbadge b{font-size:10px!important}
+html.L #opps .opp .chips .fan:before{width:5px!important;height:8px!important}
+
+html.L #opps .opp .chips .fan,html.L #opps .opp .chips .pbadge{padding:0 3px 0 3px!important}html.L #opps .opp{column-gap:5px!important}
+
+html.L #opps .opp.sm:not(.side) .chips .ngl{display:none}html.L #opps .opp.sm.nod:not(.side) .onm{color:#ff9a80!important}html.L #opps .opp.sm.nod:not(.side){box-shadow:inset 0 0 0 1.5px #ff7a5a,0 6px 12px rgba(0,0,0,.6)!important}
 </style>
 </head>
 <body>
@@ -1948,7 +1991,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-113401';
+const BUILD='20261128-120938';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1987,7 +2030,7 @@ if(!L){if(narr&&hud&&narr.parentNode!==hud)hud.appendChild(narr);layRe('P'+W+'x'
 const s=safeIns();const M=Math.round(Math.max(s.l,s.r)+(Math.max(s.l,s.r)>0?2:12));const B=Math.round(Math.max(s.b,6));const T=Math.round(s.t);
 const CW=Math.round(Math.max(56,Math.min(104,H*.218)));const RH=Math.round(CW*1.42)+20;const RT=H-B-RH;
 const MW=Math.round(Math.max(104,Math.min(150,W*.15)));const TT=Math.round(T+Math.max(86,H*.235));const TB=RT-24;
-const side=Math.round(Math.max(108,Math.min(150,W*.15)));const TL=M+side,TR=W-M-side;
+const side=Math.round(Math.max(118,Math.min(150,W*.15)));const TL=M+side,TR=W-M-side;
 const PW=Math.round(Math.max(44,Math.min(66,(TB-TT)*.5)));
 Object.assign(LV,{W,H,M,B,T,CW,RH,RT,MW,TT,TB,TL,TR,PW});
 const st=de.style;for(const k of ['M','T','CW','RH','RT','MW','TT','TB','TL','TR','PW'])st.setProperty('--'+k,LV[k]+'px');
@@ -2003,10 +2046,10 @@ const crowd=nt>=4;document.getElementById('game').classList.toggle('crowd',crowd
 const tin=nt>=4?44:30;const xa=nt<=3?0:Math.max(tb.l+tin,tR+30),xb=tb.r-tin;const slotT=nt<=1?(tb.r-tb.l)/2:nt<=3?(tb.r-tb.l)/(nt+1):(xb-xa)/(nt-1);
 const sideW=Math.max(60,tb.l-GP-M);const sx=Math.round((M+tb.l-GP)/2);const rx=Math.round((tb.r+GP+W-M)/2);
 const y0=Math.max(T+46,tBt+8),y1=hw.t-GP;const nameH=sm?19:21;const C=40;
-const Dt=Math.round(Math.max(32,Math.min(58,(tb.t-GP-T-4)-nameH-6,slotT-C-14)));
-const Ds=Math.round(Math.max(32,Math.min(58,(sideW-C-4)/1.08,(nl>1?(y1-y0)/2:(y1-y0))-nameH-12)));
-els.forEach((el,i)=>{const side=i<nl||i>=nl+nt;el.classList.toggle('side',side);const av=el.querySelector('.avw'),fn=el.querySelector('.fan');if(av&&fn&&fn.parentNode!==av)av.appendChild(fn);el.classList.toggle('chL',i<nl);el.classList.toggle('chR',!(i<nl));el.classList.toggle('hasP',!!el.querySelector('.pbadge'));const D=side?Ds:Dt;el.style.setProperty('--D',D+'px');el.style.setProperty('--C',C+'px');el.classList.toggle('cmp',D<40);const nm=el.querySelector('.onm');
-if(nm)nm.style.setProperty('max-width',Math.round(side?(sideW-4)/1.08:Math.max(56,Math.min(130,nt<=3?slotT-8:2*(slotT-Dt/2-46))))+'px','important')});
+const Dt=sm?24:28;
+const Ds=sm?24:28;
+els.forEach((el,i)=>{const side=i<nl||i>=nl+nt;el.classList.toggle('side',side);let ch=el.querySelector('.chips');if(!ch){ch=document.createElement('div');ch.className='chips';el.appendChild(ch)}const fn=el.querySelector('.fan'),pb=el.querySelector('.pbadge');if(fn&&fn.parentNode!==ch)ch.appendChild(fn);if(pb&&pb.parentNode!==ch)ch.appendChild(pb);if(el.classList.contains('nod')&&!ch.querySelector('.ngl')){const g=document.createElement('span');g.className='ngl';g.innerHTML=UI.chain;g.title='Engelli';ch.appendChild(g)}const D=side?Ds:Dt;el.style.setProperty('--D',D+'px');el.style.setProperty('--C',C+'px');el.classList.toggle('cmp',D<40);const nm=el.querySelector('.onm');
+const mw=Math.round(side?sideW-16:Math.max(56,Math.min(150,slotT-12-14)));if(nm)nm.style.setProperty('max-width',mw+'px','important');const chs=el.querySelector('.chips');if(chs)chs.style.maxWidth=Math.max(30,mw-D-5)+'px'});
 els.forEach(el=>{const nm=el.querySelector('.onm');if(!nm)return;nm.classList.remove('tight');if(nm.scrollWidth>nm.clientWidth+1)nm.classList.add('tight')});const hs=els.map(el=>el.offsetHeight||64);const pos=[];
 const sideYs=(n,idx)=>{if(!n)return[];if(n===1){const h=hs[idx];return[Math.max(y0+h/2,Math.min(y1-h/2,(tb.t+tb.b)/2))]}const h=Math.max(hs[idx],hs[idx+1]);const a=y0+h/2,b=y1-h/2;return[b,a]};
 const L=sideYs(nl,0);L.forEach(y=>pos.push([sx,y]));
