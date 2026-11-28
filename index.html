@@ -951,6 +951,15 @@ html.L #opps .opp .chips .fan:before{width:5px!important;height:8px!important}
 html.L #opps .opp .chips .fan,html.L #opps .opp .chips .pbadge{padding:0 3px 0 3px!important}html.L #opps .opp{column-gap:5px!important}
 
 html.L #opps .opp.sm:not(.side) .chips .ngl{display:none}html.L #opps .opp.sm.nod:not(.side) .onm{color:#ff9a80!important}html.L #opps .opp.sm.nod:not(.side){box-shadow:inset 0 0 0 1.5px #ff7a5a,0 6px 12px rgba(0,0,0,.6)!important}
+
+/* ıstaka düzeltmeleri */
+html.L #handWrap{overflow:visible!important}
+html.L #hand,html.L #hand.grid{border-radius:14px;padding:12px 14px 0!important;bottom:16px!important;height:auto!important}
+html.L #hand.more{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 34px),transparent)}
+html.L #hand.scl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 30px);mask-image:linear-gradient(90deg,transparent,#000 30px)}
+html.L #hand.more.scl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 34px),transparent);mask-image:linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 34px),transparent)}
+html.L #hcount{top:-15px!important;right:14px!important;height:15px;line-height:15px;box-sizing:border-box;padding:0 9px!important;border-radius:8px 8px 0 0!important;background:linear-gradient(180deg,#4a2c12,#2a1607)!important;box-shadow:inset 0 1px 0 rgba(255,210,150,.25),0 0 0 1px #120802!important;font-size:9px!important}
+html.L #handWrap:after{bottom:5px!important;height:6px!important}
 </style>
 </head>
 <body>
@@ -1006,7 +1015,7 @@ html.L #opps .opp.sm:not(.side) .chips .ngl{display:none}html.L #opps .opp.sm.no
 <rect width="400" height="260" fill="url(#skf)"/></svg></div>
 <header>
 <div class="t" id="htitle"><svg viewBox="0 0 40 22"><path d="M4 18 l3-13 7 7 6-10 6 10 7-7 3 13z" fill="url(#tsgl)" stroke="#5a3a0a"/></svg>TAHT SAVAŞI</div>
-<button class="ib gear" id="btnMenu" aria-label="Ayarlar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/><circle cx="12" cy="12" r="6.6"/></svg></button><div id="mpanel"><button class="ib" id="btnStep" aria-label="Adım adım"></button><button class="ib" id="btnFast" aria-label="Hızlı animasyon"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Son olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Oyundan çık"></button></div>
+<button class="ib gear" id="btnMenu" aria-label="Ayarlar"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v2.6M12 18.9v2.6M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M2.5 12h2.6M18.9 12h2.6M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/><circle cx="12" cy="12" r="6.6"/></svg></button><div id="mpanel"><button class="ib" id="btnStep" aria-label="Adım adım" hidden style="display:none"></button><button class="ib" id="btnFast" aria-label="Hızlı animasyon" hidden style="display:none"></button><button class="ib on" id="btnSnd" aria-label="Ses"></button><button class="ib" id="btnLog" aria-label="Son olaylar"></button><button class="ib" id="btnRules" aria-label="Kurallar"></button><button class="ib" id="btnQuit" aria-label="Oyundan çık"></button></div>
 </header>
 <section id="opps"></section>
 <div id="order"></div>
@@ -1091,7 +1100,7 @@ const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'
 const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
 const AINAMES=HOUSES.map(h=>h.n);
 let MATCH={total:1,n:1,hist:[]};
-const CFG={vol:1,total:1,opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};
+const CFG={vol:1,total:1,opps:3,diff:'normal',fast:false,autoHuman:false,speed:1,sound:true};try{localStorage.setItem('ts_step','0')}catch(e){}
 const STATS={played:{},errors:[],turns:0};
 const F='fill="currentColor"',FO='fill="currentColor" fill-opacity=".2"';
 const grain=y=>`<path d="M32 ${y} q-10 -2 -11 -11 q10 2 11 11 Z" ${FO}/><path d="M32 ${y} q10 -2 11 -11 q-10 2 -11 11 Z" ${FO}/>`;
@@ -1273,7 +1282,7 @@ let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(n>3&&n<=6&&innerHeight/W>1.9)col
 const w=Math.max(40,Math.min(cols<=3?118:n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
 return{w,step:0,start:0,grid:true,cols}}
 function renderHand(){renderHand0();postHand()}
-function postHand(){const hc=$('#hcount');const m=me();if(isL()&&hc){const n=m.hand.length;const vis=Math.floor(($('#handWrap').clientWidth-24)/((LV.CW||80)+6));hc.textContent=n>vis?n+' KART · kaydır ›':''}
+function postHand(){const hc=$('#hcount');const m=me();if(isL()&&hc){const n=m.hand.length;const vis=Math.floor(($('#handWrap').clientWidth-24)/((LV.CW||80)+6));hc.textContent=n>vis?n+' KART · kaydır ›':'';const hh=$('#hand');hh.classList.toggle('more',n>vis&&hh.scrollLeft+hh.clientWidth<hh.scrollWidth-4);hh.classList.toggle('scl',hh.scrollLeft>4);if(!hh._sb){hh._sb=1;hh.addEventListener('scroll',()=>{hh.classList.toggle('scl',hh.scrollLeft>4);hh.classList.toggle('more',hh.scrollLeft+hh.clientWidth<hh.scrollWidth-4)},{passive:true})}}
 document.querySelectorAll('#hand .pck').forEach(x=>x.remove());document.querySelectorAll('#hand .card.pdim,#hand .card.psel').forEach(e=>e.classList.remove('pdim','psel'));if(!G.pick||!G.pick.mine)return;const P=G.pick;document.querySelectorAll('#hand .card').forEach(el=>{const id=+el.dataset.id;el.classList.remove('dis','sel');const c=m.hand.find(x=>x.id===id);const on=c&&P.sel.includes(c);el.classList.toggle('pdim',!P.ids.has(id));el.classList.toggle('psel',!!on);if(on){const b=document.createElement('span');b.className='pck';b.textContent=P.n>1?P.sel.indexOf(c)+1:'✓';el.appendChild(b)}})}
 function renderHand0(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
 const n=m.hand.length;if(!n){const H0=$('#hand');H0._k=null;H0.classList.remove('grid','hs');H0.style.height='';H0.style.maxHeight='';H0.innerHTML=`<div class="hempty"><div class="hei">${UI.shield}</div><b>Elinde kart yok</b><span>${G.emptyWhy||'Kartların atıldı ya da verildi.'}</span><small>Sıran gelince desteden kart çekip oyuna devam edeceksin.</small></div>`;return}G.emptyWhy=null;const g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
@@ -1656,7 +1665,7 @@ for(let k=0;k<m;k++){if(G.over)break;const cands=rivals(p).filter(q=>q.last&&!ba
 const n=v.last.name;let t=null;if(TARG.has(n)){const ru=rivals(p),uf=ru.filter(q=>n==='Engel'?!q.noDraw:n==='İttifak'||n==='Şifacı'?true:q.hand.length>0);t=await choosePlayer(p,uf.length?uf:ru,XT(k,m,`İntikam: ${n} kime uygulansın?`),{unprot:1,ask:1});if(!t){if(!k)return fizzle(p,'hedef yok');break}}
 await say(T(p,`${m>1?`${k+1}. İntikam: `:''}${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor${m>1?` (${k+1}/${m})`:''}`),1100);await EFF[n]({p,m:1,forced:t})}};
 function explainStep(p,c,m){
-if(CFG.fast||NET.on||CFG.autoHuman||!FXON()||LS.get('ts_step')==='0')return Promise.resolve();
+if(true)return Promise.resolve();
 const mt=M[c.name],e=$('#explain');
 e.innerHTML=`<div class="eh"><b>${esc(nm(p))}</b> oynadı${m>1?' · etki ×'+m:''}</div><div class="en">${c.name}</div><div class="et">${mt.text}</div><div class="eb"><button class="go">ANLADIM ▶</button><button class="au">Otomatik<br>devam et</button></div>`;
 e.classList.add('on');
@@ -1991,7 +2000,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-120938';
+const BUILD='20261128-123733';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -2028,7 +2037,7 @@ const W=app.clientWidth||innerWidth,H=app.clientHeight||innerHeight;const L=W>H&
 const narr=document.getElementById('narr'),hud=document.getElementById('hud'),tb=document.getElementById('table');
 if(!L){if(narr&&hud&&narr.parentNode!==hud)hud.appendChild(narr);layRe('P'+W+'x'+H);return}
 const s=safeIns();const M=Math.round(Math.max(s.l,s.r)+(Math.max(s.l,s.r)>0?2:12));const B=Math.round(Math.max(s.b,6));const T=Math.round(s.t);
-const CW=Math.round(Math.max(56,Math.min(104,H*.218)));const RH=Math.round(CW*1.42)+20;const RT=H-B-RH;
+const CW=Math.round(Math.max(56,Math.min(102,H*.212)));const RH=Math.round(CW*1.42)+30;const RT=H-B-RH;
 const MW=Math.round(Math.max(104,Math.min(150,W*.15)));const TT=Math.round(T+Math.max(86,H*.235));const TB=RT-24;
 const side=Math.round(Math.max(118,Math.min(150,W*.15)));const TL=M+side,TR=W-M-side;
 const PW=Math.round(Math.max(44,Math.min(66,(TB-TT)*.5)));
