@@ -967,6 +967,13 @@ html.L #hcount:empty{display:none!important}
 html.L #hand,html.L #hand.grid{padding-top:14px!important}
 html.L #hand .card.press{transform:translateY(-5px) scale(1.03) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))!important}
 html.L #hand.grid .card.sel,html.L #hand .card.psel{transform:translateY(-6px)!important}
+
+#invBox{text-align:center;margin:0 0 12px;padding:12px 14px;border-radius:14px;background:linear-gradient(180deg,rgba(60,38,16,.9),rgba(22,13,6,.9));box-shadow:inset 0 0 0 1px rgba(231,200,115,.45)}
+#invBox .inv1{font:600 17px var(--serif);color:#f3e6c8}#invBox .inv1 b{color:#ffe08a}
+#invBox .inv2{font:500 13px Inter,system-ui;color:#bfa878;margin-top:4px}
+#invBox .btn{margin-top:8px!important;width:auto!important;padding:6px 16px!important;min-height:0!important;font-size:13px!important}
+html:not(.ingame) #rot{display:none!important}
+html.L #opps .opp .think{position:absolute!important;top:-9px!important;right:-6px!important;left:auto!important;bottom:auto!important;transform:none!important;height:16px!important;width:auto!important;line-height:14px!important;padding:0 6px!important;font-size:11px!important;letter-spacing:1px!important;border-radius:8px!important;display:block!important;z-index:7}
 </style>
 </head>
 <body>
@@ -989,6 +996,7 @@ html.L #hand.grid .card.sel,html.L #hand .card.psel{transform:translateY(-6px)!i
 <button class="btn ghost back1">← Geri</button>
 </div>
 <div id="pOnline" class="panel hidden">
+<div id="invBox" style="display:none"></div>
 <div class="lab">ADIN</div>
 <input id="inName" class="inp" maxlength="16" placeholder="Adını yaz" autocomplete="off">
 <button class="btn primary big" id="createBtn">ODA KUR</button>
@@ -1977,7 +1985,7 @@ $('#onlineBtn').onclick=()=>{sfx('tap');const n0=$('#myName').value.trim();if(n0
 const nameOk=()=>{const n=$('#inName').value.trim();if(!n){$('#onErr').textContent='Önce adını yaz';return null}LS.set('ts_name',n);return n};
 $('#createBtn').onclick=async()=>{const n=nameOk();if(!n)return;$('#onErr').textContent='';try{const r=await api('create',{name:n});await enterRoom(r.code,r.seat,r.token)}catch(e){$('#onErr').textContent=e.message}};
 $('#joinBtn').onclick=async()=>{const n=nameOk();if(!n)return;const c=$('#inCode').value.trim();if(!c){$('#onErr').textContent='Davet linkiyle gir';return}$('#onErr').textContent='';try{const r=await api('join',{code:c,name:n});await enterRoom(r.code,r.seat,r.token)}catch(e){$('#onErr').textContent=e.message}};
-$('#shareBtn').onclick=async()=>{const url=location.origin+location.pathname+'?oda='+NET.code;const txt='Taht Savaşı\'na davetlisin! Bu linkten gir:';try{if(navigator.share){await navigator.share({title:'Taht Savaşı',text:txt,url});return}}catch(e){return}try{await navigator.clipboard.writeText(txt+' '+url);toast('Link kopyalandı')}catch(e){toast(url)}};
+$('#shareBtn').onclick=async()=>{const url=location.origin+location.pathname+'?oda='+NET.code;const nmI=(LS.get('ts_name')||'').trim();const txt=(nmI?nmI+' seni':'Seni')+' Taht Savaşı\'na davet ediyor! Linke dokun, adını yaz, odaya katıl:';try{if(navigator.share){await navigator.share({title:'Taht Savaşı',text:txt,url});return}}catch(e){return}try{await navigator.clipboard.writeText(txt+' '+url);toast('Link kopyalandı')}catch(e){toast(url)}};
 $('#lbStart').onclick=async()=>{try{$('#lbStart').disabled=true;await api('start',{code:NET.code,token:NET.token});await NET.sync()}catch(e){$('#lbErr').textContent=e.message;$('#lbStart').disabled=false}};
 $('#lbLeave').onclick=()=>{leaveRoom();showPanel(OWNER?'pMain':'pGate')};
 $('#takeBtn').onclick=async()=>{const p=G&&G.thinking;if(!p)return;const i=idxOf(p);const seat=Object.keys(NET.seatMap||{}).find(k=>NET.seatMap[k]===i);NET.hideTake();try{await api('move',{code:NET.code,token:NET.token,n:p.ni||0,forSeat:+seat,data:{k:'ai'}});await NET.sync()}catch(e){toast(e.message)}};
@@ -1988,7 +1996,7 @@ const code=qs?qs.trim():(sv&&sv.code);
 if(code){try{if(sv&&sv.code===code){const r=await api('join',{code,name:LS.get('ts_name')||'Oyuncu'});await enterRoom(r.code,r.seat,r.token);return}
 const room=await fb('GET','/rooms/'+code);if(!room||!room.info)throw E('Bu davet artık geçerli değil.',404);
 if(Date.now()-(room.info.t||0)>12*36e5)throw E('Bu davetin süresi dolmuş. Yeni oyun için davet linkini iste.',409);if(room.info.status!=='lobby')throw E('Bu odada oyun başladı, şu an katılamazsın. Oyun bitince kurucudan yeni davet linki iste.',409);
-$('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn').textContent='ODAYA KATIL';$('#createBtn').onclick=()=>$('#joinBtn').click();$('#pOnline .back1').style.display='none';showPanel('pOnline')}
+$('#inName').value=LS.get('ts_name')||'';$('#inCode').value=code;$('#createBtn').textContent='ODAYA KATIL';try{const ps=sortedP(room.p||{});const host=(ps[0]||{}).name||'Bir arkadaşın';const ib=$('#invBox');ib.innerHTML=`<div class="inv1"><b>${esc(host)}</b> seni oyuna davet ediyor</div><div class="inv2">Odada: ${ps.map(x=>esc(x.name)).join(', ')||esc(host)}</div><button class="btn ghost" id="invRules">Nasıl oynanır?</button>`;ib.style.display='';$('#invRules').onclick=()=>showIntro(()=>{})}catch(e){}$('#createBtn').onclick=()=>$('#joinBtn').click();$('#pOnline .back1').style.display='none';showPanel('pOnline')}
 catch(e){LS.set('ts_room','');if(!OWNER)gate(e.message||'Bu davet artık geçerli değil.');else showPanel('pMain')}}
 try{if(qs&&!OWNER)history.replaceState(null,'',location.pathname)}catch(e){}})();
 $('#setupRules').onclick=()=>showIntro(()=>{});$('#btnRules').onclick=openRules;$('#btnLog').onclick=openLog;$('#btnLog').innerHTML='<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h7M9 14h7M9 18h4"/></svg>';
@@ -2007,7 +2015,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-124222';
+const BUILD='20261128-140933';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -2154,6 +2162,7 @@ P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(true);z.style.left=R.l+'px';z
 g.classList.add('zfull');g.classList.remove('zmine');z.className='on full view';
 z.innerHTML=`<div class="zask"><div class="zh" style="justify-content:center"><b>${title}</b></div>${text?`<p>${text}</p>`:''}<div class="zb">${buttons.map((b,i)=>`<button data-i="${i}" class="${b.good?'good':''}" ${b.off?'disabled':''}>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</button>`).join('')}</div></div>`;
 z.querySelectorAll('.zb button').forEach(b=>b.onclick=()=>{sfx('tap');endPick();res(+b.dataset.i)})};P.paint()})}
+(()=>{const g=document.getElementById('game');if(!g)return;const f=()=>document.documentElement.classList.toggle('ingame',!g.classList.contains('hidden'));f();new MutationObserver(f).observe(g,{attributes:true,attributeFilter:['class']})})();
 addEventListener('resize',()=>setTimeout(layL,60));addEventListener('orientationchange',()=>{setTimeout(layL,350);setTimeout(layL,900)});document.addEventListener('visibilitychange',()=>{if(!document.hidden){setTimeout(layL,120);setTimeout(layL,700)}});addEventListener('pageshow',()=>setTimeout(layL,150));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(layL,60));
 document.addEventListener('DOMContentLoaded',layL);setTimeout(layL,0);
 (()=>{const r=document.createElement('div');r.id='rot';r.innerHTML='<div class="ph"></div><b>Telefonu yan çevir</b><p>Taht Savaşı yatay oynanır.<br>Ekran döndürme kilidi açıksa kapat<br><small>iPhone: Denetim Merkezi · Android: Hızlı Ayarlar</small></p>';document.body.appendChild(r)})();
