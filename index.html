@@ -299,6 +299,7 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 .lbp{display:flex;flex-direction:column;gap:6px;width:100%}
 .lbp div{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid var(--line);font-weight:800;font-size:16px}
 .lbp div svg{width:26px;height:30px}
+.lbp .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .lbp div small{margin-left:auto;font-size:11px;color:var(--gold);letter-spacing:.14em}
 .sub2{color:#cdbb95;font-style:italic;font-size:14px}
 #takeBtn{position:absolute;left:50%;transform:translateX(-50%);top:46%;z-index:36;display:none;font-size:14px;padding:10px 16px}
@@ -599,6 +600,165 @@ html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
 #mpanel{background:#1c140c!important;box-shadow:0 0 0 1px #000,0 18px 50px #000e!important}
 
 #opps.x1 .pbadge,#opps.x2 .pbadge{right:auto;left:50%;transform:translateX(-50%);bottom:-6px;padding:0 4px 0 3px}#opps.x1 .pbadge b,#opps.x2 .pbadge b{font-size:10.5px}#opps.x1 .cbadge,#opps.x2 .cbadge{left:-4px;bottom:auto;top:2px;width:17px;height:17px}
+/* ================= YATAY (LANDSCAPE) ================= */
+html.L #app{max-width:none!important;width:100%!important;margin:0!important;left:0!important;right:0!important}
+#rot{display:none}
+@media (orientation:portrait) and (pointer:coarse){
+#rot{display:flex;position:fixed;inset:0;z-index:999990;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:30px;background:radial-gradient(ellipse at 50% 40%,#4a2a14,#140b06 70%,#0b0705)}
+#rot .ph{width:62px;height:108px;border-radius:13px;box-shadow:inset 0 0 0 3px #f3d27a;position:relative;animation:rotP 2.2s ease-in-out infinite}
+#rot .ph:after{content:'';position:absolute;inset:8px;border-radius:7px;background:linear-gradient(135deg,#5a3418,#2a1607)}
+#rot b{font:700 24px Lora,Georgia,serif;color:#ffe08a;margin-top:18px}#rot p{font:600 15px/1.45 Lora,Georgia,serif;color:#c7b08a;margin:0}
+@keyframes rotP{0%,25%{transform:rotate(0)}55%,85%{transform:rotate(-90deg)}100%{transform:rotate(0)}}
+}
+html.L #sky,html.L #order,html.L #cap{display:none!important}
+html.L #game:not(.hidden){position:absolute!important;inset:0;display:block!important}
+html.L #game>header{position:absolute!important;left:var(--M);right:var(--M);top:calc(var(--T) + 6px);height:36px;padding:0!important;display:flex;align-items:center;justify-content:space-between;z-index:60!important}
+html.L #htitle{font-size:12px!important;letter-spacing:.22em!important}
+html.L #btnMenu{width:36px!important;height:36px!important}
+html.L #mpanel{top:calc(100% + 4px);right:0}
+html.L #game{background:radial-gradient(ellipse 60% 70% at 50% 42%,#3a2416 0%,#1a0f08 60%,#0b0705 100%)}
+/* koltuklar */
+html.L #opps{position:absolute!important;inset:0;padding:0!important;display:block!important;pointer-events:none;z-index:8}
+html.L .opp{position:absolute!important;transform:translate(-50%,-50%)!important;max-width:none!important;width:max-content;padding:4px 10px 4px 5px!important;margin:0!important;display:grid!important;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:6px;align-items:center;border-radius:12px;background:linear-gradient(180deg,#3a2414,#1c1008);box-shadow:inset 0 0 0 1px #8a6a2c,0 4px 10px rgba(0,0,0,.7);pointer-events:auto;transition:box-shadow .2s,opacity .2s}
+html.L .opp .avw{grid-row:1/3;width:30px!important;height:35px!important;margin:0!important}
+html.L .opp .onm{grid-column:2;align-self:end;margin:0!important;padding:0!important;background:none!important;clip-path:none!important;box-shadow:none!important;font-size:12px!important;max-width:84px;text-align:left;color:#f3e6c8}
+html.L .opp .fan{grid-column:2;align-self:start;margin-top:1px!important;height:13px}
+html.L .opp .fan span{font-size:11px}
+html.L .opp.turn{transform:translate(-50%,-50%)!important;box-shadow:inset 0 0 0 1.5px #f3d27a,0 0 16px rgba(255,200,90,.55),0 4px 10px rgba(0,0,0,.7)}
+html.L .opp.turn .onm{background:none!important;color:#ffe3a0!important}
+html.L .opp .sira{top:-9px!important}
+html.L .opp.tgt{box-shadow:inset 0 0 0 2px #f3d27a,0 0 20px rgba(255,200,90,.75)!important}
+html.L .opp.tgt:after{top:auto!important;bottom:-9px!important}
+html.L .opp .think{top:auto!important;bottom:-12px!important}
+html.L .opp .pbadge{right:-12px!important;bottom:-4px!important;left:auto!important;transform:none!important}
+html.L .opp.sm{padding:3px 8px 3px 4px!important;column-gap:4px}
+html.L .opp.sm .avw{width:26px!important;height:30px!important}html.L .opp.sm .onm{font-size:10.5px!important;max-width:64px}
+/* masa */
+html.L #table{position:absolute!important;left:calc(var(--TL) - 14px);top:calc(var(--TT) - 14px);width:calc(var(--TR) - var(--TL) + 28px);height:calc(var(--TB) - var(--TT) + 28px);max-height:none!important;min-height:0!important;margin:0!important;padding:0!important;display:block!important;flex:none!important;z-index:4;overflow:visible!important}
+html.L .temb{width:calc(var(--TB) - var(--TT))!important;opacity:.8}
+html.L #deck,html.L #disc{position:absolute!important;top:50%;transform:translateY(-50%);width:auto!important;margin:0!important;z-index:3}
+html.L #deck{left:calc(var(--PW) * .55 + 6px)}html.L #disc{right:calc(var(--PW) * .55 + 6px)}
+html.L .pile{--pw:var(--PW)!important}
+html.L #stage{position:absolute!important;margin:0!important;padding:0!important;z-index:6;display:block!important;height:auto!important;flex:none!important;pointer-events:none}
+html.L #stageCard{width:var(--PW)!important;height:calc(var(--PW) * 1.42)!important;--sw:var(--PW)!important;pointer-events:auto}
+html.L #stageCard .glow{inset:-12px!important}
+html.L #narr{position:absolute!important;left:50%!important;top:50%!important;transform:translate(-50%,-50%);width:auto!important;max-width:calc(var(--TR) - var(--TL) - var(--PW) * 2 - 120px);min-height:0!important;margin:0!important;padding:9px 18px!important;border-radius:14px;background:rgba(18,9,3,.74)!important;box-shadow:inset 0 0 0 1px rgba(201,162,74,.55);clip-path:none!important;font-size:15.5px!important;line-height:1.25;z-index:5;text-align:center}
+html.L #narr:empty{display:none}
+html.L #narr small{display:block!important;font-size:11.5px;color:#c7b08a;font-weight:600;margin-top:2px}
+html.L #explain{left:50%!important;right:auto!important;bottom:6px!important;width:min(460px,calc(var(--TR) - var(--TL) - 20px));transform:translateX(-50%)}
+html.L #chainBar{top:6px!important}
+/* oyuncu paneli */
+html.L #hud{position:absolute!important;left:var(--M);top:var(--RT);width:var(--MW);height:var(--RH);margin:0!important;padding:8px!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:6px!important;border-radius:14px!important;z-index:7}
+html.L #hud .mel{max-width:none!important}
+html.L #hud #myScore{flex:1;width:auto!important;height:auto!important;border-radius:10px!important}
+html.L #hud #myScore b{font-size:22px!important}
+/* ıstaka */
+html.L #handWrap{position:absolute!important;left:calc(var(--M) + var(--MW) + 8px);right:var(--M);top:var(--RT);height:var(--RH);margin:0!important;padding:0!important;display:block!important;border-radius:14px;background:linear-gradient(180deg,#5a3418,#3a200c 70%,#2a1607)!important;box-shadow:inset 0 2px 0 rgba(255,210,150,.25),inset 0 0 0 1px #120802,0 8px 18px rgba(0,0,0,.7);z-index:7;overflow:hidden}
+html.L #handWrap:after{content:'';position:absolute;left:8px;right:8px;bottom:3px;height:5px;border-radius:3px;background:linear-gradient(#1a0c04,#3a2010);box-shadow:inset 0 1px 2px #000;pointer-events:none}
+html.L #hand,html.L #hand.grid{position:absolute!important;inset:0;display:flex!important;flex-wrap:nowrap!important;justify-content:flex-start!important;align-items:flex-start;gap:6px!important;padding:12px 12px 0!important;overflow-x:auto!important;overflow-y:hidden!important;touch-action:pan-x!important;max-height:none!important;height:auto!important;scrollbar-width:none;overscroll-behavior:contain}
+html.L #hand::-webkit-scrollbar{display:none}
+html.L #hand .card{flex:none!important;touch-action:pan-x!important}
+html.L #hand.grid .card.sel,html.L #hand .card.psel{transform:translateY(-6px)!important}
+html.L #hand::after{content:'';flex:none;width:6px}
+html.L #hcount{display:block!important;position:absolute!important;right:6px;top:0;z-index:3;padding:1px 8px!important;border-radius:0 0 8px 8px;background:#120802;box-shadow:0 0 0 1px #8a6a2c;font-size:9px!important;letter-spacing:.12em;color:#f0d58c!important;margin:0!important}
+html.L #hcount:empty{display:none}
+html.L .hempty{margin:10px auto!important;padding:10px 16px!important;flex-direction:row!important;gap:12px!important;text-align:left!important;max-width:520px}
+/* kart bilgi paneli (seçili kart) */
+html.L #info{left:var(--TL)!important;width:calc(var(--TR) - var(--TL))!important;right:auto!important;bottom:auto!important;top:var(--TT)!important;height:calc(var(--TB) - var(--TT))!important;z-index:30;box-sizing:border-box}
+/* seçim alanı */
+#zone{display:none}
+html.L #zone.on{display:flex;position:absolute;z-index:20;flex-direction:column;justify-content:space-between;gap:6px;padding:8px 12px;border-radius:14px;background:rgba(18,9,3,.86);box-shadow:inset 0 0 0 1.5px #f3d27a,0 0 18px rgba(255,200,90,.28);box-sizing:border-box}
+html.L #zone .zh{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1px}
+html.L #zone .zh b{font:700 15px var(--serif);color:#ffe08a;line-height:1.15}html.L #zone .zh span{font-size:10.5px;color:#a0927a;font-weight:600}
+html.L #zone.full .zh{flex-direction:row;justify-content:space-between;align-items:baseline}
+html.L #zone .zcards{flex:1;min-height:0;display:flex;gap:7px;justify-content:safe center;align-items:flex-end;overflow-x:auto;overflow-y:hidden;padding:12px 4px 0;scrollbar-width:none;touch-action:pan-x}
+html.L #zone .zcards::-webkit-scrollbar{display:none}
+html.L #zone .pc{position:relative;flex:none;transition:transform .12s,opacity .15s}
+html.L #zone .pc.on .card{transform:translateY(-5px);box-shadow:0 0 0 .14em #8ee59a,0 0 1em rgba(120,230,140,.5)!important}
+html.L #zone .zcards.hs .pc:not(.on){opacity:.55}
+html.L #zone .ck,html.L #hand .pck{position:absolute;right:-3px;top:-4px;width:19px;height:19px;border-radius:50%;background:#3fae5a;color:#fff;font:900 11px Inter,system-ui;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0b0705;z-index:6}
+html.L #zone .zf{display:flex;align-items:center;justify-content:center;gap:14px}
+html.L #zone.full .zf{justify-content:flex-end}
+html.L #zone .zc{font:700 12px Inter,system-ui;color:#c7b08a}html.L #zone .zc b{font:700 22px var(--serif);color:#8ee59a}
+html.L #zone .zf .btn{padding:6px 22px!important;font-size:15px!important;letter-spacing:.12em;width:auto!important;min-height:0!important;margin:0!important}
+html.L #zone .zsel{font:600 12px Inter,system-ui;color:#c7b08a;flex:1;text-align:left}html.L #zone .zsel b{color:#8ee59a;font:700 14px var(--serif)}
+html.L #hand .card.pdim{opacity:.38;filter:saturate(.5)}
+html.L #hand .card.psel{box-shadow:0 0 0 .14em #8ee59a,0 0 1em rgba(120,230,140,.55)!important}
+html.L #game.zfull #deck,html.L #game.zfull #disc,html.L #game.zfull #narr,html.L #game.zfull #stage,html.L #game.zfull .temb{visibility:hidden}
+html.L #game.zmine #narr{visibility:hidden}
+/* diğer katmanlar */
+html.L .mbox{max-height:calc(100dvh - 24px)!important;max-width:min(760px,92vw)!important;padding:14px 18px!important}
+html.L #modal .mbox .grid{gap:6px}
+html.L #modal .names{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))!important}
+html.L #result .mbox.res{max-width:min(760px,90vw)!important}
+
+html.L #turnBanner{top:calc(var(--TT) + 20px)!important}
+html.L #toast{top:auto!important;bottom:calc(var(--RH) + 30px)!important;max-width:min(520px,80vw);text-align:center}
+html.L #zoom .zw:has(>.card){display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto;column-gap:26px;row-gap:10px;max-width:min(640px,88vw)!important;text-align:left!important;align-items:center}
+html.L #zoom .zw>.card{grid-row:1/3}
+html.L #zoom .zh{text-align:left}
+html.L #pickTip{left:50%!important;right:auto!important;transform:translateX(-50%);width:min(560px,80vw);top:calc(var(--T) + 8px)!important}
+/* ana sayfa ve lobi */
+html.L #setup:not(.hidden){display:grid!important;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto auto 1fr;column-gap:30px;row-gap:8px;align-items:center;justify-items:center;padding:12px calc(var(--M,14px) + 10px) 14px!important;overflow:auto}
+html.L #setup>:first-child,html.L #setup>:last-child{margin:0!important}
+html.L #setup .hero{grid-column:1;grid-row:2;margin:0!important}
+html.L #setup .fan{grid-column:1;grid-row:3;margin:0!important;transform:scale(.86);transform-origin:top center}
+html.L #setup .panel{grid-column:2;grid-row:1/5;align-self:center;max-width:380px!important}
+html.L #setup .h1a{font-size:clamp(38px,9vh,56px)!important}html.L #setup .h1b{font-size:clamp(18px,4.4vh,26px)!important}
+html.L #setup:has(#pLobby:not(.hidden)) .hero,html.L #setup:has(#pLobby:not(.hidden)) .fan{display:none!important}
+html.L #setup:has(#pLobby:not(.hidden)){grid-template-columns:1fr!important;grid-template-rows:1fr!important;align-items:center!important}
+html.L #setup #pLobby:not(.hidden){display:grid!important;grid-column:1/-1!important;grid-row:1/-1!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-auto-rows:min-content;column-gap:26px;row-gap:7px;max-width:min(780px,100%)!important;width:100%;align-content:center;align-items:start;margin:0 auto!important}
+html.L #pLobby>*{grid-column:1;width:100%;box-sizing:border-box;margin-top:0!important;margin-bottom:0!important}
+html.L #pLobby>#lbHost,html.L #pLobby>#lbWait,html.L #pLobby>#lbErr{grid-column:2}
+html.L #pLobby>#lbHost{grid-row:1/span 5;display:flex;flex-direction:column;gap:6px;align-self:center}
+html.L #pLobby>#lbErr{grid-row:6}html.L #pLobby>#lbLeave{grid-column:2;grid-row:7;padding-top:6px!important;padding-bottom:6px!important}
+html.L #pLobby>#lbWait{grid-row:1/span 5;align-self:center;text-align:center}
+html.L #pLobby #lbHost .seg{flex-wrap:nowrap}
+html.L #pLobby #lbHost .seg button{flex:1;min-width:0;padding-left:4px;padding-right:4px}
+html.L #pLobby #lbHost .lab{margin:4px 0 0!important}
+html.L #pLobby #lbStart{margin-top:8px!important}
+html.L #pLobby .lbp{max-height:calc(100dvh - 190px);overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+html.L #pLobby .lbp>*{margin:0!important;min-width:0;padding:7px 10px!important;gap:8px!important;font-size:15px!important;white-space:nowrap}
+html.L #pLobby .lbp .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}
+html.L #pLobby .lbp>:first-child{grid-column:1/-1}html.L #pLobby .lbp svg{flex:none}
+html.L #pLobby .lbp div small{font-size:9px!important;letter-spacing:.08em!important;flex:none}
+html.L #pLobby #shareBtn{padding-top:10px;padding-bottom:10px}
+
+html.L #opps{z-index:8!important}
+html.L #table{background:repeating-linear-gradient(180deg,transparent 0,transparent calc(20% - 1px),rgba(0,0,0,.42) calc(20% - 1px),rgba(255,220,170,.05) 20%),radial-gradient(ellipse 60% 70% at 50% 40%,rgba(255,215,150,.16),transparent 70%),url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='160' preserveAspectRatio='none'><filter id='w'><feTurbulence type='fractalNoise' baseFrequency='.004 .11' numOctaves='4' seed='9'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.4 0 0 0 -.45'/></filter><rect width='100%' height='100%' fill='%23663a1a'/><rect width='100%' height='100%' fill='%23200d03' filter='url(%23w)' opacity='.55'/></svg>") center/100% 100%!important;border:12px solid #3a1e0b!important;border-radius:18px!important;box-shadow:0 0 0 1px #120802,inset 0 0 0 1px #1a0c03,inset 0 6px 14px rgba(0,0,0,.55),0 16px 26px rgba(0,0,0,.75)!important;box-sizing:border-box}
+html.L #table:before,html.L #table:after{display:none!important}
+html.L .tfrm{inset:-6px!important;border-radius:12px!important;box-shadow:inset 0 0 0 1.5px #c9a24a,inset 0 0 0 2.5px rgba(0,0,0,.55)!important}
+html.L .tcor{width:22px!important;height:22px!important}html.L .tcor.c0{left:-10px!important;top:-10px!important}html.L .tcor.c1{right:-10px!important;top:-10px!important}html.L .tcor.c2{left:-10px!important;bottom:-10px!important}html.L .tcor.c3{right:-10px!important;bottom:-10px!important}
+html.L .temb{opacity:.55!important}
+html.L #deck,html.L #disc{left:auto}html.L #deck{left:calc(var(--PW) * .3 + 4px)!important}html.L #disc{right:calc(var(--PW) * .3 + 4px)!important}
+
+html.L #stageCard:not(.on){visibility:hidden!important}
+
+html.L #zone .card.xs .nm{display:flex!important;justify-content:center}
+html.L #zone{gap:4px!important}
+
+html.L #result .mbox.res{display:grid!important;grid-template-columns:1fr 190px;column-gap:18px;row-gap:4px;align-content:start;align-items:start}
+html.L #result .mbox.res>*{grid-column:1;margin-top:0!important}
+html.L #result .mbox.res #again{grid-column:2;grid-row:1/span 3;align-self:end;width:100%!important;margin:0!important}
+html.L #result .mbox.res #menu{grid-column:2;grid-row:4/span 2;align-self:start;width:100%!important;margin:6px 0 0!important}
+html.L #result .mbox.res .win{font-size:26px!important;margin:0!important}
+html.L #result .mt .mr{padding:5px 8px!important}
+html.L #intro .mbox,html.L #intro .ibox{max-width:min(620px,90vw)!important}
+html.L #intro .slide{display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:22px;row-gap:6px;text-align:left!important;align-items:center}
+html.L #intro .slide .il{grid-row:1/3;height:auto!important;transform:scale(.92)}
+html.L #intro .slide h4{align-self:end;font-size:20px}
+html.L #intro .slide p{align-self:start;font-size:14.5px;max-width:none!important}
+html.L #intro .mbox>*,html.L #intro .ibox>*{margin-top:8px}
+
+html.L #zone .zmsel{flex:1;display:flex;flex-wrap:wrap;gap:6px;justify-content:center;align-items:center;min-height:0;overflow:hidden}html.L #zone .zmsel b{font:700 13px var(--serif);color:#8ee59a;padding:3px 10px;border-radius:9px;background:rgba(120,230,140,.1);box-shadow:inset 0 0 0 1px rgba(120,230,140,.4)}html.L #zone .zmsel i{font:italic 600 12px var(--serif);color:#8a7a5a}
+
+html.L #explain{position:absolute!important;left:6px!important;right:6px!important;top:6px!important;bottom:6px!important;width:auto!important;transform:none!important;display:none;flex-direction:column;justify-content:center;z-index:25!important}
+html.L #explain.on{display:flex!important}
+html.L .hempty{margin:0 2px!important;padding:8px 14px!important;height:calc(var(--RH) - 34px)!important;flex:1;box-sizing:border-box;align-items:center!important;overflow:hidden}
+html.L .hempty b{font-size:15px!important}html.L .hempty span,html.L .hempty small{font-size:12px!important}
+html.L #hand .card.dis{opacity:.45!important;filter:saturate(.55)}
+
+html.L .hempty{border:0!important;background:rgba(0,0,0,.28)!important;box-shadow:inset 0 0 0 1px rgba(201,162,74,.45)!important;border-radius:12px!important;height:calc(var(--RH) - 36px)!important}
 </style>
 </head>
 <body>
@@ -892,14 +1052,14 @@ const cls=['opp'];if(G.cur===p)cls.push('turn');if(G.thinking===p)cls.push('thin
 const lt=esc((p.name||'?')[0].toLocaleUpperCase('tr')),oc=OPPC[k%OPPC.length];
 return `<div class="${cls.join(' ')}" data-p="${i}">${G.cur===p?'<div class="sira">SIRA</div>':''}<div class="avw${p.prot?' prot':''}">${crestSVG(lt,oc)}${p.prot?`<div class="pbadge">${UI.shield}<b>${p.prot}</b></div>`:''}${p.noDraw?`<div class="cbadge">${UI.chain}</div>`:''}</div><div class="think"><b>•</b><b>•</b><b>•</b></div>
 <div class="onm"><span>${esc(p.name)}</span>${NET.on&&p.ai?' <small>YZ</small>':''}</div><div class="fan"><i></i><i></i><i></i><span>${p.hand.length}</span></div></div>`}).join('');
-document.querySelectorAll('.opp').forEach(el=>el.onclick=()=>{const p=G.players[+el.dataset.p];if(G.targeting){if(G.targeting.cands.includes(p)){const r=G.targeting.res;G.targeting=null;sfx('tap');renderOpps();r(p)}}else showOpp(p)})}
+placeSeats();document.querySelectorAll('.opp').forEach(el=>el.onclick=()=>{const p=G.players[+el.dataset.p];if(G.targeting){if(G.targeting.cands.includes(p)){const r=G.targeting.res;G.targeting=null;sfx('tap');renderOpps();r(p)}}else showOpp(p)})}
 function renderPiles(){
 const d=G.deck.length;const dk=$('#deck');dk.classList.toggle('low',d>0&&d<=G.players.length*2);
 dk.innerHTML=`<div class="pc2">${d>0?(d>2?`<div style="left:4.5px;top:-4.5px">${backHTML(62)}</div><div style="left:3px;top:-3px">${backHTML(62)}</div><div style="left:1.5px;top:-1.5px">${backHTML(62)}</div>`:'')+backHTML(62):'<div class="empty"></div>'}</div><div class="cnt"><b>${d}</b>DESTE</div>`;
 const n=G.disc.length;
 $('#disc').innerHTML=`<div class="pc2">${G.top&&!G.hide.has(G.top.id)?cardHTML(G.top,{w:62}):'<div class="empty"></div>'}</div><div class="cnt"><b>${n}</b>ATILAN</div>`;
 const pc=$('#disc .pc2');pc.onclick=()=>{if(G.top)zoom(G.top)};
-$('#deck .pc2').style.width=$('#disc .pc2').style.width=''}
+$('#deck .pc2').style.width=$('#disc .pc2').style.width='';placeStage()}
 function renderMe(){const m=me();const hi=handInfo(m);
 const el=$('#me');el.classList.toggle('turn',G.cur===m);
 el.innerHTML=`<div class="mel"><div id="meAv">${crestSVG(esc((m.name||'S')[0].toLocaleUpperCase('tr')),'#a87a20')}</div><div class="mtx"><b>${isMe(m)?'Sen':esc(m.name)}</b><span class="${m.prot?'on':''}">${UI.shield}${m.prot?m.prot+' tur':'—'}</span>${m.noDraw?'<span class="eng">Engelli</span>':''}</div></div><div class="sc" id="myScore"><small>PUAN</small><b>${hi.total}</b>${hi.od?'<i>×2 Hazine</i>':''}</div>`;
@@ -908,17 +1068,20 @@ function renderOrder(){const el=$('#order');if(!el||!G)return;const ord=G.ord,n=
 const sz=n>8?15:n>6?17:n>4?19:21;el.style.setProperty('--s',sz+'px');
 el.innerHTML=Array.from({length:n},(_,k)=>ord[(st+k)%n]).map((p,k)=>{const h=isMe(p)?{c:'#C9962F'}:HOUSES[p.house%HOUSES.length];return `<i class="o${k===0&&G.cur?' cur':''}${isMe(p)?' me':''}" style="--c:${h.c}">${esc((p.name||'?')[0].toLocaleUpperCase('tr'))}</i><u${k===n-1?' class="rt"':''}>${k===n-1?'↻':'›'}</u>`}).join('')}
 function render(){
-if(!G||!$('#game'))return;
+if(!G||!$('#game'))return;if(!LV.W)layL();
 renderOpps();renderOrder();renderPiles();renderMe();renderHand();
 const t=$('#htitle');t.innerHTML='<svg viewBox="0 0 40 22"><path d="M4 18 l3-13 7 7 6-10 6 10 7-7 3 13z" fill="url(#tsgl)" stroke="#5a3a0a"/></svg>TAHT SAVAŞI'+(G.final?'<small>SON TUR</small>':'');
 $('#game').classList.toggle('myturn',!!G.humanTurn);$('#game').classList.toggle('chain',!!G.chain);{const cb=$('#chainBar');if(cb){cb.className=G.chain?'on':'';cb.innerHTML=G.chain?`<b>×${G.chain.mult}</b><span>▼</span>`:''}}
 updateInfo()}
 function sortedHand(m){return m.hand.slice().sort((a,b)=>(M[b.name].pts-M[a.name].pts)||(M[a.name].type===M[b.name].type?(a.name<b.name?-1:a.name>b.name?1:a.id-b.id):0))}
-function handGeom(n){const W=($('#hand').clientWidth||360);
+function handGeom(n){if(isL())return{w:LV.CW||80,step:0,start:0,grid:true,cols:n};const W=($('#hand').clientWidth||360);
 let cols=n<=5?Math.max(1,n):n<=8?4:n<=15?5:6;if(n>3&&n<=6&&innerHeight/W>1.9)cols=3;if(cols===6&&(W-14-30)/6<62)cols=5;if(cols===5&&n>5&&(W-14-24)/5<58)cols=4;
 const w=Math.max(40,Math.min(cols<=3?118:n<=5?96:90,Math.floor((W-14-(cols-1)*6)/cols)));
 return{w,step:0,start:0,grid:true,cols}}
-function renderHand(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
+function renderHand(){renderHand0();postHand()}
+function postHand(){const hc=$('#hcount');const m=me();if(isL()&&hc){const n=m.hand.length;const vis=Math.floor(($('#handWrap').clientWidth-24)/((LV.CW||80)+6));hc.textContent=n>vis?n+' KART · kaydır ›':''}
+if(!G.pick||!G.pick.mine)return;const P=G.pick;document.querySelectorAll('#hand .card').forEach(el=>{const id=+el.dataset.id;el.classList.remove('dis','sel');const c=m.hand.find(x=>x.id===id);const on=c&&P.sel.includes(c);el.classList.toggle('pdim',!P.ids.has(id));el.classList.toggle('psel',!!on);if(on){const b=document.createElement('span');b.className='pck';b.textContent=P.n>1?P.sel.indexOf(c)+1:'✓';el.appendChild(b)}})}
+function renderHand0(){const m=me();if(G.sel!=null&&!m.hand.some(c=>c.id===G.sel))G.sel=null;
 const n=m.hand.length;if(!n){const H0=$('#hand');H0.classList.remove('grid','hs');H0.style.height='';H0.style.maxHeight='';H0.innerHTML=`<div class="hempty"><div class="hei">${UI.shield}</div><b>Elinde kart yok</b><span>${G.emptyWhy||'Kartların atıldı ya da verildi.'}</span><small>Sıran gelince desteden kart çekip oyuna devam edeceksin.</small></div>`;return}G.emptyWhy=null;const g=handGeom(n),mid=(n-1)/2;const hs=sortedHand(m);const H=$('#hand');H.classList.toggle('hs',G.sel!=null);H.classList.toggle('grid',!!g.grid);
 if(g.grid){const sT=H.scrollTop;H.style.height='';H.innerHTML=hs.map(c=>cardHTML(c,{w:g.w,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTurn&&(G.chain?!G.chain.ids.has(c.id):!canPlay(m,c))})).join('');
 H.style.maxHeight='';H.scrollTop=sT}
@@ -928,7 +1091,7 @@ return cardHTML(c,{w:g.w,st,hid:G.hide.has(c.id),sel:G.sel===c.id,dis:G.humanTur
 if(!n){H.classList.remove('grid');H.style.height='';H.style.maxHeight='';H.innerHTML=`<div class="hempty"><svg viewBox="0 0 64 64" class="ic"><rect x="14" y="10" width="30" height="42" rx="4" stroke-dasharray="4 4"/><rect x="22" y="14" width="30" height="42" rx="4" stroke-dasharray="4 4"/></svg><b>Elin boş</b><span>${G.deck.length?'Sıran gelince desteden kart çekeceksin':'Oyun sonuna kadar kartın yok'}</span></div>`}
 const hc=$('#hcount');hc.textContent=`${n} KART`;hc.classList.remove('over')}
 const hiNum=t=>esc(t).replace(/(×?\d+)/g,'<em>$1</em>');
-function updateInfo(){const el=$('#info');if(!el||!G)return;const m=me();const c=G.sel!=null&&m.hand.find(x=>x.id===G.sel);
+function updateInfo(){const el=$('#info');if(!el||!G)return;if(G.pick){el.style.display='none';el.innerHTML='';return}const m=me();const c=G.sel!=null&&m.hand.find(x=>x.id===G.sel);
 if(!c){el.style.display='none';el.innerHTML='';return}
 const hr=$('#handWrap').getBoundingClientRect(),ar=$('#app').getBoundingClientRect();
 el.style.bottom=(ar.bottom-hr.top+8)+'px';el.style.display='flex';
@@ -939,22 +1102,22 @@ const cb=$('#cancelBtn');if(cb)cb.onclick=e=>{e.stopPropagation();G.sel=null;ren
 const pb=$('#playBtn');if(pb)pb.onclick=e=>{e.stopPropagation();commitPlay(c)}}
 function commitPlay(c){if(G.chain&&G.chainRes){if(G.chain.ids.has(c.id)){const r=G.chainRes;G.chainRes=null;G.sel=null;r(c)}return}
 if(G.waitRes&&G.humanTurn&&canPlay(me(),c)){const r=G.waitRes;G.waitRes=null;G.sel=null;r(c)}}
-function selectCard(id){const m=me();const c=m.hand.find(x=>x.id===id);if(!c)return;
+function selectCard(id){const m=me();const c=m.hand.find(x=>x.id===id);if(!c)return;if(G.pick){if(G.pick.mine&&G.pick.ids.has(id))G.pick.toggle(c);return}
 G.sel=G.sel===id?null:id;
 sfx(G.sel!=null?'sel':'tap');renderHand();updateInfo()}
 (function(){let st=null,lp=null;const h=document.addEventListener.bind(document);
 const cardAt=(x,e)=>{const m=me();const n=m.hand.length;if(!n)return null;const g=handGeom(n);if(g.grid){const el=e&&document.elementFromPoint(e.clientX,e.clientY);const ce=el&&el.closest&&el.closest('#hand .card');return ce?m.hand.find(k=>k.id==ce.dataset.id)||null:null}const hr=$('#hand').getBoundingClientRect();let i=g.step?Math.floor((x-hr.left-g.start)/g.step):0;i=Math.max(0,Math.min(n-1,i));return sortedHand(m)[i]};
 const setPeek=id=>{document.querySelectorAll('#hand .card').forEach(el=>el.classList.toggle('peek',id!=null&&+el.dataset.id===id&&id!==G.sel))};
 h('pointerdown',e=>{if(!G||!e.target.closest||!e.target.closest('#hand')){st=null;return}const c=cardAt(e.clientX,e);if(!c){st=null;return}
-st={id:c.id,y:e.clientY,x:e.clientX,done:false,scrub:false};setPeek(c.id);clearTimeout(lp);
+st={id:c.id,y:e.clientY,x:e.clientX,done:false,scrub:false};setPeek(c.id);clearTimeout(lp);if(G.pick&&G.pick.mine&&G.pick.ids.has(c.id)){lp=setTimeout(()=>{if(st){st.done=true;showTip(c)}},380)}
 });
 h('pointermove',e=>{if(!st||!G)return;if(Math.abs(e.clientX-st.x)>8){if(handGeom(me().hand.length).grid){clearTimeout(lp);return}st.scrub=true;clearTimeout(lp)}if(Math.abs(e.clientY-st.y)>10)clearTimeout(lp);
 if(st.scrub&&e.clientY-st.y>-40){const c=cardAt(e.clientX,e);if(c&&c.id!==st.id){st.id=c.id;setPeek(c.id);sfx('tap')}}});
-h('pointerup',e=>{clearTimeout(lp);if(!st||!G)return;const s0=st;st=null;setPeek(null);if(s0.done)return;const dy=e.clientY-s0.y;const m=me();const c=m.hand.find(x=>x.id===s0.id);if(!c)return;
+h('pointerup',e=>{clearTimeout(lp);hideTip();if(!st||!G)return;const s0=st;st=null;setPeek(null);if(s0.done)return;const dy=e.clientY-s0.y;const m=me();const c=m.hand.find(x=>x.id===s0.id);if(!c)return;
 if(dy<-50&&!handGeom(m.hand.length).grid){G.sel=c.id;sfx('tap');renderHand();updateInfo();return}
 if(s0.scrub){G.sel=c.id;sfx('tap');renderHand();updateInfo();return}
-if(Math.abs(dy)<14)selectCard(c.id)});
-h('pointercancel',()=>{clearTimeout(lp);st=null;if(G)setPeek(null)});
+if(Math.abs(dy)<14&&Math.abs(e.clientX-s0.x)<14)selectCard(c.id)});
+h('pointercancel',()=>{clearTimeout(lp);hideTip();st=null;if(G)setPeek(null)});
 h('click',e=>{if(!G||G.sel==null)return;if(e.target.closest('#hand,#info,.ov'))return;G.sel=null;renderHand();updateInfo()})})();
 function renderStage(p,c){
 const sc=$('#stageCard'),cap=$('#cap');
@@ -971,7 +1134,7 @@ async function banner(text,gold){if(!FXON())return;const b=$('#turnBanner');b.cl
 function shake(){if(!FXON())return;const a=$('#app');a.classList.remove('shake');void a.offsetWidth;a.classList.add('shake');const f=$('#flash');f.classList.remove('on');void f.offsetWidth;f.classList.add('on')}
 function hurt(p){if(!FXON())return;if(isMe(p)){shake();return}const el=document.querySelector(`.opp[data-p="${idxOf(p)}"]`);if(el){el.classList.remove('hurt');void el.offsetWidth;el.classList.add('hurt')}}
 function zoom(c){const z=$('#zoom');const mt=M[c.name];
-z.innerHTML=`<div class="zw">${cardHTML(c,{w:Math.min(210,window.innerWidth*.52)})}<div class="zt"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]} · DESTEDE ${mt.count}</i><b>${c.name}</b>${mt.text}</div><div class="zh">Kapatmak için dokun</div></div>`;
+z.innerHTML=`<div class="zw">${cardHTML(c,{w:isL()?Math.min(200,Math.round((window.innerHeight-56)/1.42)):Math.min(210,window.innerWidth*.52)})}<div class="zt"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]} · DESTEDE ${mt.count}</i><b>${c.name}</b>${mt.text}</div><div class="zh">Kapatmak için dokun</div></div>`;
 z.classList.add('open');z.onclick=()=>z.classList.remove('open');sfx('tap')}
 function zoomScore(){const m=me();const hi=handInfo(m);const z=$('#zoom');
 z.innerHTML=`<div class="zw"><div class="zt"><i style="color:var(--gold)">PUANIN</i><b>${hi.total} puan</b>Elindeki karakterler: ${hi.sum}${hi.od?'<br>Hazine elinde: puanın ×2':''}<br><br><span style="color:var(--mut);font-size:13px">Oyun sonunda elinde kalan karakterlerin puanı toplanır. Rakiplerin elleri gizlidir; oyun sonunda açılır.</span></div><div class="zh">Kapatmak için dokun</div></div>`;
@@ -1100,10 +1263,10 @@ return true}
 function whyNot(p,c){if(p.noDraw)return 'Engellisin.';if(c.blocked)return 'Bu kart bloke edildi: oynanamaz, yalnızca atılabilir.';if(c.name==='Hazine')return 'Hazine oynanmaz; elinde tutarsan oyun sonunda puanını ikiye katlar.';
 if(!canPlay(p,c))return 'Şu an oynanamaz (uygun kart yok).';return ''}
 const modalEl=()=>$('#modal');
-function closeModal(){const m=modalEl();m.classList.remove('open');m.innerHTML=''}
+function closeModal(){const m=modalEl();m.classList.remove('open');m.innerHTML='';if(typeof G!=='undefined'&&G&&G.pick)endPick()}
 function ask(title,text,buttons){return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${text?`<p class="sub">${text}</p>`:''}<div class="div"></div>${buttons.map((b,i)=>`<button class="pbtn ${b.good?'good':''}" data-i="${i}" ${b.off?'disabled':''}><span>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</span></button>`).join('')}</div>`;m.classList.add('open');m.querySelectorAll('.pbtn').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(+b.dataset.i)})})}
 function pickPlayer(title,cands){return new Promise(res=>{G.targeting={cands,res};narrHTML(`${esc(title)}<small>Parlayan rakibe dokun</small>`);renderOpps();sfx('turn')})}
-function pickCards(title,cards,n,o={}){return new Promise(res=>{const sel=[];const m=modalEl();const w=cards.length>6?72:84;let first=true;
+function pickCards(title,cards,n,o={}){if(isL())return pickCardsL(title,cards,n,o);return new Promise(res=>{const sel=[];const m=modalEl();const w=cards.length>6?72:84;let first=true;
 const paint=()=>{const og=first?null:m.querySelector('.mbox.pick .grid'),oy=og?og.scrollTop:0,om=first?null:m.querySelector('.mbox.pick'),omy=om?om.scrollTop:0;first=false;m.innerHTML=`<div class="mbox pick"><h3>${title}</h3><div class="pkh">Basılı tut: kartın bilgisi</div><div class="grid${sel.length?' hs':''}">${cards.map((c,i)=>`<div class="pc ${sel.includes(c)?'on':''}" data-i="${i}">${sel.includes(c)?`<span class="ck">${n>1?sel.indexOf(c)+1:'✓'}</span>`:''}${cardHTML(c,{w})}</div>`).join('')}</div><button class="btn primary" id="okb" ${o.any||sel.length===n?'':'disabled'}>${o.any||sel.length===n?'ONAYLA':'SEÇ'} · ${sel.length}${o.any?'':'/'+n}</button></div>`;m.classList.add('open');{const ng=m.querySelector('.mbox.pick .grid'),nm2=m.querySelector('.mbox.pick');if(ng)ng.scrollTop=oy;if(nm2)nm2.scrollTop=omy}
 m.querySelectorAll('.pc').forEach(el=>{const c=cards[+el.dataset.i];let t=null,lp=false,sx=0,sy=0;
 const hideTip=()=>{clearTimeout(t);const x=document.getElementById('pickTip');if(x)x.remove();if(lp)setTimeout(()=>lp=false,250)};
@@ -1419,7 +1582,7 @@ const deck=[];let id=0;for(const n of NAMES)for(let i=0;i<M[n].count;i++)deck.pu
 const players=spec?spec.players.map(x=>({name:x.name,ai:!!x.ai,house:x.house})):[{name:(LS.get('ts_name')||'Sen'),ai:false,house:0},...AINAMES.slice(0,CFG.opps).map((n,i)=>({name:n,ai:true,house:i}))];
 if(CFG.autoHuman&&!spec)players[0].ai=true;if(CFG.d0&&!spec)players[0].diff=CFG.d0;
 players.forEach(p=>{Object.assign(p,{hand:[],saray:[],played:[],prot:0,noDraw:false,last:null,ni:0})});
-{const e=document.getElementById('explain');if(e)e.classList.remove('on')}
+{const e=document.getElementById('explain');if(e)e.classList.remove('on');const z=document.getElementById('zone');if(z){z.className='';z.innerHTML=''}const g=document.getElementById('game');if(g)g.classList.remove('zfull','zmine')}
 G={meIdx:spec?spec.meIdx:0,players,ord:players.slice(),deck,disc:[],log:[],hide:new Set(),top:null,turnIdx:R()*players.length|0,firstTurn:true,cur:null,endTrig:false,final:false,over:false,ceasefire:null,humanTurn:false,thinking:null,targeting:null,sel:null,tutor:!LS.get('ts_played')};
 return G}
 async function dealAll(){
@@ -1550,7 +1713,7 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)NET.sync()
 function showPanel(id){['pMain','pSolo','pOnline','pLobby','pGate'].forEach(x=>$('#'+x).classList.toggle('hidden',x!==id))}
 function showLobby(){if(G)return;const _r=NET.room||{};const _k=JSON.stringify([NET.code,NET.players,_r.ai,_r.diff,_r.total]);if(showLobby.k===_k&&!$('#pLobby').classList.contains('hidden')&&!$('#setup').classList.contains('hidden'))return;showLobby.k=_k;$('#setup').classList.remove('hidden');$('#game').classList.add('hidden');showPanel('pLobby');
 $('#lbCode').textContent=NET.code;const host=NET.seat===0;const r=NET.room||{ai:0,diff:'normal'};
-$('#lbPlayers').innerHTML=NET.players.map((p,i)=>`<div>${houseShield(i,p.seat===NET.seat,p.name)}${esc(p.name)}${p.seat===NET.seat?' (sen)':''}${p.seat===0?'<small>KURUCU</small>':''}</div>`).join('')+(r.ai?Array.from({length:r.ai},(_,i)=>`<div style="opacity:.7">${houseShield(NET.players.length+i,false,'Y')}Yapay zekâ<small>YZ</small></div>`).join(''):'');
+$('#lbPlayers').innerHTML=NET.players.map((p,i)=>`<div>${houseShield(i,p.seat===NET.seat,p.name)}<span class="nm">${esc(p.name)}${p.seat===NET.seat?' (sen)':''}</span>${p.seat===0?'<small>KURUCU</small>':''}</div>`).join('')+(r.ai?Array.from({length:r.ai},(_,i)=>`<div style="opacity:.7">${houseShield(NET.players.length+i,false,'Y')}Yapay zekâ<small>YZ</small></div>`).join(''):'');
 $('#lbHost').classList.toggle('hidden',!host);$('#lbWait').classList.toggle('hidden',host);
 const maxAi=Math.max(0,6-NET.players.length);
 const sa=$('#segAi');sa.innerHTML='';for(let i=0;i<=Math.min(4,maxAi);i++){const b=document.createElement('button');b.textContent=i;if(r.ai===i)b.className='on';b.onclick=()=>NET_set({ai:i});sa.appendChild(b)}
@@ -1603,12 +1766,12 @@ const i=await ask('Savaştan çekilsin mi?','Bu oyun kaybolur.',[{label:'Devam e
 (()=>{const e=$('#ember');for(let i=0;i<18;i++){const d=document.createElement('i');d.style.cssText=`left:${Math.random()*100}%;--dx:${(Math.random()*80-40)}px;animation-duration:${8+Math.random()*10}s;animation-delay:${-Math.random()*14}s`;e.appendChild(d)}})();
 window.addEventListener('resize',()=>{if(G)render()});
 ['gesturestart','gesturechange','gestureend','dblclick'].forEach(t=>document.addEventListener(t,e=>{if(!/INPUT|TEXTAREA/.test((e.target||{}).tagName))e.preventDefault()},{passive:false}));
-let _lt=0;document.addEventListener('touchend',e=>{const n=Date.now();if(n-_lt<350&&!/INPUT|TEXTAREA/.test((e.target||{}).tagName))e.preventDefault();_lt=n},{passive:false});
+let _lt=0,_lx=-99,_ly=-99;document.addEventListener('touchend',e=>{const n=Date.now(),t=(e.changedTouches||[])[0]||{},x=t.clientX||0,y=t.clientY||0;if(n-_lt<300&&Math.abs(x-_lx)<24&&Math.abs(y-_ly)<24&&!/INPUT|TEXTAREA/.test((e.target||{}).tagName)&&!(e.target.closest&&e.target.closest('#hand,#zone')))e.preventDefault();_lt=n;_lx=x;_ly=y},{passive:false});
 window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-021026';
+const BUILD='20261128-045138';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1636,6 +1799,67 @@ const p=document.createElement('div');p.style.cssText='position:fixed;left:0;rig
 const r=document.createElement('div');r.style.cssText='position:fixed;left:0;right:0;bottom:0;height:24px;background:#f0f;z-index:1000000;color:#fff;font:700 12px monospace;text-align:center;line-height:24px';r.textContent='EN ALT (bottom:0)';
 const u=()=>{const cs=getComputedStyle(p);t.textContent=`innerH ${innerHeight}  innerW ${innerWidth}\nscreen ${screen.width}x${screen.height}\nvisualVP ${window.visualViewport?Math.round(visualViewport.height):'-'}\nclientH ${document.documentElement.clientHeight}\nstandalone ${navigator.standalone} ${matchMedia('(display-mode: standalone)').matches}\nsafe top ${cs.paddingTop} bottom ${cs.paddingBottom}\napp bottom ${Math.round(document.getElementById('app').getBoundingClientRect().bottom)}\n--apph ${getComputedStyle(document.documentElement).getPropertyValue('--apph')}`};
 document.body.append(d,t,r);u();setInterval(u,1000)})();
+/* ================= YATAY YERLEŞİM ================= */
+function isL(){return document.documentElement.classList.contains('L')}
+const LV={};
+function safeIns(){if(window.__safe)return window.__safe;let p=document.getElementById('safeProbe');if(!p){p=document.createElement('div');p.id='safeProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';document.body.appendChild(p)}const s=getComputedStyle(p);return{t:parseFloat(s.paddingTop)||0,r:parseFloat(s.paddingRight)||0,b:parseFloat(s.paddingBottom)||0,l:parseFloat(s.paddingLeft)||0}}
+function layL(){const de=document.documentElement;const app=document.getElementById('app');if(!app)return;
+const W=app.clientWidth||innerWidth,H=app.clientHeight||innerHeight;const L=W>H&&W>=560&&H<=700;de.classList.toggle('L',L);
+const narr=document.getElementById('narr'),hud=document.getElementById('hud'),tb=document.getElementById('table');
+if(!L){if(narr&&hud&&narr.parentNode!==hud)hud.appendChild(narr);return}
+const s=safeIns();const M=Math.round(Math.max(s.l,s.r)+(Math.max(s.l,s.r)>0?2:12));const B=Math.round(Math.max(s.b,6));const T=Math.round(s.t);
+const CW=Math.round(Math.max(54,Math.min(96,H*.2)));const RH=Math.round(CW*1.42)+20;const RT=H-B-RH;
+const MW=Math.round(Math.max(104,Math.min(150,W*.15)));const TT=Math.round(T+Math.max(76,H*.21));const TB=RT-24;
+const side=Math.round(Math.max(96,Math.min(124,W*.124)));const TL=M+side,TR=W-M-side;
+const PW=Math.round(Math.max(44,Math.min(66,(TB-TT)*.5)));
+Object.assign(LV,{W,H,M,B,T,CW,RH,RT,MW,TT,TB,TL,TR,PW});
+const st=de.style;for(const k of ['M','T','CW','RH','RT','MW','TT','TB','TL','TR','PW'])st.setProperty('--'+k,LV[k]+'px');
+if(narr&&tb&&narr.parentNode!==tb)tb.appendChild(narr);
+if(typeof G!=='undefined'&&G&&G.players){try{placeSeats();placeStage();if(G.pick&&G.pick.paint)G.pick.paint()}catch(e){}}}
+function placeSeats(){if(!isL())return;const els=[...document.querySelectorAll('#opps .opp')];const k=els.length;if(!k)return;
+const {W,TL,TR,TT,TB,M}=LV;const mid=(TT+TB)/2;let nl,nr;if(k===1){nl=0;nr=0}else if(k<=7){nl=1;nr=1}else{nl=2;nr=2}const nt=k-nl-nr;
+const sx=Math.round((M+TL-14)/2)+4,rx=W-sx;const pos=[];
+const ys=n=>n===0?[]:n===1?[mid]:[mid+30,mid-28];
+ys(nl).forEach(y=>pos.push([sx,y]));
+for(let i=0;i<nt;i++){const x=nt<=3?TL+(TR-TL)*(i+1)/(nt+1):(TL+16)+i*((TR-TL-32)/(nt-1));pos.push([x,TT-14])}
+ys(nr).slice().reverse().forEach(y=>pos.push([rx,y]));
+els.forEach((el,i)=>{const p=pos[i]||[W/2,TT-14];el.style.left=Math.round(p[0])+'px';el.style.top=Math.round(p[1])+'px';el.classList.toggle('sm',nt>=4||nl>1);const side=i<nl||i>=nl+nt,nm=el.querySelector('.onm');if(nm){if(side)nm.style.setProperty('max-width',Math.max(44,Math.min(84,Math.round(TL-M-12-46)))+'px','important');else nm.style.removeProperty('max-width')}const w=el.offsetWidth,lo=M+w/2+2,hi=W-M-w/2-2;if(lo<=hi)el.style.left=Math.round(Math.min(hi,Math.max(lo,p[0])))+'px'})}
+function placeStage(){if(!isL())return;const d=document.querySelector('#disc .pc2'),t=document.getElementById('table'),s=document.getElementById('stage');if(!d||!t||!s)return;
+const dr=d.getBoundingClientRect(),tr=t.getBoundingClientRect();s.style.left=Math.round(dr.left-tr.left-t.clientLeft)+'px';s.style.top=Math.round(dr.top-tr.top-t.clientTop)+'px';s.style.width=Math.round(dr.width)+'px';s.style.height=Math.round(dr.height)+'px'}
+function zoneEl(){let z=document.getElementById('zone');if(!z){z=document.createElement('div');z.id='zone';document.getElementById('game').appendChild(z)}return z}
+function zoneRect(full){const t=document.getElementById('table').getBoundingClientRect(),a=document.getElementById('app').getBoundingClientRect();
+if(full)return{l:LV.TL-6,t:LV.TT-8,w:LV.TR-LV.TL+12,h:LV.TB-LV.TT+16};
+const dk=document.querySelector('#deck').getBoundingClientRect(),ds=document.querySelector('#disc').getBoundingClientRect();
+const l=Math.round(dk.right-a.left+12),r=Math.round(ds.left-a.left-12);return{l,t:LV.TT+4,w:Math.max(220,r-l),h:LV.TB-LV.TT-8}}
+function showTip(c){const mt=M[c.name];let x=document.getElementById('pickTip');if(x)x.remove();x=document.createElement('div');x.id='pickTip';
+x.innerHTML=`<div class="pt-i" style="--ac:${COL[mt.cat]}"><svg viewBox="0 0 64 64">${ICON[c.name]}</svg></div><div class="pt-x"><b>${c.name}</b><i>${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]}</i><p>${hiNum(mt.text)}</p></div>`;document.body.appendChild(x);try{navigator.vibrate&&navigator.vibrate(18)}catch(_){}}
+function hideTip(){const x=document.getElementById('pickTip');if(x)x.remove()}
+function endPick(){if(!G||!G.pick)return;G.pick=null;const z=document.getElementById('zone');if(z){z.className='';z.innerHTML=''}const g=document.getElementById('game');g.classList.remove('zfull','zmine');hideTip();renderHand();updateInfo()}
+function pickCardsL(title,cards,n,o={}){return new Promise(res=>{const m=me();const mine=cards.length>0&&cards.every(c=>m.hand.includes(c));const sel=[];
+G.sel=null;updateInfo();const z=zoneEl();const g=document.getElementById('game');
+const ok=()=>o.any||sel.length===n;
+const P={mine,ids:new Set(cards.map(c=>c.id)),sel,n};G.pick=P;
+P.toggle=c=>{const k=sel.indexOf(c);if(k>=0)sel.splice(k,1);else{if(sel.length>=n){if(n===1)sel.length=0;else{sfx('tap');return}}sel.push(c)}sfx(sel.includes(c)?'sel':'tap');P.paint()};
+P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(!mine);z.style.left=R.l+'px';z.style.top=R.t+'px';z.style.width=R.w+'px';z.style.height=R.h+'px';
+g.classList.toggle('zfull',!mine);g.classList.toggle('zmine',mine);z.className='on '+(mine?'mine':'full');
+const cw=Math.round(Math.max(36,Math.min(64,(R.h-94)/1.42)));const sx=(z.querySelector('.zcards')||{}).scrollLeft||0;
+const last=sel.length?sel[sel.length-1]:null;
+z.innerHTML=`<div class="zh"><b>${title}</b><span>${mine?'Istakadaki kartlara dokun':'Kartlara dokun'} · basılı tut: bilgisi</span></div>`+
+(mine?`<div class="zmsel">${sel.length?sel.map(c=>`<b>${c.name}</b>`).join(''):'<i>Henüz seçilmedi</i>'}</div>`:`<div class="zcards${sel.length?' hs':''}">${cards.map((c,i)=>`<div class="pc ${sel.includes(c)?'on':''}" data-i="${i}">${sel.includes(c)?`<span class="ck">${n>1?sel.indexOf(c)+1:'✓'}</span>`:''}${cardHTML(c,{w:cw})}</div>`).join('')}</div>`)+
+`<div class="zf">${!mine&&last?`<div class="zsel"><b>${last.name}</b>${M[last.name].type==='char'?' · '+M[last.name].pts+' puan':''}</div>`:''}<div class="zc"><b>${sel.length}</b>${o.any?'':'/'+n}</div><button class="btn primary" id="okb" ${ok()?'':'disabled'}>${ok()?'ONAYLA':'SEÇ'}</button></div>`;
+const zc=z.querySelector('.zcards');if(zc)zc.scrollLeft=sx;
+z.querySelectorAll('.pc').forEach(el=>{const c=cards[+el.dataset.i];let t=null,lp=false,x0=0,y0=0;
+el.addEventListener('contextmenu',e=>e.preventDefault());
+el.addEventListener('pointerdown',e=>{x0=e.clientX;y0=e.clientY;lp=false;clearTimeout(t);t=setTimeout(()=>{lp=true;showTip(c)},380)});
+el.addEventListener('pointermove',e=>{if(!lp&&(Math.abs(e.clientX-x0)>10||Math.abs(e.clientY-y0)>10))clearTimeout(t)});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>{clearTimeout(t);hideTip();if(lp)setTimeout(()=>lp=false,250)}));
+el.onclick=()=>{if(lp)return;P.toggle(c)}});
+z.querySelector('#okb').onclick=()=>{if(!ok())return;sfx('tap');const r=sel.slice();endPick();res(r)};
+if(mine)renderHand()};
+P.paint()})}
+addEventListener('resize',()=>setTimeout(layL,60));addEventListener('orientationchange',()=>setTimeout(layL,350));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(layL,60));
+document.addEventListener('DOMContentLoaded',layL);setTimeout(layL,0);
+(()=>{const r=document.createElement('div');r.id='rot';r.innerHTML='<div class="ph"></div><b>Telefonu yan çevir</b><p>Taht Savaşı yatay oynanır.<br>Ekran döndürme kilidi açıksa kapat<br><small>iPhone: Denetim Merkezi · Android: Hızlı Ayarlar</small></p>';document.body.appendChild(r)})();
 </script>
 </body>
 </html>
