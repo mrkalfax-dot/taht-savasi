@@ -272,13 +272,13 @@ background:radial-gradient(ellipse 80% 70% at 50% 50%,#3d2715 0%,#2a1a0d 55%,#17
 .res .lose{background:linear-gradient(180deg,#e8d5c0,#9a7d63);-webkit-background-clip:text;background-clip:text}
 .mt{display:flex;flex-direction:column;gap:5px;margin:4px 0 8px}
 .mt .mh,.mt .mr{display:flex;align-items:center;gap:3px;padding:8px 8px;border-radius:12px;font-weight:800}
-.mt .mh{font-size:11px;color:var(--mut);letter-spacing:.06em;padding:0 8px}
+.mt .mh{font-size:11px;color:var(--mut);letter-spacing:.06em;padding:0 8px;border:1px solid transparent}
 .mt .mr{background:rgba(0,0,0,.28);border:1px solid #3a2e20;font-size:15px}
 .mt .mr.w{border-color:var(--gold);background:linear-gradient(90deg,rgba(217,180,90,.2),rgba(0,0,0,.2))}
 .mt .n{width:18px;text-align:center;color:var(--mut);flex:none}.mt .mr.w .n{color:var(--gold2)}
 .mt .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mt .c{width:30px;text-align:right;flex:none;color:#bfae88;font-size:13px}.mt .c.cur{color:#FFE08A}
-.mt .tt{width:54px;text-align:right;flex:none;color:#FFE08A;font-size:18px}.mt .mh .tt{font-size:11px;color:var(--mut)}
+.mt .c{width:34px;text-align:center;flex:none;color:#bfae88;font-size:13px}.mt .c.cur{color:#FFE08A}
+.mt .tt{width:64px;text-align:right;flex:none;color:#FFE08A;font-size:18px}.mt .mh .tt{font-size:11px;color:var(--mut)}
 .rk{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px;background:rgba(0,0,0,.25);border:1px solid #3a2e20}
 .rk.w{border-color:var(--gold);background:linear-gradient(90deg,rgba(217,180,90,.18),rgba(0,0,0,.2))}
 .rk .n{width:24px;font-weight:800;color:var(--mut);font-size:16px;text-align:center}
@@ -374,7 +374,7 @@ header .t{letter-spacing:.3em}
 
 #duel .sw.q{font-size:58px;font-weight:900;color:#FFD866;text-shadow:0 0 22px rgba(255,200,80,.9);animation:qp .8s ease-in-out infinite alternate}
 @keyframes qp{from{transform:scale(.9)}to{transform:scale(1.25)}}
-.gcard{position:relative;width:132px;height:186px;perspective:700px;margin:6px 0}
+.gcard{position:relative;width:var(--gw,132px);height:calc(var(--gw,132px)*1.41);perspective:700px;margin:6px 0}
 .gcard .gf,.gcard .gb{position:absolute;left:0;top:0;backface-visibility:hidden;transition:transform .45s cubic-bezier(.3,.7,.3,1)}
 .gcard .gb{transform:rotateY(180deg)}
 .gcard.flip .gf{transform:rotateY(180deg)}.gcard.flip .gb{transform:rotateY(360deg)}
@@ -591,6 +591,17 @@ html,body{position:fixed!important;inset:0;width:100%;overscroll-behavior:none}
 .atkTok{position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;padding:7px;color:#fff6dc;background:radial-gradient(circle at 40% 35%,color-mix(in srgb,var(--ac) 70%,#fff3),color-mix(in srgb,var(--ac) 45%,#000) 75%);box-shadow:0 0 0 2px #f3d27a,0 0 16px var(--ac),0 4px 8px #000a;pointer-events:none;transition:opacity .3s;z-index:2}
 .atkTok.me{box-shadow:0 0 0 2px #ff8a78,0 0 18px #ff4a30,0 4px 8px #000a}
 .atkTok .ic{width:100%;height:100%;stroke-width:4}
+.atkRing{position:absolute;width:54px;height:54px;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 2px var(--ac),0 0 18px var(--ac);pointer-events:none;animation:atkRing .5s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes atkRing{0%{transform:translate(-50%,-50%) scale(1.6);opacity:0}40%{opacity:1}100%{transform:translate(-50%,-50%) scale(.6);opacity:0}}
+.atkTr{position:absolute;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#fff 0,var(--ac) 45%,transparent 72%);pointer-events:none;mix-blend-mode:screen}
+.atkWave{position:absolute;width:60px;height:60px;border-radius:50%;border:3px solid var(--ac);box-shadow:0 0 22px var(--ac),inset 0 0 14px var(--ac);pointer-events:none}
+.atkLab{position:absolute;pointer-events:none;font:800 17px var(--serif);letter-spacing:.06em;color:#fff3d6;white-space:nowrap;padding:3px 12px;border-radius:10px;background:linear-gradient(180deg,#3a2612,#160c05);box-shadow:0 0 0 1.5px var(--ac),0 0 16px var(--ac),0 6px 12px #000c;z-index:30}
+.atkLab.me{color:#ffd9cf;background:linear-gradient(180deg,#5a1208,#200402)}
+.atkTok{transition:none}.atkTok:before{content:'';position:absolute;inset:-6px;border-radius:50%;background:conic-gradient(from var(--ang,0deg),transparent 0 60%,var(--ac) 85%,transparent);filter:blur(3px);opacity:.85;z-index:-1}
+.atkCharge{animation:atkCh .55s ease-out}
+@keyframes atkCh{0%{filter:brightness(1)}35%{filter:brightness(1.7) drop-shadow(0 0 12px #ffd873)}100%{filter:brightness(1)}}
+.struck{animation:struck .5s cubic-bezier(.3,.7,.3,1)}
+@keyframes struck{0%{translate:0 0;filter:brightness(1)}15%{translate:var(--kx) var(--ky);filter:brightness(2.2) saturate(.3)}35%{translate:calc(var(--kx)*-.4) calc(var(--ky)*-.4);filter:brightness(1.3) drop-shadow(0 0 14px #ff5a40)}60%{translate:calc(var(--kx)*.2) calc(var(--ky)*.2)}100%{translate:0 0;filter:brightness(1)}}
 .atkTok.hit{animation:tokHit .35s ease-out}.atkTok.out{opacity:0}
 @keyframes tokHit{50%{filter:brightness(1.8)}}
 #hud.hurt{animation:hudHurt .7s ease-out}@keyframes hudHurt{0%,100%{box-shadow:inset 0 0 0 1.5px #c9a24a,0 8px 18px #000a}30%{box-shadow:inset 0 0 0 2.5px #ff5a40,0 0 22px #ff3a20aa}}
@@ -622,11 +633,18 @@ html.L #opps{position:absolute!important;inset:0;padding:0!important;display:blo
 html.L .opp{position:absolute!important;transform:translate(-50%,-50%)!important;max-width:none!important;width:max-content;padding:4px 10px 4px 5px!important;margin:0!important;display:grid!important;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:6px;align-items:center;border-radius:12px;background:linear-gradient(180deg,#3a2414,#1c1008);box-shadow:inset 0 0 0 1px #8a6a2c,0 4px 10px rgba(0,0,0,.7);pointer-events:auto;transition:box-shadow .2s,opacity .2s}
 html.L .opp .avw{grid-row:1/3;width:30px!important;height:35px!important;margin:0!important}
 html.L .opp .onm{grid-column:2;align-self:end;margin:0!important;padding:0!important;background:none!important;clip-path:none!important;box-shadow:none!important;font-size:12px!important;max-width:84px;text-align:left;color:#f3e6c8}
+html.L .opp .onm{white-space:normal!important;overflow:hidden;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;line-height:1.08!important;overflow-wrap:normal;word-break:normal;width:max-content}
+html.L #opps .opp .onm{font-size:12px!important;letter-spacing:0!important;padding:0!important}html.L #opps .opp.sm .onm{font-size:11px!important}
 html.L .opp .fan{grid-column:2;align-self:start;margin-top:1px!important;height:13px}
 html.L .opp .fan span{font-size:11px}
 html.L .opp.turn{transform:translate(-50%,-50%)!important;box-shadow:inset 0 0 0 1.5px #f3d27a,0 0 16px rgba(255,200,90,.55),0 4px 10px rgba(0,0,0,.7)}
 html.L .opp.turn .onm{background:none!important;color:#ffe3a0!important}
 html.L .opp .sira{top:-9px!important}
+html.L .opp.side{grid-template-columns:auto!important;grid-template-rows:auto auto auto;justify-items:center;padding:5px 6px 4px!important;row-gap:1px}
+html.L .opp.side .avw{grid-row:1!important;grid-column:1}
+html.L .opp.side .onm{grid-column:1!important;grid-row:2;align-self:center!important;text-align:center!important;font-size:12px!important;margin-top:1px!important}
+html.L .opp.side .fan{grid-column:1!important;grid-row:3;align-self:center!important}
+html.L .opp.side.sm .avw{width:26px!important;height:30px!important}
 html.L .opp.tgt{box-shadow:inset 0 0 0 2px #f3d27a,0 0 20px rgba(255,200,90,.75)!important}
 html.L .opp.tgt:after{top:auto!important;bottom:-9px!important}
 html.L .opp .think{top:auto!important;bottom:-12px!important}
@@ -736,6 +754,36 @@ html.L #stageCard:not(.on){visibility:hidden!important}
 
 html.L #zone .card.xs .nm{display:flex!important;justify-content:center}
 html.L #zone{gap:4px!important}
+html.L #duel{right:auto!important;bottom:auto!important;left:calc(var(--TL) - 6px)!important;top:calc(var(--TT) - 8px)!important;width:calc(var(--TR) - var(--TL) + 12px)!important;height:calc(var(--TB) - var(--TT) + 16px)!important;border-radius:14px;flex-direction:row!important;gap:22px!important;padding:6px 14px;box-sizing:border-box;background:radial-gradient(ellipse at center,#2a170a,#120904 80%)!important;box-shadow:inset 0 0 0 1.5px #f3d27a,0 0 18px rgba(255,200,90,.28);z-index:21!important;overflow:hidden}
+html.L #duel.me{background:radial-gradient(ellipse at center,#5a0c06,#1a0200 85%)!important;box-shadow:inset 0 0 0 1.5px #ff7a5a,0 0 22px rgba(255,60,30,.45)}
+html.L #duel .vs{flex-direction:row;margin:0!important;gap:6px!important}
+html.L #duel .who{width:74px!important;gap:3px!important}
+html.L #duel .who .sh{width:46px!important;height:53px!important}
+html.L #duel .who b{font-size:14px!important;max-width:74px!important}
+html.L #duel .sw{font-size:28px!important}html.L #duel .sw.q{font-size:34px!important}html.L #duel .sw i{font-size:18px!important}
+html.L #duel .gcard{margin:0!important}
+html.L #duel .gres{height:auto!important;min-width:120px;font-size:30px!important}
+html.L #duel .cards{flex-wrap:nowrap!important;gap:6px!important}
+html.L #duel .stamp:after{font-size:11px!important;padding:2px 6px!important;border-width:2px!important}
+html.L #zone .zh .btn{padding:5px 18px!important;font-size:14px!important;letter-spacing:.12em;width:auto!important;min-height:0!important;margin:0!important}
+html.L #zone .zstrip{flex:1;min-height:0;display:flex;gap:14px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;touch-action:pan-x;align-items:flex-end;padding:0 2px}
+html.L #zone .zstrip::-webkit-scrollbar{display:none}
+html.L #zone .zgrp{flex:none;display:flex;flex-direction:column;gap:3px;padding-left:12px;border-left:1px solid rgba(243,210,122,.25)}
+html.L #zone .zgrp:first-child{border-left:0;padding-left:0}
+html.L #zone .zrn{display:flex;align-items:baseline;gap:6px;line-height:1.1}
+html.L #zone .zrn b{font:700 13px var(--serif);color:#ffe08a;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}html.L #zone .zrn i{font:600 10.5px Inter,system-ui;font-style:normal;color:#a0927a}
+html.L #zone .zrc{display:flex;gap:5px}
+html.L #zone .zrc .pc{flex:none}html.L #zone .zemp{color:#8a7a5a;font-size:12px}
+html.L #zone .ztabs{display:flex;gap:6px;margin-left:auto;margin-right:10px}html.L #zone.full .zh{align-items:center!important}
+html.L #zone .ztabs button{font:700 12px Inter,system-ui;color:#c7b08a;background:rgba(0,0,0,.35);border:1px solid rgba(243,210,122,.35);border-radius:9px;padding:4px 12px}
+html.L #zone .ztabs button.on{color:#1a1006;background:linear-gradient(#f3d27a,#c99a3a);border-color:#f3d27a}
+html.L #zone .znames{flex:1;min-height:0;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(86px,1fr));gap:4px;-webkit-mask-image:linear-gradient(#000 calc(100% - 10px),transparent);mask-image:linear-gradient(#000 calc(100% - 10px),transparent);padding-bottom:8px!important;align-content:start;scrollbar-width:none;padding:2px}
+html.L #zone .znames::-webkit-scrollbar{display:none}
+html.L #zone .znames button{display:flex;align-items:center;gap:5px;padding:4px 7px;border-radius:9px;background:rgba(0,0,0,.38);border:1px solid rgba(243,210,122,.28);color:#f3e6c8;font:700 12.5px var(--serif);text-align:left;min-height:27px;white-space:nowrap;overflow:hidden}
+html.L #zone .znames button svg{width:17px;height:17px;flex:none;fill:none;stroke:var(--ac);stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round}
+html.L #zone .znames button span{overflow:hidden;text-overflow:ellipsis}
+html.L #zone .znames button.on{background:rgba(120,230,140,.16);border-color:#8ee59a;color:#cfffd8;box-shadow:0 0 10px rgba(120,230,140,.35)}
+
 
 html.L #result .mbox.res{display:grid!important;grid-template-columns:1fr 190px;column-gap:18px;row-gap:4px;align-content:start;align-items:start}
 html.L #result .mbox.res>*{grid-column:1;margin-top:0!important}
@@ -759,6 +807,64 @@ html.L .hempty b{font-size:15px!important}html.L .hempty span,html.L .hempty sma
 html.L #hand .card.dis{opacity:.45!important;filter:saturate(.55)}
 
 html.L .hempty{border:0!important;background:rgba(0,0,0,.28)!important;box-shadow:inset 0 0 0 1px rgba(201,162,74,.45)!important;border-radius:12px!important;height:calc(var(--RH) - 36px)!important}
+
+/* ===== Yatay: yuvarlak oyuncu madalyonları ===== */
+html.L #opps .opp{--D:44px;display:flex!important;flex-direction:column!important;align-items:center!important;grid-template-columns:none!important;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;width:max-content!important;max-width:none!important;min-width:0!important;gap:0!important;transition:transform .35s cubic-bezier(.3,.7,.3,1.3),opacity .25s,filter .25s!important}
+html.L #opps .opp.sm{--D:38px}
+html.L #opps .opp:before,html.L #opps .opp:after{display:none!important}
+html.L #opps .opp .avw{position:relative!important;width:var(--D)!important;height:var(--D)!important;margin:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:radial-gradient(circle at 50% 38%,#4a3218,#1a0f06 72%)!important;box-shadow:0 0 0 2px #b88a32,0 0 0 3.5px #2a1a0a,0 5px 10px rgba(0,0,0,.75),inset 0 2px 4px rgba(255,220,150,.18)!important;grid-row:auto!important;overflow:visible!important}
+html.L #opps .opp .avw:before,html.L #opps .opp .avw:after{display:none!important}
+html.L #opps .opp .avw .crs{width:84%!important;height:96%!important;margin-top:6%;filter:drop-shadow(0 2px 3px #000b)!important}
+html.L #opps .opp .avw.prot{box-shadow:0 0 0 2px #8fbcf0,0 0 0 3.5px #12253a,0 0 14px rgba(120,180,255,.75),0 5px 10px rgba(0,0,0,.75)!important}
+html.L #opps .opp .pbadge{position:absolute!important;top:-5px!important;right:-9px!important;left:auto!important;bottom:auto!important;transform:none!important;display:flex!important;align-items:center;gap:1px;height:18px;min-width:18px;padding:0 4px 0 3px!important;border-radius:9px!important;background:linear-gradient(180deg,#2f5276,#14263a)!important;border:1.5px solid #9cc0e8!important;color:#e2efff!important;z-index:5;box-shadow:0 2px 4px #000a}
+html.L #opps .opp .pbadge svg{width:10px!important;height:10px!important}html.L #opps .opp .pbadge b{font:800 10.5px Inter,system-ui!important}
+html.L #opps .opp .cbadge{position:absolute!important;top:-5px!important;left:-9px!important;right:auto!important;bottom:auto!important;width:18px!important;height:18px!important;border-radius:50%!important;display:grid!important;place-items:center;background:linear-gradient(180deg,#7a1a10,#3a0804)!important;border:1.5px solid #ff8a70!important;color:#ffd0c6!important;z-index:5}
+html.L #opps .opp .cbadge svg{width:11px!important;height:11px!important}
+html.L #opps .opp .fan{position:absolute!important;left:calc(50% + var(--D)/2 - 12px)!important;top:calc(var(--D) - 14px)!important;margin:0!important;height:auto!important;display:flex!important;align-items:center;gap:2px;padding:1px 5px 1px 4px;border-radius:9px;background:linear-gradient(180deg,#3a2612,#140b04);border:1.5px solid #c9a24a;z-index:5;box-shadow:0 2px 4px #000b;grid-column:auto!important}
+html.L #opps .opp .fan i{display:none!important}
+html.L #opps .opp .fan:before{content:'';width:7px;height:10px;border-radius:1.5px;background:linear-gradient(160deg,#c0392b,#6a1a12);box-shadow:inset 0 0 0 1px #f3d27a}
+html.L #opps .opp .fan span{font:800 10.5px Inter,system-ui!important;color:#ffe8b0!important;position:static!important}
+html.L #opps .opp .onm{margin-top:5px!important;padding:2px 8px!important;border-radius:9px!important;background:linear-gradient(180deg,rgba(40,26,12,.96),rgba(16,9,4,.96))!important;border:1px solid rgba(201,162,74,.55)!important;color:#f3e6c8!important;text-align:center!important;font:700 11.5px var(--serif)!important;line-height:1.1!important;box-shadow:0 3px 6px rgba(0,0,0,.6)!important;clip-path:none!important;align-self:center!important;grid-column:auto!important}
+html.L #opps .opp.sm .onm{font-size:10.5px!important;padding:1px 6px!important}html.L #opps .opp .onm.tight{font-size:9.5px!important;letter-spacing:-.02em!important;padding:2px 4px!important}
+html.L #opps .opp .onm small{font:700 8.5px Inter,system-ui;color:#c9a24a;letter-spacing:.06em}
+html.L #opps .opp .sira{position:absolute!important;top:-12px!important;left:50%!important;transform:translateX(-50%)!important;z-index:6;font:900 8px Inter,system-ui!important;letter-spacing:.16em;padding:2px 6px!important;border-radius:6px!important;background:linear-gradient(180deg,#ffe08a,#c99a3a)!important;color:#2a1806!important;box-shadow:0 0 10px rgba(255,200,90,.7)!important}
+html.L #opps .opp.turn{transform:translate(-50%,-50%) scale(1.16)!important;z-index:9}
+html.L #opps .opp.turn .avw{box-shadow:0 0 0 2.5px #ffe08a,0 0 0 4px #3a2208,0 0 18px rgba(255,200,90,.85),0 5px 10px rgba(0,0,0,.75)!important;animation:seatGlow 1.6s ease-in-out infinite}
+html.L #opps .opp.turn .onm{color:#2a1806!important;background:linear-gradient(180deg,#ffe08a,#c99a3a)!important;border-color:#fff0b8!important}
+@keyframes seatGlow{50%{filter:brightness(1.15) drop-shadow(0 0 8px rgba(255,210,110,.8))}}
+html.L #opps .opp.tgt{transform:translate(-50%,-50%) scale(1.1)!important;z-index:9}
+html.L #opps .opp.tgt .avw{animation:seatTgt .9s ease-in-out infinite}
+@keyframes seatTgt{50%{box-shadow:0 0 0 3px #8ee59a,0 0 0 5px #0b2a12,0 0 22px rgba(120,230,140,.9),0 5px 10px #000b}}
+html.L #opps .opp.tgt .onm{border-color:#8ee59a!important;color:#cfffd8!important}
+html.L #opps .opp.no{opacity:.4;filter:grayscale(.6)}
+html.L #opps .opp .think{position:absolute!important;top:calc(var(--D)/2 - 6px);left:50%;transform:translateX(-50%);z-index:6}
+html.L #seatTrack .trk{animation:trk 0.8s linear infinite}@keyframes trk{to{stroke-dashoffset:-10}}
+#seatTrack{display:none}html.L #seatTrack{display:block;position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:7;overflow:visible}
+
+/* ===== 3D doku: kartlar ===== */
+.card:after{background:radial-gradient(120% 70% at var(--gx,30%) var(--gy,0%),rgba(255,246,220,.26),transparent 55%),linear-gradient(118deg,transparent 32%,rgba(255,240,200,.15) 46%,transparent 58%),url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .45 0 0 0 0 .35 0 0 0 .13 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")!important;background-size:auto,auto,120px 120px!important;mix-blend-mode:normal;opacity:1!important;border-radius:inherit;box-shadow:inset 0 .09em 0 rgba(255,236,190,.45),inset 0 -.14em .2em rgba(0,0,0,.55),inset .07em 0 .1em rgba(255,236,190,.12),inset -.07em 0 .1em rgba(0,0,0,.35);z-index:4}
+.card .art{filter:drop-shadow(0 .08em .06em rgba(0,0,0,.55))}.card .pt,.card .gem,.card .nm{z-index:5}
+.card .nm{text-shadow:0 1px 0 #000,0 .08em .2em rgba(0,0,0,.8)}
+html.L #hand{perspective:700px}
+html.L #hand .card{transform-style:preserve-3d;transition:transform .22s cubic-bezier(.3,.7,.3,1.2),box-shadow .22s,filter .2s;transform:translateZ(0) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))}
+html.L #hand .card.press{transform:translateY(-10px) scale(1.06) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg))!important;z-index:5;box-shadow:0 0 0 .1em #ffe08a,0 1.1em 1.4em rgba(0,0,0,.75),0 0 1.2em rgba(255,210,110,.35)!important;transition:transform .12s ease-out,box-shadow .12s}
+html.L #hand .card.sel{box-shadow:0 0 0 .14em #ffe08a,0 .9em 1.2em rgba(0,0,0,.75),0 0 1.4em rgba(255,210,110,.55)!important}
+html.L #handWrap{box-shadow:inset 0 3px 0 rgba(255,220,150,.18),inset 0 -6px 10px rgba(0,0,0,.55),0 8px 18px rgba(0,0,0,.6)!important}
+html.L #table{box-shadow:inset 0 2px 0 rgba(255,220,150,.2),inset 0 0 28px rgba(0,0,0,.55),0 14px 26px rgba(0,0,0,.65),0 3px 0 #1a0f06!important}
+
+html.L .hempty{width:calc(100% - 4px)!important;max-width:none!important;flex:none!important}
+html.L #explain.on{display:grid!important;grid-template-columns:minmax(0,1fr) 150px;grid-template-rows:auto auto auto;column-gap:16px;row-gap:2px;align-content:center;padding:8px 14px!important}
+html.L #explain .eh{grid-column:1;margin:0!important;font-size:12px!important}html.L #explain .eh b{font-size:13px!important}
+html.L #explain .en{grid-column:1;margin:0!important;font-size:19px!important;line-height:1.1}
+html.L #explain .et{grid-column:1;margin:2px 0 0!important;font-size:14px!important;line-height:1.3!important}
+html.L #explain .eb{grid-column:2;grid-row:1/4;flex-direction:column!important;gap:6px!important;align-self:center}
+html.L #explain button{min-height:38px!important;font-size:15px!important}html.L #explain .au{flex:none!important;min-height:30px!important;font-size:11.5px!important;line-height:1.1}
+html.L #zone .zask{flex:1;display:flex;flex-direction:column;justify-content:center;gap:8px;text-align:center}
+html.L #zone .zask p{font:500 13px var(--serif);color:#e2d6bc;margin:0}
+html.L #zone .zask .zb{display:flex;gap:10px;justify-content:center}
+html.L #zone .zask .zb button{min-width:150px;padding:8px 16px;border-radius:11px;font:800 14px var(--serif);letter-spacing:.04em;color:#f3e6c8;background:linear-gradient(180deg,#3a2612,#160c05);border:1px solid rgba(201,162,74,.6);box-shadow:inset 0 1px 0 rgba(255,220,150,.2),0 4px 8px #000a}
+html.L #zone .zask .zb button.good{color:#2a1806;background:linear-gradient(180deg,#ffe08a,#c99a3a);border-color:#fff0b8}
+html.L #zone .zask .zb button small{display:block;font:600 10px Inter,system-ui;opacity:.8}
 </style>
 </head>
 <body>
@@ -893,7 +999,7 @@ def('Yer Değiştir','act',0,2,'⇅','spe','İstediğin iki oyuncunun sıradaki 
 def('El Değiştir','act',0,1,'⇋','atk','Seçeceğin rakiple elindeki bütün kartları değiştir.',{atk:1});
 const NAMES=Object.keys(M);
 const ATK=new Set(NAMES.filter(n=>M[n].atk));
-const NODOUBLE=new Set(['Hazine','Ateşkes','Kaos','Darbe','Yer Değiştir','El Değiştir','Fedai','Yardım']);
+const NODOUBLE=new Set(['Hazine','Kaos','Darbe','Fedai']);
 const CHAIN={Asker:2,Kombo:3};
 const CATN={char:'KARAKTER',draw:'KART ÇEKME',prot:'KORUMA',atk:'SALDIRI',rea:'TEPKİ',spe:'ÖZEL'};
 const HOUSES=[{n:'Ejderha',c:'#8E2A22',c2:'#4a120d'},{n:'Dinozor',c:'#2D5A8C',c2:'#142a45'},{n:'Goril',c:'#3E6B3A',c2:'#1c351a'},{n:'Maymun',c:'#6A3A85',c2:'#341b44'},{n:'Kartal',c:'#9A5A1E',c2:'#4d2b0c'}];
@@ -998,7 +1104,7 @@ function handInfo(p){let s=0,od=false;for(const c of p.hand){s+=pts(c);if(c.name
 const total=p=>handInfo(p).total;
 const rivals=p=>G.players.filter(q=>q!==p);
 const idxOf=p=>G.players.indexOf(p);
-const nm=p=>isMe(p)?'Sen':p.name;
+const nm=p=>p.name||'Sen';
 const VW='aeıioöuü';const lastV=s=>{s=s.toLocaleLowerCase('tr');for(let i=s.length-1;i>=0;i--)if(VW.includes(s[i]))return s[i];return 'e'};const endV=s=>VW.includes(s.slice(-1).toLocaleLowerCase('tr'));
 const dat=p=>isMe(p)?'sana':p.name+"'"+(endV(p.name)?'y':'')+('aıou'.includes(lastV(p.name))?'a':'e');
 const gen=p=>isMe(p)?'senin':p.name+"'"+(endV(p.name)?'n':'')+({a:'ın',ı:'ın',e:'in',i:'in',o:'un',u:'un',ö:'ün',ü:'ün'}[lastV(p.name)]);
@@ -1062,7 +1168,7 @@ const pc=$('#disc .pc2');pc.onclick=()=>{if(G.top)zoom(G.top)};
 $('#deck .pc2').style.width=$('#disc .pc2').style.width='';placeStage()}
 function renderMe(){const m=me();const hi=handInfo(m);
 const el=$('#me');el.classList.toggle('turn',G.cur===m);
-el.innerHTML=`<div class="mel"><div id="meAv">${crestSVG(esc((m.name||'S')[0].toLocaleUpperCase('tr')),'#a87a20')}</div><div class="mtx"><b>${isMe(m)?'Sen':esc(m.name)}</b><span class="${m.prot?'on':''}">${UI.shield}${m.prot?m.prot+' tur':'—'}</span>${m.noDraw?'<span class="eng">Engelli</span>':''}</div></div><div class="sc" id="myScore"><small>PUAN</small><b>${hi.total}</b>${hi.od?'<i>×2 Hazine</i>':''}</div>`;
+el.innerHTML=`<div class="mel"><div id="meAv">${crestSVG(esc((m.name||'S')[0].toLocaleUpperCase('tr')),'#a87a20')}</div><div class="mtx"><b>${esc(m.name)}</b><span class="${m.prot?'on':''}">${UI.shield}${m.prot?m.prot+' tur':'—'}</span>${m.noDraw?'<span class="eng">Engelli</span>':''}</div></div><div class="sc" id="myScore"><small>PUAN</small><b>${hi.total}</b>${hi.od?'<i>×2 Hazine</i>':''}</div>`;
 el.querySelector('#myScore').onclick=()=>zoomScore()}
 function renderOrder(){const el=$('#order');if(!el||!G)return;const ord=G.ord,n=ord.length;let st=G.cur?ord.indexOf(G.cur):ord.indexOf(me());if(st<0)st=0;
 const sz=n>8?15:n>6?17:n>4?19:21;el.style.setProperty('--s',sz+'px');
@@ -1151,10 +1257,17 @@ if(isMe(p)){const r=rectOf($('#mySaray'));return{x:r.x,y:r.y,w:42}}
 const r=avatarOf(p);return{x:r.x,y:r.y,w:22}}
 function mkGhost(c,face,w,x,y){const g=document.createElement('div');g.className='gh';const h=w*1.42;g.style.cssText=`width:${w}px;height:${h}px;left:${x-w/2}px;top:${y-h/2}px`;g.innerHTML=face&&c?cardHTML(c,{w}):backHTML(w);$('#fx').appendChild(g);return g}
 async function fly(c,face,from,to,o={}){
-if(!FXON())return;const g0=G;const dur=(o.dur||520)*CFG.speed;
-const gh=mkGhost(c,face,from.w,from.x,from.y);const k=to.w/from.w,dx=to.x-from.x,dy=to.y-from.y,arc=o.arc===undefined?-30:o.arc;
-const kf=[{transform:'translate(0,0) scale(1) rotate(0deg)',opacity:1,filter:'drop-shadow(0 4px 6px rgba(0,0,0,.5))'},{transform:`translate(${dx/2}px,${dy/2+arc}px) scale(${(1+k)/2*1.08}) rotate(${(o.rot||0)/2}deg)`,offset:.5,opacity:1,filter:'drop-shadow(0 18px 14px rgba(0,0,0,.55))'},{transform:`translate(${dx}px,${dy}px) scale(${k}) rotate(${o.rot||0}deg)`,opacity:o.fade?0:1,filter:'drop-shadow(0 2px 3px rgba(0,0,0,.5))'}];
-const a=gh.animate(kf,{duration:dur,delay:(o.delay||0)*CFG.speed,easing:'cubic-bezier(.3,.6,.25,1)',fill:'both'});
+if(!FXON())return;const g0=G;const dur=(o.dur||560)*CFG.speed;
+const gh=mkGhost(c,face,from.w,from.x,from.y);const k=to.w/from.w,dx=to.x-from.x,dy=to.y-from.y,arc=o.arc===undefined?-34:o.arc,rot=o.rot||0;
+const tilt=Math.max(-14,Math.min(14,dx/22));const L=(a,b,t)=>a+(b-a)*t;
+const sh=(y,b,a)=>`drop-shadow(0 ${y}px ${b}px rgba(0,0,0,${a}))`;
+const kf=[
+{transform:`translate(0px,0px) scale(1) rotate(0deg)`,opacity:1,filter:sh(3,4,.45),offset:0,easing:'cubic-bezier(.3,0,.6,1)'},
+{transform:`translate(${dx*.05}px,${dy*.05+arc*.45}px) scale(${1.13}) rotate(${-tilt*.35}deg)`,opacity:1,filter:sh(16,12,.5),offset:.2,easing:'cubic-bezier(.35,.1,.25,1)'},
+{transform:`translate(${dx*.72}px,${dy*.72+arc*.7}px) scale(${L(1.13,k,.7)*1.06}) rotate(${tilt*.6+rot*.75}deg)`,opacity:1,filter:sh(20,14,.5),offset:.7,easing:'cubic-bezier(.2,.7,.3,1)'},
+{transform:`translate(${dx}px,${dy}px) scale(${k*1.05}) rotate(${rot}deg)`,opacity:o.fade?.0:1,filter:sh(4,5,.5),offset:.9,easing:'ease-out'},
+{transform:`translate(${dx}px,${dy}px) scale(${k}) rotate(${rot}deg)`,opacity:o.fade?0:1,filter:sh(2,3,.45),offset:1}];
+const a=gh.animate(kf,{duration:dur,delay:(o.delay||0)*CFG.speed,fill:'both'});
 await a.finished;gh.remove();if(G!==g0)throw new Error('abort')}
 async function flipAt(c,rect){
 if(!FXON())return;const g0=G;const gh=mkGhost(c,false,rect.w,rect.x,rect.y);
@@ -1185,30 +1298,47 @@ return got.length}
 // --- Düello sahnesi: kim kime ne yaptı, herkes görsün ---
 function duelWait(ms,me){return new Promise(res=>{const d=$('#duel');let done=false;const fin=()=>{if(done)return;done=true;d.onclick=null;clearTimeout(t);res()};const t=setTimeout(fin,ms);setTimeout(()=>{d.onclick=fin},350)})}
 function shieldOf(p){return `<div class="sh">${houseShield(p.house,isMe(p),p.name)}</div>`}
+function seatEl(p){return isMe(p)?$('#hud'):document.querySelector(`.opp[data-p="${idxOf(p)}"]`)}
 async function showdown(src,v,cname){
-if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const vm=isMe(v);
-const a=avatarOf(src),b=avatarOf(v);const col=vm?'#ff6a55':'#f3d27a';const fx=$('#fx');
-const mx=(a.x+b.x)/2,my=Math.min(a.y,b.y)-Math.max(40,Math.abs(a.x-b.x)*.25);
-const W=fx.clientWidth,H=fx.clientHeight;const ns='http://www.w3.org/2000/svg';
+if(!FXON()||CFG.fast||!src||!v||src===v)return;const g0=G;const vm=isMe(v);const sp=Math.max(.6,CFG.speed);
+const a=avatarOf(src),b=avatarOf(v);const mt=M[cname];const col=vm?'#ff5a40':COL[mt.cat];const fx=$('#fx');const ns='http://www.w3.org/2000/svg';
+const dist=Math.hypot(b.x-a.x,b.y-a.y);const mx=(a.x+b.x)/2,my=Math.min(a.y,b.y)-Math.max(46,dist*.32);
+const W=fx.clientWidth,H=fx.clientHeight;
 const sv=document.createElementNS(ns,'svg');sv.setAttribute('class','atkArc');sv.setAttribute('viewBox',`0 0 ${W} ${H}`);
 const d=`M${a.x} ${a.y} Q${mx} ${my} ${b.x} ${b.y}`;
-sv.innerHTML=`<path d="${d}" fill="none" stroke="${col}" stroke-opacity=".25" stroke-width="7" stroke-linecap="round"/><path class="ln" d="${d}" fill="none" stroke="${col}" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="6 7"/>`;
-fx.appendChild(sv);
-const mt=M[cname];const tok=document.createElement('div');tok.className='atkTok'+(vm?' me':'');tok.style.setProperty('--ac',COL[mt.cat]);
-tok.innerHTML=`<svg viewBox="0 0 64 64" class="ic">${ICON[cname]}</svg>`;fx.appendChild(tok);
-const T=Math.round(650*Math.max(.6,CFG.speed)),t0=performance.now();sfx('swoosh');
-await new Promise(res=>{const step=now=>{let t=Math.min(1,(now-t0)/T);const e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;const u=1-e;
-const x=u*u*a.x+2*u*e*mx+e*e*b.x,y=u*u*a.y+2*u*e*my+e*e*b.y;tok.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) scale(${.8+.4*Math.sin(Math.PI*e)})`;
+sv.innerHTML=`<defs><linearGradient id="agr" gradientUnits="userSpaceOnUse" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}"><stop offset="0" stop-color="${col}" stop-opacity=".05"/><stop offset="1" stop-color="${col}" stop-opacity=".95"/></linearGradient></defs><path class="glow" d="${d}" fill="none" stroke="${col}" stroke-opacity=".22" stroke-width="10" stroke-linecap="round"/><path class="ln" d="${d}" fill="none" stroke="url(#agr)" stroke-width="3" stroke-linecap="round"/>`;
+fx.appendChild(sv);const paths=[...sv.querySelectorAll('path')];const PL=paths[1].getTotalLength();paths.forEach(pp=>{pp.style.strokeDasharray=PL;pp.style.strokeDashoffset=PL});
+// 1) charge
+const se=seatEl(src),ve=seatEl(v);if(se){se.classList.remove('atkCharge');void se.offsetWidth;se.classList.add('atkCharge')}
+const ring=document.createElement('div');ring.className='atkRing';ring.style.cssText=`left:${a.x}px;top:${a.y}px;--ac:${col}`;fx.appendChild(ring);
+const tok=document.createElement('div');tok.className='atkTok'+(vm?' me':'');tok.style.setProperty('--ac',col);
+tok.innerHTML=`<svg viewBox="0 0 64 64" class="ic">${ICON[cname]}</svg>`;tok.style.transform=`translate(${a.x}px,${a.y}px) translate(-50%,-50%) scale(.2)`;fx.appendChild(tok);
+sfx('swoosh');
+const chA=tok.animate([{transform:`translate(${a.x}px,${a.y}px) translate(-50%,-50%) scale(.2) rotate(-90deg)`,opacity:0},{transform:`translate(${a.x}px,${a.y}px) translate(-50%,-50%) scale(1.25) rotate(0deg)`,opacity:1,offset:.7},{transform:`translate(${a.x}px,${a.y}px) translate(-50%,-50%) scale(1)`,opacity:1}],{duration:300*sp,easing:'cubic-bezier(.3,.7,.3,1.3)'});await chA.finished;tok.style.transform=`translate(${a.x}px,${a.y}px) translate(-50%,-50%) scale(1)`;tok.style.opacity=1;
+if(G!==g0){sv.remove();tok.remove();ring.remove();throw new Error('abort')}
+// 2) flight with trail
+const T=Math.round(Math.max(520,Math.min(820,dist*1.6))*sp),t0=performance.now();let lastTr=0;
+await new Promise(res=>{const step=now=>{let t=Math.min(1,(now-t0)/T);const e=t*t*(3-2*t)*.35+t*t*.65;const u=1-e;
+const x=u*u*a.x+2*u*e*mx+e*e*b.x,y=u*u*a.y+2*u*e*my+e*e*b.y;const tx=2*u*(mx-a.x)+2*e*(b.x-mx),ty=2*u*(my-a.y)+2*e*(b.y-my);const ang=Math.atan2(ty,tx)*180/Math.PI;
+tok.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%) scale(${1+.35*Math.sin(Math.PI*e)})`;tok.style.setProperty('--ang',ang+'deg');
+paths.forEach(pp=>pp.style.strokeDashoffset=PL*(1-e));
+if(now-lastTr>16){lastTr=now;const tr=document.createElement('div');tr.className='atkTr';tr.style.cssText=`left:${x}px;top:${y}px;--ac:${col}`;fx.appendChild(tr);tr.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:.9},{transform:'translate(-50%,-50%) scale(.15)',opacity:0}],{duration:380,easing:'ease-out'}).finished.then(()=>tr.remove())}
 if(t<1&&G===g0)requestAnimationFrame(step);else res()};requestAnimationFrame(step)});
+// 3) impact
 tok.classList.add('hit');sfx(vm?'hit':'play');
-if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}shake();const h=$('#hud');if(h){h.classList.remove('hurt');void h.offsetWidth;h.classList.add('hurt')}}else hurt(v);
-try{burst(b.x,b.y,vm?'#ff5a40':COL[mt.cat],14)}catch(e){}
+for(let k=0;k<2;k++){const sw=document.createElement('div');sw.className='atkWave';sw.style.cssText=`left:${b.x}px;top:${b.y}px;--ac:${col}`;fx.appendChild(sw);sw.animate([{transform:'translate(-50%,-50%) scale(.2)',opacity:.95},{transform:`translate(-50%,-50%) scale(${k?3.2:2.2})`,opacity:0}],{duration:(k?640:480)*sp,delay:k*90,easing:'cubic-bezier(.1,.7,.3,1)',fill:'both'}).finished.then(()=>sw.remove())}
+if(ve){const ax=b.x-a.x,ay=b.y-a.y,ln=Math.hypot(ax,ay)||1;ve.style.setProperty('--kx',(ax/ln*9).toFixed(1)+'px');ve.style.setProperty('--ky',(ay/ln*9).toFixed(1)+'px');ve.classList.remove('struck','me');void ve.offsetWidth;ve.classList.add('struck');if(vm)ve.classList.add('me')}
+const lab=document.createElement('div');lab.className='atkLab'+(vm?' me':'');lab.textContent=cname;lab.style.cssText=`left:${b.x}px;top:${b.y-30}px;--ac:${col}`;fx.appendChild(lab);
+lab.animate([{transform:'translate(-50%,-50%) scale(.4)',opacity:0},{transform:'translate(-50%,-90%) scale(1.15)',opacity:1,offset:.25},{transform:'translate(-50%,-110%) scale(1)',opacity:1,offset:.7},{transform:'translate(-50%,-150%) scale(.95)',opacity:0}],{duration:1150*sp,easing:'ease-out',fill:'both'}).finished.then(()=>lab.remove());
+if(vm){try{navigator.vibrate&&navigator.vibrate([60,80,120])}catch(e){}shake()}else hurt(v);
+try{burst(b.x,b.y,col,18)}catch(e){}
 G.log.push({msg:`${src.name} → ${v.name}: ${cname}`,tone:vm?'bad':''});
-await sleep(Math.round((vm?650:420)*Math.max(.6,CFG.speed)));sv.classList.add('out');tok.classList.add('out');setTimeout(()=>{sv.remove();tok.remove()},300);if(G!==g0)throw new Error('abort')}
+await sleep(Math.round((vm?700:480)*sp));sv.classList.add('out');tok.classList.add('out');setTimeout(()=>{sv.remove();tok.remove();ring.remove();if(se)se.classList.remove('atkCharge');if(ve)ve.classList.remove('struck','me')},420);if(G!==g0)throw new Error('abort')}
+function dW(){return isL()&&LV.TB?Math.round(Math.min(132,(LV.TB-LV.TT-16)/1.41)):132}
 async function guessReveal(p,v,name,ok){
 if(!FXON()||CFG.fast)return;const g0=G;const d=$('#duel');const vm=isMe(v),pm=isMe(p);
 d.className='on'+(vm?' me':'');
-d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(p)}<b>${pm?'Sen':esc(p.name)}</b></div><div class="sw q">?</div><div class="who v${vm?' me':''}">${shieldOf(v)}<b>${vm?'Sen':esc(v.name)}</b></div></div><div class="gcard sus"><div class="gf">${backHTML(132)}</div><div class="gb">${cardHTML({id:'g',name},{w:132})}</div></div><div class="gres"><i></i><i></i><i></i></div>`;
+d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(p)}<b>${esc(p.name)}</b></div><div class="sw q">?</div><div class="who v${vm?' me':''}">${shieldOf(v)}<b>${esc(v.name)}</b></div></div><div class="gcard sus" style="--gw:${dW()}px"><div class="gf">${backHTML(dW())}</div><div class="gb">${cardHTML({id:'g',name},{w:dW()})}</div></div><div class="gres"><i></i><i></i><i></i></div>`;
 sfx('turn');G.log.push({msg:`${p.name} tahmin etti: ${name}`});
 await sleep(1700*Math.max(.6,CFG.speed));if(G!==g0)throw new Error('abort');
 const gc=d.querySelector('.gcard'),gr=d.querySelector('.gres');gc.classList.remove('sus');gc.classList.add('flip');sfx('draw');
@@ -1218,7 +1348,7 @@ await sleep(1500*Math.max(.6,CFG.speed));d.className='';d.innerHTML='';if(G!==g0
 async function cardNews(from,to,cards){
 if(!FXON()||CFG.fast||!cards.length)return;const lost=isMe(from),got=isMe(to);if(!lost&&!got)return;const g0=G;const d=$('#duel');
 d.className='on'+(lost?' me':'');
-d.innerHTML=`<div class="vs"><div class="who v${lost?' me':''}">${shieldOf(from)}<b>${isMe(from)?'Sen':esc(from.name)}</b></div><div class="sw">➜</div><div class="who a">${shieldOf(to)}<b>${isMe(to)?'Sen':esc(to.name)}</b></div></div><div class="cards">${cards.map(c=>`<div class="stamp ${lost?'bad':'good'} dc" data-s="${lost?'ÇALINDI':'SENİN'}">${cardHTML(c,{w:cards.length>2?78:104})}</div>`).join('')}</div>`;
+d.innerHTML=`<div class="vs"><div class="who v${lost?' me':''}">${shieldOf(from)}<b>${esc(from.name)}</b></div><div class="sw">➜</div><div class="who a">${shieldOf(to)}<b>${esc(to.name)}</b></div></div><div class="cards">${cards.map(c=>`<div class="stamp ${lost?'bad':'good'} dc" data-s="${lost?'ÇALINDI':'SENİN'}">${cardHTML(c,{w:isL()?Math.min(cards.length>2?62:80,Math.round((LV.TB-LV.TT-6)/1.42)):(cards.length>2?78:104)})}</div>`).join('')}</div>`;
 sfx(lost?'hit':'coin');if(lost){try{navigator.vibrate&&navigator.vibrate(90)}catch(e){}}
 G.log.push({msg:lost?`${to.name} senden aldı: ${cards.map(c=>c.name).join(', ')}`:`${to.name} elinden aldın: ${cards.map(c=>c.name).join(', ')}`,tone:lost?'bad':'good'});
 await duelWait(2000*Math.max(.6,CFG.speed));d.className='';d.innerHTML='';if(G!==g0)throw new Error('abort')}
@@ -1264,7 +1394,7 @@ function whyNot(p,c){if(p.noDraw)return 'Engellisin.';if(c.blocked)return 'Bu ka
 if(!canPlay(p,c))return 'Şu an oynanamaz (uygun kart yok).';return ''}
 const modalEl=()=>$('#modal');
 function closeModal(){const m=modalEl();m.classList.remove('open');m.innerHTML='';if(typeof G!=='undefined'&&G&&G.pick)endPick()}
-function ask(title,text,buttons){return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${text?`<p class="sub">${text}</p>`:''}<div class="div"></div>${buttons.map((b,i)=>`<button class="pbtn ${b.good?'good':''}" data-i="${i}" ${b.off?'disabled':''}><span>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</span></button>`).join('')}</div>`;m.classList.add('open');m.querySelectorAll('.pbtn').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(+b.dataset.i)})})}
+function ask(title,text,buttons){if(isL()&&typeof G!=='undefined'&&G&&!G.over&&!G.pick&&!$('#game').classList.contains('hidden'))return askL(title,text,buttons);return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${text?`<p class="sub">${text}</p>`:''}<div class="div"></div>${buttons.map((b,i)=>`<button class="pbtn ${b.good?'good':''}" data-i="${i}" ${b.off?'disabled':''}><span>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</span></button>`).join('')}</div>`;m.classList.add('open');m.querySelectorAll('.pbtn').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(+b.dataset.i)})})}
 function pickPlayer(title,cands){return new Promise(res=>{G.targeting={cands,res};narrHTML(`${esc(title)}<small>Parlayan rakibe dokun</small>`);renderOpps();sfx('turn')})}
 function pickCards(title,cards,n,o={}){if(isL())return pickCardsL(title,cards,n,o);return new Promise(res=>{const sel=[];const m=modalEl();const w=cards.length>6?72:84;let first=true;
 const paint=()=>{const og=first?null:m.querySelector('.mbox.pick .grid'),oy=og?og.scrollTop:0,om=first?null:m.querySelector('.mbox.pick'),omy=om?om.scrollTop:0;first=false;m.innerHTML=`<div class="mbox pick"><h3>${title}</h3><div class="pkh">Basılı tut: kartın bilgisi</div><div class="grid${sel.length?' hs':''}">${cards.map((c,i)=>`<div class="pc ${sel.includes(c)?'on':''}" data-i="${i}">${sel.includes(c)?`<span class="ck">${n>1?sel.indexOf(c)+1:'✓'}</span>`:''}${cardHTML(c,{w})}</div>`).join('')}</div><button class="btn primary" id="okb" ${o.any||sel.length===n?'':'disabled'}>${o.any||sel.length===n?'ONAYLA':'SEÇ'} · ${sel.length}${o.any?'':'/'+n}</button></div>`;m.classList.add('open');{const ng=m.querySelector('.mbox.pick .grid'),nm2=m.querySelector('.mbox.pick');if(ng)ng.scrollTop=oy;if(nm2)nm2.scrollTop=omy}
@@ -1279,8 +1409,8 @@ el.addEventListener('pointermove',e=>{if(Math.abs(e.clientX-sx)>10||Math.abs(e.c
 
 el.onclick=()=>{if(lp)return;const k=sel.indexOf(c);if(k>=0)sel.splice(k,1);else{if(sel.length>=n){if(n===1)sel.length=0;else return}sel.push(c)}sfx('tap');paint()}});
 m.querySelector('#okb').onclick=()=>{sfx('tap');closeModal();res(sel.slice())}};paint()})}
-function reveal(title,groups){if(CFG.fast)return Promise.resolve();return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${groups.map(g=>`<div class="div"></div><div class="sub"><b style="color:var(--gold2)">${g.p.name}</b> · ${g.p.hand.length} kart</div><div class="grid">${g.p.hand.map(c=>cardHTML(c,{w:62})).join('')||'<span class="sub">(boş)</span>'}</div>`).join('')}<button class="btn primary" id="okb">Tamam</button></div>`;m.classList.add('open');m.querySelector('#okb').onclick=()=>{closeModal();res()}})}
-function pickName(title){return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3><div class="names">${NAMES.map(n=>`<button data-n="${n}">${cardHTML({id:'n',name:n},{w:50})}${n}</button>`).join('')}</div></div>`;m.classList.add('open');m.querySelectorAll('.names button').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(b.dataset.n)})})}
+function reveal(title,groups){if(CFG.fast)return Promise.resolve();if(isL())return revealL(title,groups);return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3>${groups.map(g=>`<div class="div"></div><div class="sub"><b style="color:var(--gold2)">${g.p.name}</b> · ${g.p.hand.length} kart</div><div class="grid">${g.p.hand.map(c=>cardHTML(c,{w:62})).join('')||'<span class="sub">(boş)</span>'}</div>`).join('')}<button class="btn primary" id="okb">Tamam</button></div>`;m.classList.add('open');m.querySelector('#okb').onclick=()=>{closeModal();res()}})}
+function pickName(title){if(isL())return pickNameL(title);return new Promise(res=>{const m=modalEl();m.innerHTML=`<div class="mbox"><h3>${title}</h3><div class="names">${NAMES.map(n=>`<button data-n="${n}">${cardHTML({id:'n',name:n},{w:50})}${n}</button>`).join('')}</div></div>`;m.classList.add('open');m.querySelectorAll('.names button').forEach(b=>b.onclick=()=>{sfx('tap');closeModal();res(b.dataset.n)})})}
 function showOpp(p){const m=modalEl();const played=p.played.slice(-6).reverse();const i=p.house;
 m.innerHTML=`<div class="mbox"><div style="display:flex;align-items:center;gap:12px;justify-content:center"><div style="width:46px;height:54px">${isMe(p)?crestSVG(esc((p.name||'S')[0].toLocaleUpperCase('tr')),'#a87a20'):crestSVG(esc((p.name||'?')[0].toLocaleUpperCase('tr')),OPPC[i%OPPC.length])}</div><div style="text-align:left"><h3 style="text-align:left">${p.name}</h3><div class="sub" style="text-align:left">Elinde ${p.hand.length} kart${p.prot?` · 🛡 ${p.prot} tur korunuyor`:''}${p.noDraw?' · engelli':''}</div></div></div><div class="div"></div><div class="lab" style="text-align:center">SON OYNADIKLARI</div><div class="grid">${played.map(c=>cardHTML(c,{w:58})).join('')||'<span class="sub">Henüz yok</span>'}</div><button class="btn primary" id="okb">Kapat</button></div>`;
 m.classList.add('open');m.querySelector('#okb').onclick=closeModal}
@@ -1328,7 +1458,7 @@ async function takeSay(p,v,cards){await say(isMe(p)?`${gen(v)} elinden ${cards.l
 const TARG=new Set(['Casus','Hırsız','Kahin','Prens','Köylü','Tüccar','Olta','Engel','Zehir','İhanet','Savaş','El Değiştir','Şifacı','İttifak']);
 const pending=(p,x)=>p.hand.includes(x);
 EFF['Kral']=async({p,m})=>{await draw(p,5*m);p.prot=(p.prot|0)+3*m;render();sfx('good');
-const cs=rivals(p).filter(q=>q.prot);if(cs.length){const v=await choosePlayer(p,cs,'Kral: kimin dokunulmazlığı kalksın?',{ask:1});if(v){v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')}}};
+for(let k=0;k<m;k++){const cs=rivals(p).filter(q=>q.prot);if(!cs.length)break;const v=await choosePlayer(p,cs,XT(k,m,'Kral: kimin dokunulmazlığı kalksın?'),{ask:1});if(!v)break;v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')}};
 EFF['Vezir']=async({p,m})=>{await draw(p,2*m);p.prot=(p.prot|0)+m;render()};
 EFF['Şövalye']=async({p,m})=>{p.prot=(p.prot|0)+m;render();sfx('shield');await draw(p,m)};
 EFF['Kalkan']=async({p,m})=>{p.prot=(p.prot|0)+m;render();sfx('shield');await say(T(p,`+${m} tur: toplam ${p.prot} tur korunuyorsun`,`${p.name} +${m} tur: toplam ${p.prot}`),700,'good')};
@@ -1340,6 +1470,7 @@ EFF['Hazine']=async()=>{};
 EFF['Fedai']=async({p})=>{await say('Ayna hazır',500)};
 const bestBy=(p,cs)=>cs.map(x=>[x,aiScore(p,x)]).sort((a,b)=>b[1]-a[1])[0][0];
 const top2=(p,cs)=>cs.map(x=>[x,aiScore(p,x)]).sort((a,b)=>b[1]-a[1]).slice(0,2).map(z=>z[0]);
+const XT=(k,m,t)=>m>1?`${t} (${k+1}/${m})`:t;
 const multFor=(c,f)=>(NODOUBLE.has(c.name)&&!CHAIN[c.name])?1:f;
 function chainPick(o,nm){return new Promise(res=>{G.chain={ids:new Set(o.map(c=>c.id)),mult:nm};G.chainRes=c=>res({k:'c',ids:[c.id]});G.humanTurn=true;G.sel=null;narrHTML('Kartını seç');render();sfx('good')})}
 async function pickPlay(p,nm,pref){const o=p.hand.filter(x=>eligibleInner(p,x,true));if(!o.length)return false;
@@ -1369,8 +1500,8 @@ await hit(p,v,true,'Tüccar',()=>giveGet(p,v,2*m,'Tüccar'))};
 EFF['Prens']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Prens: kimin elini göreceksin?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Prens',async()=>{const c=await chooseCards(p,v.hand,Math.min(2*m,v.hand.length),{mode:'high',title:`${v.name} elinden ${Math.min(2*m,v.hand.length)} kart çal`});await takeSay(p,v,c);
 for(const x of c){if(pending(p,x)&&eligibleInner(p,x,true))await playCard(p,x,multFor(x,2*m),true)}})};
-EFF['Büyücü']=async({p,forced})=>{const cs=rivals(p).filter(q=>q.prot);if(!cs.length)return fizzle(p,'dokunulmaz rakip yok');const v=await choosePlayer(p,cs,'Büyücü: kimin dokunulmazlığı kalksın?',{forced,ask:1});if(!v)return fizzle(p);
-v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')};
+EFF['Büyücü']=async({p,m,forced})=>{for(let k=0;k<(forced?1:m);k++){const cs=rivals(p).filter(q=>q.prot);if(!cs.length){if(!k)return fizzle(p,'dokunulmaz rakip yok');break}const v=await choosePlayer(p,cs,XT(k,m,'Büyücü: kimin dokunulmazlığı kalksın?'),{forced,ask:1});if(!v){if(!k)return fizzle(p);break}
+v.prot=0;render();sfx('hit');await say(T(v,'Dokunulmazlığın kaldırıldı',`${v.name} dokunulmazlığını kaybetti`),900,isMe(v)?'bad':'')}};
 EFF['Şifacı']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Şifacı: kim 3 kart çeksin?',{forced,ask:1,mode:'low'});if(!v)return fizzle(p,'hedef yok');await say(T(v,'Desteden 3 kart çekiyorsun',`${v.name} desteden 3 kart çekiyor`),600);await draw(v,3*m)};
 EFF['Kahin']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Kahin: kimin elini tahmin edeceksin?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Kahin',async()=>{const name=(await decide(p,()=>pickName('Hangi kart elinde?').then(n=>({k:'n',n})),()=>{const pool=[];for(const n of NAMES)for(let i=0;i<M[n].count;i++)pool.push(n);return{k:'n',n:pool[R()*pool.length|0]}})).n;
@@ -1386,28 +1517,28 @@ EFF['Darbe']=async({p})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length);i
 if(isLocal(p))await reveal('Darbe: rakiplerin elleri',rs.map(q=>({p:q})));
 let any=false;for(const q of rs){const cs=q.hand.filter(c=>c.name==='Kral'||c.name==='Kraliçe');if(cs.length){any=true;if(isMe(q))await showdown(p,q,'Darbe');else hurt(q);await takeSay(p,q,cs)}}
 if(!any)await say('Kral ya da Kraliçe çıkmadı',800)};
-EFF['Engel']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Engel: kim engellensin?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'Engel',async()=>{v.noDraw=true;render();sfx('block');await say(T(v,'Sırası gelene dek çekemez',`${v.name} sırası gelene kadar çekemez, oynayamaz`),1000,isMe(v)?'bad':'')})};
-EFF['Yardım']=async({p})=>{const cs=G.players.filter(q=>q.noDraw&&q!==p);if(!cs.length)return fizzle(p,'engelli oyuncu yok');const v=await choosePlayer(p,cs,'Yardım: kimin engeli kalksın?',{ask:1});if(!v)return fizzle(p);
-v.noDraw=false;render();sfx('good');await say(T(v,'Engelin kalktı',`${v.name} engeli kalktı`),800,'good')};
+EFF['Engel']=async({p,m,forced})=>{for(let k=0;k<(forced?1:m);k++){const cs=k?rivals(p).filter(q=>!q.noDraw):rivals(p);const v=cs.length?await choosePlayer(p,cs,XT(k,m,'Engel: kim engellensin?'),{unprot:1,forced,ask:1}):null;if(!v){if(!k)return fizzle(p,'hedef yok');break}
+await hit(p,v,true,'Engel',async()=>{v.noDraw=true;render();sfx('block');await say(T(v,'Sırası gelene dek çekemez',`${v.name} sırası gelene kadar çekemez, oynayamaz`),1000,isMe(v)?'bad':'')})}};
+EFF['Yardım']=async({p,m})=>{for(let k=0;k<m;k++){const cs=G.players.filter(q=>q.noDraw&&q!==p);if(!cs.length){if(!k)return fizzle(p,'engelli oyuncu yok');break}const v=await choosePlayer(p,cs,XT(k,m,'Yardım: kimin engeli kalksın?'),{ask:1});if(!v){if(!k)return fizzle(p);break}
+v.noDraw=false;render();sfx('good');await say(T(v,'Engelin kalktı',`${v.name} engeli kalktı`),800,'good')}};
 EFF['Zehir']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Zehir: kimin puanlı kartı atılsın?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Zehir',async()=>{for(let i=0;i<m;i++){if(!v.hand.some(c=>M[c.name].type==='char')){await say(T(v,'Elinde puanlı kart yok',`${gen(v)} elinde puanlı kart yok`),700);break}
 await discardN(v,1,c=>M[c.name].type==='char',{title:'Zehir: puanlı bir kartını at'})}})};
-EFF['İhanet']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'İhanet: kimin eli boşalsın?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'İhanet',async()=>{await say(T(v,`${v.hand.length} kartının hepsi atılıyor`,`${gen(v)} ${v.hand.length} kartının hepsi atılıyor`),isMe(v)?1800:700,isMe(v)?'bad':'');if(isMe(v))G.emptyWhy=`${esc(p.name)} sana İhanet oynadı, bütün kartların atıldı.`;await discardCards(v,v.hand.slice())})};
+EFF['İhanet']=async({p,m,forced})=>{for(let k=0;k<(forced?1:m);k++){const cs=k?rivals(p).filter(q=>q.hand.length):rivals(p);const v=cs.length?await choosePlayer(p,cs,XT(k,m,'İhanet: kimin eli boşalsın?'),{unprot:1,forced,ask:1,mode:'hand'}):null;if(!v){if(!k)return fizzle(p,'hedef yok');break}
+await hit(p,v,true,'İhanet',async()=>{await say(T(v,`${v.hand.length} kartının hepsi atılıyor`,`${gen(v)} ${v.hand.length} kartının hepsi atılıyor`),isMe(v)?1800:700,isMe(v)?'bad':'');if(isMe(v))G.emptyWhy=`${esc(p.name)} sana İhanet oynadı, bütün kartların atıldı.`;await discardCards(v,v.hand.slice())})}};
 EFF['Şans']=async({p,m})=>{const rs=rivals(p).filter(q=>!q.prot&&q.hand.length);if(!rs.length)return fizzle(p,'hedef yok');
 for(const q of rs)await hit(p,q,false,'Şans',async()=>{if(!q.hand.length)return;const n=Math.min(2*m,q.hand.length);const cs=await chooseCards(q,q.hand,n,{mode:'low',title:`Şans: ${dat(p)} ${n} kart ver`});await takeSay(p,q,cs);await draw(q,1)})};
-EFF['Olta']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'Olta: kimin eline bakacaksın?',{unprot:1,forced,ask:1});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'Olta',async()=>{if(isLocal(p))await reveal('Olta: '+v.name+' eli',[{p:v}])})};
+EFF['Olta']=async({p,m,forced})=>{const seen=new Set();for(let k=0;k<(forced?1:m);k++){const cs=rivals(p).filter(q=>!seen.has(q));const v=cs.length?await choosePlayer(p,cs,XT(k,m,'Olta: kimin eline bakacaksın?'),{unprot:1,forced,ask:1}):null;if(!v){if(!k)return fizzle(p,'hedef yok');break}seen.add(v);
+await hit(p,v,true,'Olta',async()=>{if(isLocal(p))await reveal('Olta: '+v.name+' eli',[{p:v}])})}};
 EFF['İttifak']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'İttifak: kiminle korunacaksın?',{forced,ask:1});p.prot=(p.prot|0)+2*m;if(v){v.prot=(v.prot|0)+2*m;render();sfx('shield');await say(isMe(p)?`Sen ve ${v.name} ${2*m} tur korunuyorsunuz`:isMe(v)?`${p.name} ve sen ${2*m} tur korunuyorsunuz`:`${p.name} ve ${v.name} ${2*m} tur korunuyor`,900,'good')}else render()};
-EFF['Ateşkes']=async({p})=>{G.ceasefire=p;for(const q of G.players)q.prot=Math.max(q.prot|0,1);render();sfx('shield');await say(`Ateşkes! ${T(p,'Senin sıran',gen(p)+' sırası')} gelene kadar herkes korunur, çekilen kartlar atılır`,1200,'good')};
+EFF['Ateşkes']=async({p,m})=>{G.ceasefire=p;G.cfN=Math.max(G.cfN|0,(m|0)-1);for(const q of G.players)q.prot=Math.max(q.prot|0,1);render();sfx('shield');await say(m>1?`Ateşkes ×${m}! ${T(p,'Senin sıran',gen(p)+' sırası')} ${m} kez gelene kadar herkes korunur, çekilen kartlar atılır`:`Ateşkes! ${T(p,'Senin sıran',gen(p)+' sırası')} gelene kadar herkes korunur, çekilen kartlar atılır`,1200,'good')};
 EFF['Bolluk']=async({p,m})=>{await draw(p,4*m);for(const q of rivals(p))await draw(q,2*m)};
 EFF['İsyan']=async({p,m})=>{const mn=Math.min(...G.players.map(q=>q.hand.length));const ws=G.players.filter(q=>q.hand.length===mn);const n=ws.length>1?2:3;
 for(const q of ws){await say(T(q,`En az kart sende: ${n*m} kart çekiyorsun`,`${q.name} en az kartlı: ${n*m} kart çekiyor`),300);await draw(q,n*m)}};
 async function ganimetShow(p,c,ok){
 if(!FXON()||CFG.fast)return;const g0=G;const d=$('#duel');
 d.className='on';
-d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(p)}<b>${isMe(p)?'Sen':esc(p.name)}</b></div></div><div class="gcard"><div class="gf">${backHTML(132)}</div><div class="gb">${cardHTML(c,{w:132})}</div></div><div class="gres"></div>`;
+d.innerHTML=`<div class="vs"><div class="who a">${shieldOf(p)}<b>${esc(p.name)}</b></div></div><div class="gcard" style="--gw:${dW()}px"><div class="gf">${backHTML(dW())}</div><div class="gb">${cardHTML(c,{w:dW()})}</div></div><div class="gres"></div>`;
 sfx('draw');await sleep(450*Math.max(.6,CFG.speed));if(G!==g0)throw new Error('abort');
 const gc=d.querySelector('.gcard'),gr=d.querySelector('.gres');gc.classList.add('flip');sfx('draw');await sleep(420);
 gr.className='gres '+(ok?'yes':'no');gr.textContent=ok?'PUANLI ✓':'GEÇ ✗';sfx(ok?'good':'tap');
@@ -1422,18 +1553,19 @@ EFF['Arınma']=async({p})=>{const act=q=>discardCards(q,q.hand.filter(c=>M[c.nam
 EFF['Savaş']=async({p,m,forced})=>{const v=await choosePlayer(p,rivals(p),'Savaş: kimin elini göreceksin?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
 await hit(p,v,true,'Savaş',async()=>{const [c]=await chooseCards(p,v.hand,1,{mode:'high',title:`${v.name} elinden bir kart çal`,sub:'O kartı hemen bir rakibe uygularsın.'});if(!c)return;await takeSay(p,v,[c]);
 if(pending(p,c)&&eligibleInner(p,c,true))await playCard(p,c,multFor(c,m),true)})};
-EFF['El Değiştir']=async({p,forced})=>{const v=await choosePlayer(p,rivals(p),'El Değiştir: kiminle değiştireceksin?',{unprot:1,forced,ask:1,mode:'hand'});if(!v)return fizzle(p,'hedef yok');
-await hit(p,v,true,'El Değiştir',async()=>{const a=p.hand,b=v.hand;p.hand=b;v.hand=a;[...a,...b].forEach(c=>{c.blocked=false;c.dbl=false});render();sfx('good');await say(T(p,`Elleriniz değişti: ${a.length} ↔ ${b.length}`,`${p.name} ve ${nm(v)} ellerini değiştirdi`),1200)})};
-EFF['Yer Değiştir']=async({p})=>{const c1=rivals(p).filter(q=>!q.prot);if(!c1.length)return fizzle(p,'hedef yok');
-const a=await choosePlayer(p,c1,'Yer Değiştir: birinci oyuncu',{unprot:1,ask:1});if(!a)return fizzle(p);
-const c2=rivals(p).filter(q=>q!==a&&!q.prot);let b=null;if(c2.length)b=await choosePlayer(p,c2,'Yer Değiştir: ikinci oyuncu',{unprot:1,ask:1});if(!b)b=p;
+EFF['El Değiştir']=async({p,m,forced})=>{const done=new Set();for(let k=0;k<(forced?1:m);k++){const cs=rivals(p).filter(q=>!done.has(q));const v=cs.length?await choosePlayer(p,cs,XT(k,m,'El Değiştir: kiminle değiştireceksin?'),{unprot:1,forced,ask:1,mode:'hand'}):null;if(!v){if(!k)return fizzle(p,'hedef yok');break}done.add(v);
+await hit(p,v,true,'El Değiştir',async()=>{const a=p.hand,b=v.hand;p.hand=b;v.hand=a;[...a,...b].forEach(c=>{c.blocked=false;c.dbl=false});render();sfx('good');await say(T(p,`Elleriniz değişti: ${a.length} ↔ ${b.length}`,`${p.name} ve ${nm(v)} ellerini değiştirdi`),1200)})}};
+EFF['Yer Değiştir']=async({p,m})=>{for(let k=0;k<m;k++){const c1=rivals(p).filter(q=>!q.prot);if(!c1.length){if(!k)return fizzle(p,'hedef yok');break}
+const a=await choosePlayer(p,c1,XT(k,m,'Yer Değiştir: birinci oyuncu'),{unprot:1,ask:1});if(!a){if(!k)return fizzle(p);break}
+const c2=rivals(p).filter(q=>q!==a&&!q.prot);let b=null;if(c2.length)b=await choosePlayer(p,c2,XT(k,m,'Yer Değiştir: ikinci oyuncu'),{unprot:1,ask:1});if(!b)b=p;
 const cur=G.ord[G.turnIdx];const i=G.ord.indexOf(a),j=G.ord.indexOf(b);[G.ord[i],G.ord[j]]=[G.ord[j],G.ord[i]];G.turnIdx=G.ord.indexOf(cur);render();sfx('good');
-await say(`Yer değiştirdi: ${nm(a)} ↔ ${nm(b)}`,1100,'good')};
+await say(`Yer değiştirdi: ${nm(a)} ↔ ${nm(b)}`,1100,'good')}};
 EFF['Kaos']=async({p})=>{const pool=[],ps=[];for(const q of rivals(p)){if(q.prot||!q.hand.length)continue;if(await tryReact(p,q,false,'Kaos'))continue;ps.push([q,q.hand.length]);pool.push(...q.hand);q.hand=[]}
 shuffle(pool);for(const [q,n] of ps){q.hand=pool.splice(0,n);q.hand.forEach(c=>{c.blocked=false;c.dbl=false})}render();shake();await say('Rakiplerin elleri karıştırıldı',1000)};
-EFF['İntikam']=async({p,m,forced})=>{const bad=['Hazine','İntikam','Büyü','Asker','Kombo','Prenses','Fedai'];const cands=rivals(p).filter(q=>q.last&&!bad.includes(q.last.name));const v=await choosePlayer(p,cands,'İntikam: kimin son kartı?',{forced,ask:1});if(!v)return fizzle(p);
-const n=v.last.name;let t=null;if(TARG.has(n)){t=await choosePlayer(p,rivals(p),`İntikam: ${n} kime uygulansın?`,{unprot:1,ask:1});if(!t)return fizzle(p,'hedef yok')}
-await say(T(p,`${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor`),1100);await EFF[n]({p,m,forced:t})};
+EFF['İntikam']=async({p,m,forced})=>{const bad=['Hazine','İntikam','Büyü','Asker','Kombo','Prenses','Fedai'];
+for(let k=0;k<m;k++){if(G.over)break;const cands=rivals(p).filter(q=>q.last&&!bad.includes(q.last.name));const v=cands.length?await choosePlayer(p,cands,XT(k,m,'İntikam: kimin son kartı?'),{forced:k?null:forced,ask:1}):null;if(!v){if(!k)return fizzle(p);break}
+const n=v.last.name;let t=null;if(TARG.has(n)){const ru=rivals(p),uf=ru.filter(q=>n==='Engel'?!q.noDraw:n==='İttifak'||n==='Şifacı'?true:q.hand.length>0);t=await choosePlayer(p,uf.length?uf:ru,XT(k,m,`İntikam: ${n} kime uygulansın?`),{unprot:1,ask:1});if(!t){if(!k)return fizzle(p,'hedef yok');break}}
+await say(T(p,`${m>1?`${k+1}. İntikam: `:''}${gen(v)} son kartını (${n}) kullanıyorsun`,`${p.name}, ${gen(v)} son kartını (${n}) kullanıyor${m>1?` (${k+1}/${m})`:''}`),1100);await EFF[n]({p,m:1,forced:t})}};
 function explainStep(p,c,m){
 if(CFG.fast||NET.on||CFG.autoHuman||!FXON()||LS.get('ts_step')==='0')return Promise.resolve();
 const mt=M[c.name],e=$('#explain');
@@ -1515,7 +1647,7 @@ function waitPlay(p){return new Promise(res=>{G.waitRes=res;const any=p.hand.som
 if(!any){narrHTML('Oynanabilir kartın yok<small>Sıra geçiyor</small>');setTimeout(()=>{if(G.waitRes===res){G.waitRes=null;res(null)}},CFG.fast?0:1400)}
 else narrHTML(G.tutor?'Bir karta dokun, sonra OYNA<small>Dokununca kart yalnızca açılır, OYNA’ya basana kadar oynanmaz</small>':'Bir kart seç<small>Dokun: önizle · OYNA: oyna</small>')})}
 async function turn(p,final){
-G.cur=p;G.sel=null;p.prot=Math.max(0,(p.prot|0)-1);if(G.ceasefire===p)G.ceasefire=null;STATS.turns++;
+G.cur=p;G.sel=null;p.prot=Math.max(0,(p.prot|0)-1);if(G.ceasefire===p){if((G.cfN|0)>0){G.cfN--;for(const q of G.players)q.prot=Math.max(q.prot|0,1)}else G.ceasefire=null}STATS.turns++;
 const isH=isLocal(p);let skip=false;
 G.log.push({msg:`— ${p.name} sırası${final?' (son tur)':''} —`});render();
 if(isH){sfx('turn');try{navigator.vibrate&&navigator.vibrate(30)}catch(e){}await banner(final?'SON HAMLEN':'SIRA SENDE')}
@@ -1565,9 +1697,9 @@ const tot=rows.map(r=>{const per=MATCH.hist.map(h=>{const x=h.find(y=>y.n===r.p.
 tot.sort((a,b)=>b.sum-a.sum);const tt=tot.filter(x=>x.sum===tot[0].sum);
 if(lastR){iWin2=tt.some(x=>x.p===m);title2=tt.length>1?(iWin2?'TAHT PAYLAŞILDI':'MAÇ BERABERE'):(iWin2?'MAÇI KAZANDIN':tot[0].p.name.toLocaleUpperCase('tr')+' MAÇI KAZANDI')}
 const cols=MATCH.total;
-mtab=`<div class="mt"><div class="mh"><span class="n"></span><span class="nm">OYUNCU</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${k+1}</span>`).join('')}<span class="tt">TOPLAM</span></div>${tot.map((x,i)=>`<div class="mr ${tt.includes(x)&&lastR?'w':''}"><span class="n">${i+1}</span><span class="nm">${x.p===m?'Sen':esc(x.p.name)}</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${x.per[k]==null?'–':x.per[k]}</span>`).join('')}<span class="tt">${x.sum}</span></div>`).join('')}</div>`}
+mtab=`<div class="mt"><div class="mh"><span class="n"></span><span class="nm">OYUNCU</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${k+1}</span>`).join('')}<span class="tt">TOPLAM</span></div>${tot.map((x,i)=>`<div class="mr ${tt.includes(x)&&lastR?'w':''}"><span class="n">${i+1}</span><span class="nm">${esc(x.p.name)}</span>${Array.from({length:cols},(_,k)=>`<span class="c ${k===MATCH.n-1?'cur':''}">${x.per[k]==null?'–':x.per[k]}</span>`).join('')}<span class="tt">${x.sum}</span></div>`).join('')}</div>`}
 $('#result').innerHTML=`<div class="mbox res"><div class="win ${iWin2?'':'lose'}">${title2}</div>${MT?`<div class="sub" style="text-align:center;color:var(--mut);font-size:13px;margin:2px 0 6px">OYUN ${MATCH.n} / ${MATCH.total}${lastR?' · MAÇ BİTTİ':''}${title!==title2?' · bu oyunun kazananı: '+esc(top.length>1?'berabere':top[0].p.name):''}</div>`:''}<div class="div"></div>
-${MT?mtab:rows.map((r,i)=>`<div class="rk ${top.includes(r)?'w':''}"><div class="n">${i+1}</div>${houseShield(r.p.house,r.p===m,r.p.name)}<div class="nm">${r.p===m?'Sen':esc(r.p.name)}</div><div class="br">Elinde ${r.s}${r.od?'<br>Hazine ×2 ★':''}</div><div class="t">${r.t}</div></div>`).join('')}
+${MT?mtab:rows.map((r,i)=>`<div class="rk ${top.includes(r)?'w':''}"><div class="n">${i+1}</div>${houseShield(r.p.house,r.p===m,r.p.name)}<div class="nm">${esc(r.p.name)}</div><div class="br">Elinde ${r.s}${r.od?'<br>Hazine ×2 ★':''}</div><div class="t">${r.t}</div></div>`).join('')}
 ${MT?'':`<p class="sub" style="font-size:12.5px;color:var(--mut)">Puan = oyun sonunda elinde kalan karakterler${rows.some(r=>r.od)?' · ★ Hazine ×2':''}</p>`}
 <button class="btn primary" id="again">${MT&&!lastR?'SONRAKİ OYUN':MT?'YENİ MAÇ':'TEKRAR SAVAŞ'}</button><button class="btn ghost" id="menu">Ana menü</button></div>`;
 $('#result').classList.add('open');
@@ -1621,7 +1753,7 @@ r.innerHTML=`<div class="mbox rules"><h3>Nasıl oynanır?</h3><div class="rtab">
 <li><b>Karakter</b> (altın rozetli) oynarsan yeteneği çalışır ve kart atılır. Karakterler <b>oyun sonunda elinde kalırsa</b> puan olur.</li>
 <li><b>Aksiyon</b> oynarsan etkisi çalışır ve kart atılır. Aksiyonlar puan getirmez.</li>
 <li><b>Koruma</b> 🛡 rakamı, kaç tur daha dokunulmaz kaldığını gösterir. Dokunulmazlıklar birikir: 3 turun varken 2 tur daha eklersen 5 olur. Rakiplerde de aynı kalkan görünür.</li>
-<li><b>Asker / Kombo:</b> Oynadıktan sonra elinde başka Asker veya Kombo varsa zincirleyebilirsin: Asker ×2, iki Asker ×4, Kombo ×3… Sonunda oynadığın kartın etkisi toplam çarpanla çarpılır.</li>
+<li><b>Asker / Kombo:</b> Oynadıktan sonra elinde başka Asker veya Kombo varsa zincirleyebilirsin: Asker ×2, iki Asker ×4, Kombo ×3… Sonunda oynadığın kartın etkisi toplam çarpanla çarpılır.</li><li><b>Çarpan nasıl işler?</b> Sayılı etkilerde sayı katlanır (Hırsız ×2 → 4 kart çal, Kalkan ×2 → 2 tur). Tek seferlik etkiler çarpan kadar tekrarlanır: İntikam ×2 → iki kez İntikam; Engel, İhanet, Büyücü, Olta, Yardım, El Değiştir ×2 → iki ayrı oyuncuya; Yer Değiştir ×2 → iki takas; Ateşkes ×2 → sıra sana iki kez gelene kadar sürer. Kaos, Darbe ve Arınma katlanmaz.</li>
 <li><b>Fedai (Ayna):</b> Elinde Fedai varsa, sana gelen tek hedefli saldırıyı saldırana yansıtabilirsin.</li>
 <li><b>Oyun sonu:</b> Deste bitince son kartı çeken sırasını bitirir. Ardından herkes kart çekmeden bir hamle daha yapar.</li>
 <li><b>Puan:</b> Elinde kalan karakterlerin puan toplamı. Hazine elindeyse toplam iki katına çıkar. Eşitlikte taht paylaşılır.</li>
@@ -1771,7 +1903,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-045138';
+const BUILD='20261128-072825';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -1808,8 +1940,8 @@ const W=app.clientWidth||innerWidth,H=app.clientHeight||innerHeight;const L=W>H&
 const narr=document.getElementById('narr'),hud=document.getElementById('hud'),tb=document.getElementById('table');
 if(!L){if(narr&&hud&&narr.parentNode!==hud)hud.appendChild(narr);return}
 const s=safeIns();const M=Math.round(Math.max(s.l,s.r)+(Math.max(s.l,s.r)>0?2:12));const B=Math.round(Math.max(s.b,6));const T=Math.round(s.t);
-const CW=Math.round(Math.max(54,Math.min(96,H*.2)));const RH=Math.round(CW*1.42)+20;const RT=H-B-RH;
-const MW=Math.round(Math.max(104,Math.min(150,W*.15)));const TT=Math.round(T+Math.max(76,H*.21));const TB=RT-24;
+const CW=Math.round(Math.max(56,Math.min(104,H*.218)));const RH=Math.round(CW*1.42)+20;const RT=H-B-RH;
+const MW=Math.round(Math.max(104,Math.min(150,W*.15)));const TT=Math.round(T+Math.max(86,H*.235));const TB=RT-24;
 const side=Math.round(Math.max(96,Math.min(124,W*.124)));const TL=M+side,TR=W-M-side;
 const PW=Math.round(Math.max(44,Math.min(66,(TB-TT)*.5)));
 Object.assign(LV,{W,H,M,B,T,CW,RH,RT,MW,TT,TB,TL,TR,PW});
@@ -1817,13 +1949,31 @@ const st=de.style;for(const k of ['M','T','CW','RH','RT','MW','TT','TB','TL','TR
 if(narr&&tb&&narr.parentNode!==tb)tb.appendChild(narr);
 if(typeof G!=='undefined'&&G&&G.players){try{placeSeats();placeStage();if(G.pick&&G.pick.paint)G.pick.paint()}catch(e){}}}
 function placeSeats(){if(!isL())return;const els=[...document.querySelectorAll('#opps .opp')];const k=els.length;if(!k)return;
-const {W,TL,TR,TT,TB,M}=LV;const mid=(TT+TB)/2;let nl,nr;if(k===1){nl=0;nr=0}else if(k<=7){nl=1;nr=1}else{nl=2;nr=2}const nt=k-nl-nr;
-const sx=Math.round((M+TL-14)/2)+4,rx=W-sx;const pos=[];
-const ys=n=>n===0?[]:n===1?[mid]:[mid+30,mid-28];
-ys(nl).forEach(y=>pos.push([sx,y]));
-for(let i=0;i<nt;i++){const x=nt<=3?TL+(TR-TL)*(i+1)/(nt+1):(TL+16)+i*((TR-TL-32)/(nt-1));pos.push([x,TT-14])}
-ys(nr).slice().reverse().forEach(y=>pos.push([rx,y]));
-els.forEach((el,i)=>{const p=pos[i]||[W/2,TT-14];el.style.left=Math.round(p[0])+'px';el.style.top=Math.round(p[1])+'px';el.classList.toggle('sm',nt>=4||nl>1);const side=i<nl||i>=nl+nt,nm=el.querySelector('.onm');if(nm){if(side)nm.style.setProperty('max-width',Math.max(44,Math.min(84,Math.round(TL-M-12-46)))+'px','important');else nm.style.removeProperty('max-width')}const w=el.offsetWidth,lo=M+w/2+2,hi=W-M-w/2-2;if(lo<=hi)el.style.left=Math.round(Math.min(hi,Math.max(lo,p[0])))+'px'})}
+const {W,TL,TR,TT,TB,M,T,RT}=LV;let nl,nr;if(k===1){nl=0;nr=0}else if(k<=6){nl=1;nr=1}else{nl=2;nr=2}const nt=k-nl-nr;
+const sm=nt>=5||nl>1;els.forEach(el=>el.classList.toggle('sm',sm));
+const tin=nt>=4?54:30;const slot=nt<=3?(TR-TL)/(nt+1):(TR-TL-2*tin)/Math.max(1,nt-1);
+const sideW=Math.max(56,TL-M-14);const sx=Math.round((M+TL-6)/2);const rx=W-sx;
+const y0=T+60,y1=RT-8;const ht=document.getElementById('htitle'),apr=document.getElementById('app').getBoundingClientRect();let tR=0;if(ht){const rg=document.createRange();rg.selectNodeContents(ht);const rr=rg.getBoundingClientRect();if(rr.width&&rr.bottom>0)tR=rr.right-apr.left}
+els.forEach((el,i)=>{const side=i<nl||i>=nl+nt;el.classList.toggle('side',side);const nm=el.querySelector('.onm');
+if(nm)nm.style.setProperty('max-width',(side?sideW:Math.max(56,Math.min(110,Math.round(slot-10))))+'px','important')});
+els.forEach(el=>{const nm=el.querySelector('.onm');if(!nm)return;nm.classList.remove('tight');if(nm.scrollWidth>nm.clientWidth+1)nm.classList.add('tight')});const hs=els.map(el=>el.offsetHeight||64);const pos=[];
+const sideYs=(n,idx)=>{if(!n)return[];if(n===1){const h=hs[idx];return[Math.max(y0+h/2,Math.min(y1-h/2,(TT+TB)/2))]}const h=Math.max(hs[idx],hs[idx+1]);const a=y0+h/2,b=y1-h/2;return[b-(b-a)*.08,a+(b-a)*.08]};
+const L=sideYs(nl,0);L.forEach(y=>pos.push([sx,y]));
+const xa=Math.max(TL+tin,tR+34),xb=TR-tin;for(let i=0;i<nt;i++){const x=nt<=3?TL+(TR-TL)*(i+1)/(nt+1):xa+i*((xb-xa)/(nt-1));const h=hs[nl+i];pos.push([x,Math.max(T+4+h/2+10,TT-15-h/2)])}
+if(nr){const R=sideYs(nr,nl+nt);R.slice().reverse().forEach(y=>pos.push([rx,y]))}
+els.forEach((el,i)=>{const p=pos[i]||[W/2,TT-40];const w=el.offsetWidth,lo=M+w/2+2,hi=W-M-w/2-2;let x=p[0];if(lo<=hi)x=Math.min(hi,Math.max(lo,x));el.style.left=Math.round(x)+'px';el.style.top=Math.round(p[1])+'px'});
+drawTrack(els)}
+function segHitsTable(ax,ay,bx,by){const {TL,TR,TT,TB,RT}=LV;const box=[[TL-4,TT-4,TR+4,TB+4],[TL-40,RT-4,LV.W,LV.H]];for(let t=0;t<=1;t+=.05){const x=ax+(bx-ax)*t,y=ay+(by-ay)*t;if(box.some(b=>x>b[0]&&x<b[2]&&y>b[1]&&y<b[3]))return true}return false}
+function drawTrack(els){let sv=document.getElementById('seatTrack');const g=document.getElementById('game');if(!g)return;
+if(!sv){sv=document.createElementNS('http://www.w3.org/2000/svg','svg');sv.id='seatTrack';g.appendChild(sv)}
+const a=document.getElementById('app').getBoundingClientRect();const c=el=>{const r=(el.querySelector('.avw')||el).getBoundingClientRect();return[r.left-a.left+r.width/2,r.top-a.top+r.height/2,r.width/2]};
+const meA=document.getElementById('meAv');const pts=[];if(meA)pts.push(c(meA.closest('#hud')?meA:meA));els.forEach(e=>pts.push(c(e)));if(pts.length<2){sv.innerHTML='';return}
+const cur=G&&G.cur;const ci=cur?(isMe(cur)?0:1+els.findIndex(e=>+e.dataset.p===idxOf(cur))):-1;let h='';
+const n=pts.length;for(let i=0;i<n;i++){const A=pts[i],B=pts[(i+1)%n];const dx=B[0]-A[0],dy=B[1]-A[1],L=Math.hypot(dx,dy);if(L<1)continue;const ux=dx/L,uy=dy/L;
+const ax=A[0]+ux*(A[2]+8),ay=A[1]+uy*(A[2]+8),bx=B[0]-ux*(B[2]+8),by=B[1]-uy*(B[2]+8);if(Math.hypot(bx-ax,by-ay)<14)continue;if(segHitsTable(ax,ay,bx,by))continue;const on=i===ci;
+const mx=(ax+bx)/2,my=(ay+by)/2,ang=Math.atan2(uy,ux)*180/Math.PI;
+h+=`<line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${bx.toFixed(1)}" y2="${by.toFixed(1)}" stroke="${on?'#ffe08a':'#c9a24a'}" stroke-opacity="${on?.85:.22}" stroke-width="${on?2:1.2}" stroke-dasharray="${on?'5 5':'2 5'}" ${on?'class="trk"':''}/><path d="M-4 -4 L3 0 L-4 4" transform="translate(${mx.toFixed(1)} ${my.toFixed(1)}) rotate(${ang.toFixed(1)})" fill="none" stroke="${on?'#ffe08a':'#c9a24a'}" stroke-opacity="${on?.95:.35}" stroke-width="${on?2:1.4}" stroke-linecap="round" stroke-linejoin="round"/>`}
+sv.innerHTML=h}
 function placeStage(){if(!isL())return;const d=document.querySelector('#disc .pc2'),t=document.getElementById('table'),s=document.getElementById('stage');if(!d||!t||!s)return;
 const dr=d.getBoundingClientRect(),tr=t.getBoundingClientRect();s.style.left=Math.round(dr.left-tr.left-t.clientLeft)+'px';s.style.top=Math.round(dr.top-tr.top-t.clientTop)+'px';s.style.width=Math.round(dr.width)+'px';s.style.height=Math.round(dr.height)+'px'}
 function zoneEl(){let z=document.getElementById('zone');if(!z){z=document.createElement('div');z.id='zone';document.getElementById('game').appendChild(z)}return z}
@@ -1857,6 +2007,42 @@ el.onclick=()=>{if(lp)return;P.toggle(c)}});
 z.querySelector('#okb').onclick=()=>{if(!ok())return;sfx('tap');const r=sel.slice();endPick();res(r)};
 if(mine)renderHand()};
 P.paint()})}
+function bindTips(z,list){z.querySelectorAll('.pc,[data-tip]').forEach(el=>{const c=list(el);if(!c)return;let t=null,lp=false,x0=0,y0=0;
+el.addEventListener('contextmenu',e=>e.preventDefault());
+el.addEventListener('pointerdown',e=>{x0=e.clientX;y0=e.clientY;lp=false;clearTimeout(t);t=setTimeout(()=>{lp=true;el._lp=true;showTip(c)},380)});
+el.addEventListener('pointermove',e=>{if(!lp&&(Math.abs(e.clientX-x0)>10||Math.abs(e.clientY-y0)>10))clearTimeout(t)});
+['pointerup','pointercancel','pointerleave'].forEach(ev=>el.addEventListener(ev,()=>{clearTimeout(t);hideTip();if(lp)setTimeout(()=>{lp=false;el._lp=false},250)}))})}
+function revealL(title,groups){return new Promise(res=>{G.sel=null;const z=zoneEl();const g=document.getElementById('game');const P={mine:false,ids:new Set(),view:1};G.pick=P;updateInfo();
+P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(true);z.style.left=R.l+'px';z.style.top=R.t+'px';z.style.width=R.w+'px';z.style.height=R.h+'px';
+g.classList.add('zfull');g.classList.remove('zmine');z.className='on full view';
+const cw=Math.round(Math.max(40,Math.min(70,(R.h-78)/1.42)));const sx=(z.querySelector('.zstrip')||{}).scrollLeft||0;
+z.innerHTML=`<div class="zh"><b>${title}</b><button class="btn primary" id="okb">TAMAM</button></div><div class="zstrip">${groups.map((gr,gi)=>`<div class="zgrp"><div class="zrn"><b>${esc(nm(gr.p))}</b><i>${gr.p.hand.length} kart</i></div><div class="zrc">${gr.p.hand.map((c,i)=>`<div class="pc" data-g="${gi}" data-i="${i}">${cardHTML(c,{w:cw})}</div>`).join('')||'<i class="zemp">(boş)</i>'}</div></div>`).join('')}</div>`;
+const zs=z.querySelector('.zstrip');if(zs)zs.scrollLeft=sx;
+bindTips(z,el=>el.dataset.g!=null?groups[+el.dataset.g].p.hand[+el.dataset.i]:null);
+z.querySelector('#okb').onclick=()=>{sfx('tap');endPick();res()}};P.paint()})}
+function pickNameL(title){return new Promise(res=>{G.sel=null;const z=zoneEl();const g=document.getElementById('game');let tab='char',sel=null;const P={mine:false,ids:new Set(),view:1};G.pick=P;updateInfo();
+P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(true);z.style.left=R.l+'px';z.style.top=R.t+'px';z.style.width=R.w+'px';z.style.height=R.h+'px';
+g.classList.add('zfull');g.classList.remove('zmine');z.className='on full view';
+const list=NAMES.filter(n=>tab==='char'?M[n].type==='char':M[n].type!=='char');const sy=(z.querySelector('.znames')||{}).scrollTop||0;
+z.innerHTML=`<div class="zh"><b>${title}</b><div class="ztabs"><button data-t="char" class="${tab==='char'?'on':''}">Karakter</button><button data-t="act" class="${tab!=='char'?'on':''}">Aksiyon</button></div><button class="btn primary" id="okb" ${sel?'':'disabled'}>${sel?'TAHMİN ET':'SEÇ'}</button></div><div class="znames">${list.map(n=>`<button data-n="${n}" data-tip="1" class="${sel===n?'on':''}" style="--ac:${COL[M[n].cat]}"><svg viewBox="0 0 64 64">${ICON[n]}</svg><span>${n}</span></button>`).join('')}</div>`;
+if(tab===P.lastTab){const zn=z.querySelector('.znames');if(zn)zn.scrollTop=sy}P.lastTab=tab;
+z.querySelectorAll('.ztabs button').forEach(b=>b.onclick=()=>{if(tab===b.dataset.t)return;sfx('tap');tab=b.dataset.t;P.paint()});
+bindTips(z,el=>el.dataset.n?{id:'n',name:el.dataset.n}:null);
+z.querySelectorAll('.znames button').forEach(b=>b.onclick=()=>{if(b._lp)return;sel=sel===b.dataset.n?null:b.dataset.n;sfx(sel?'sel':'tap');P.paint()});
+z.querySelector('#okb').onclick=()=>{if(!sel)return;sfx('tap');const r=sel;endPick();res(r)}};P.paint()})}
+(()=>{let pc=null;const hw=()=>document.getElementById('hand');
+const end=()=>{if(pc){pc.classList.remove('press');pc.style.removeProperty('--rx');pc.style.removeProperty('--ry');pc.style.removeProperty('--gx');pc.style.removeProperty('--gy');pc=null}};
+document.addEventListener('pointerdown',e=>{if(!isL())return;const c=e.target.closest&&e.target.closest('#hand .card');if(!c||c.classList.contains('dis')&&!G?.pick)return;end();pc=c;c.classList.add('press');tilt(e)},{passive:true});
+const tilt=e=>{if(!pc)return;const r=pc.getBoundingClientRect();const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
+pc.style.setProperty('--ry',((x-.5)*16).toFixed(1)+'deg');pc.style.setProperty('--rx',((.5-y)*14).toFixed(1)+'deg');pc.style.setProperty('--gx',(x*100).toFixed(0)+'%');pc.style.setProperty('--gy',(y*100).toFixed(0)+'%')};
+document.addEventListener('pointermove',e=>{if(pc){const r=pc.getBoundingClientRect();if(e.clientX<r.left-30||e.clientX>r.right+30)end();else tilt(e)}},{passive:true});
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,end,{passive:true}));
+document.addEventListener('scroll',end,{passive:true,capture:true})})();
+function askL(title,text,buttons){return new Promise(res=>{G.sel=null;const z=zoneEl();const g=document.getElementById('game');const P={mine:false,ids:new Set(),view:1};G.pick=P;updateInfo();
+P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(true);z.style.left=R.l+'px';z.style.top=R.t+'px';z.style.width=R.w+'px';z.style.height=R.h+'px';
+g.classList.add('zfull');g.classList.remove('zmine');z.className='on full view';
+z.innerHTML=`<div class="zask"><div class="zh" style="justify-content:center"><b>${title}</b></div>${text?`<p>${text}</p>`:''}<div class="zb">${buttons.map((b,i)=>`<button data-i="${i}" class="${b.good?'good':''}" ${b.off?'disabled':''}>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</button>`).join('')}</div></div>`;
+z.querySelectorAll('.zb button').forEach(b=>b.onclick=()=>{sfx('tap');endPick();res(+b.dataset.i)})};P.paint()})}
 addEventListener('resize',()=>setTimeout(layL,60));addEventListener('orientationchange',()=>setTimeout(layL,350));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(layL,60));
 document.addEventListener('DOMContentLoaded',layL);setTimeout(layL,0);
 (()=>{const r=document.createElement('div');r.id='rot';r.innerHTML='<div class="ph"></div><b>Telefonu yan çevir</b><p>Taht Savaşı yatay oynanır.<br>Ekran döndürme kilidi açıksa kapat<br><small>iPhone: Denetim Merkezi · Android: Hızlı Ayarlar</small></p>';document.body.appendChild(r)})();
