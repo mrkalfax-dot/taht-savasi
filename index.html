@@ -705,24 +705,24 @@ html.L #hand .card.psel{box-shadow:0 0 0 .14em #8ee59a,0 0 1em rgba(120,230,140,
 html.L #game.zfull #deck,html.L #game.zfull #disc,html.L #game.zfull #narr,html.L #game.zfull #stage,html.L #game.zfull .temb{visibility:hidden}
 html.L #game.zmine #narr{visibility:hidden}
 /* diğer katmanlar */
-html.L .mbox{max-height:calc(100dvh - 24px)!important;max-width:min(760px,92vw)!important;padding:14px 18px!important}
+html.L .mbox{max-height:calc(calc(var(--vh1,1vh)*100) - 24px)!important;max-width:min(760px,calc(var(--vw1,1vw)*92))!important;padding:14px 18px!important}
 html.L #modal .mbox .grid{gap:6px}
 html.L #modal .names{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))!important}
-html.L #result .mbox.res{max-width:min(760px,90vw)!important}
+html.L #result .mbox.res{max-width:min(760px,calc(var(--vw1,1vw)*90))!important}
 
 html.L #turnBanner{top:calc(var(--TT) + 20px)!important}
-html.L #toast{top:auto!important;bottom:calc(var(--RH) + 30px)!important;max-width:min(520px,80vw);text-align:center}
-html.L #zoom .zw:has(>.card){display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto;column-gap:26px;row-gap:10px;max-width:min(640px,88vw)!important;text-align:left!important;align-items:center}
+html.L #toast{top:auto!important;bottom:calc(var(--RH) + 30px)!important;max-width:min(520px,calc(var(--vw1,1vw)*80));text-align:center}
+html.L #zoom .zw:has(>.card){display:grid!important;grid-template-columns:auto minmax(0,1fr);grid-template-rows:1fr auto;column-gap:26px;row-gap:10px;max-width:min(640px,calc(var(--vw1,1vw)*88))!important;text-align:left!important;align-items:center}
 html.L #zoom .zw>.card{grid-row:1/3}
 html.L #zoom .zh{text-align:left}
-html.L #pickTip{left:50%!important;right:auto!important;transform:translateX(-50%);width:min(560px,80vw);top:calc(var(--T) + 8px)!important}
+html.L #pickTip{left:50%!important;right:auto!important;transform:translateX(-50%);width:min(560px,calc(var(--vw1,1vw)*80));top:calc(var(--T) + 8px)!important}
 /* ana sayfa ve lobi */
 html.L #setup:not(.hidden){display:grid!important;grid-template-columns:1fr 1fr;grid-template-rows:1fr auto auto 1fr;column-gap:30px;row-gap:8px;align-items:center;justify-items:center;padding:12px calc(var(--M,14px) + 10px) 14px!important;overflow:auto}
 html.L #setup>:first-child,html.L #setup>:last-child{margin:0!important}
 html.L #setup .hero{grid-column:1;grid-row:2;margin:0!important}
 html.L #setup .fan{grid-column:1;grid-row:3;margin:0!important;transform:scale(.86);transform-origin:top center}
 html.L #setup .panel{grid-column:2;grid-row:1/5;align-self:center;max-width:380px!important}
-html.L #setup .h1a{font-size:clamp(38px,9vh,56px)!important}html.L #setup .h1b{font-size:clamp(18px,4.4vh,26px)!important}
+html.L #setup .h1a{font-size:clamp(38px,calc(var(--vh1,1vh)*9),56px)!important}html.L #setup .h1b{font-size:clamp(18px,calc(var(--vh1,1vh)*4.4),26px)!important}
 html.L #setup:has(#pLobby:not(.hidden)) .hero,html.L #setup:has(#pLobby:not(.hidden)) .fan{display:none!important}
 html.L #setup:has(#pLobby:not(.hidden)){grid-template-columns:1fr!important;grid-template-rows:1fr!important;align-items:center!important}
 html.L #setup #pLobby:not(.hidden){display:grid!important;grid-column:1/-1!important;grid-row:1/-1!important;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-auto-rows:min-content;column-gap:26px;row-gap:7px;max-width:min(780px,100%)!important;width:100%;align-content:center;align-items:start;margin:0 auto!important}
@@ -735,7 +735,7 @@ html.L #pLobby #lbHost .seg{flex-wrap:nowrap}
 html.L #pLobby #lbHost .seg button{flex:1;min-width:0;padding-left:4px;padding-right:4px}
 html.L #pLobby #lbHost .lab{margin:4px 0 0!important}
 html.L #pLobby #lbStart{margin-top:8px!important}
-html.L #pLobby .lbp{max-height:calc(100dvh - 190px);overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+html.L #pLobby .lbp{max-height:calc(calc(var(--vh1,1vh)*100) - 190px);overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:6px}
 html.L #pLobby .lbp>*{margin:0!important;min-width:0;padding:7px 10px!important;gap:8px!important;font-size:15px!important;white-space:nowrap}
 html.L #pLobby .lbp .nm{overflow:hidden;text-overflow:ellipsis;min-width:0}
 html.L #pLobby .lbp>:first-child{grid-column:1/-1}html.L #pLobby .lbp svg{flex:none}
@@ -791,7 +791,7 @@ html.L #result .mbox.res #again{grid-column:2;grid-row:1/span 3;align-self:end;w
 html.L #result .mbox.res #menu{grid-column:2;grid-row:4/span 2;align-self:start;width:100%!important;margin:6px 0 0!important}
 html.L #result .mbox.res .win{font-size:26px!important;margin:0!important}
 html.L #result .mt .mr{padding:5px 8px!important}
-html.L #intro .mbox,html.L #intro .ibox{max-width:min(620px,90vw)!important}
+html.L #intro .mbox,html.L #intro .ibox{max-width:min(620px,calc(var(--vw1,1vw)*90))!important}
 html.L #intro .slide{display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:22px;row-gap:6px;text-align:left!important;align-items:center}
 html.L #intro .slide .il{grid-row:1/3;height:auto!important;transform:scale(.92)}
 html.L #intro .slide h4{align-self:end;font-size:20px}
@@ -974,6 +974,12 @@ html.L #hand.grid .card.sel,html.L #hand .card.psel{transform:translateY(-6px)!i
 #invBox .btn{margin-top:8px!important;width:auto!important;padding:6px 16px!important;min-height:0!important;font-size:13px!important}
 html:not(.ingame) #rot{display:none!important}
 html.L #opps .opp .think{position:absolute!important;top:-9px!important;right:-6px!important;left:auto!important;bottom:auto!important;transform:none!important;height:16px!important;width:auto!important;line-height:14px!important;padding:0 6px!important;font-size:11px!important;letter-spacing:1px!important;border-radius:8px!important;display:block!important;z-index:7}
+
+/* döndürülmüş mod */
+html.rot body{position:fixed!important;inset:auto!important;left:0!important;top:0!important;width:var(--rw)!important;height:var(--rh)!important;transform:translateX(var(--pw0)) rotate(90deg);transform-origin:0 0;overflow:hidden!important}
+html.rot #app{padding:0!important;max-width:none!important;width:100%!important}
+html.rot,html.rot *{touch-action:none!important}
+html.rot #rot{display:none!important}
 </style>
 </head>
 <body>
@@ -1056,6 +1062,32 @@ html.L #opps .opp .think{position:absolute!important;top:-9px!important;right:-6
 <div id="zoom" class="ov"></div>
 <div id="duel"></div>
 </div>
+<script>
+/* ===== Döndürülmüş yatay mod: telefon dikken oyun yan çizilir ===== */
+const ROT={on:false,pw:0,ph:0};
+(()=>{const gb=Element.prototype.getBoundingClientRect;const cv=r=>ROT.on?new DOMRect(r.top,ROT.pw-r.right,r.height,r.width):r;
+Element.prototype.getBoundingClientRect=function(){return cv(gb.call(this))};
+if(window.Range&&Range.prototype.getBoundingClientRect){const rg=Range.prototype.getBoundingClientRect;Range.prototype.getBoundingClientRect=function(){return cv(rg.call(this))}}
+const patch=P=>{if(!P)return;const dx=Object.getOwnPropertyDescriptor(P,'clientX'),dy=Object.getOwnPropertyDescriptor(P,'clientY');if(!dx||!dy||!dx.get)return;
+Object.defineProperty(P,'clientX',{configurable:true,enumerable:true,get(){return ROT.on?dy.get.call(this):dx.get.call(this)}});
+Object.defineProperty(P,'clientY',{configurable:true,enumerable:true,get(){return ROT.on?ROT.pw-dx.get.call(this):dy.get.call(this)}})};
+patch(window.MouseEvent&&MouseEvent.prototype);patch(window.Touch&&Touch.prototype);
+const efp=document.elementFromPoint.bind(document);document.elementFromPoint=(x,y)=>ROT.on?efp(ROT.pw-y,x):efp(x,y);
+// sürükleyerek kaydırma (döndürülmüşken tarayıcı kaydırması yön karıştırır)
+let sd=null;const scr=el=>{for(let e=el;e&&e!==document.body;e=e.parentElement){const cs=getComputedStyle(e);if(e.scrollWidth>e.clientWidth+1&&/(auto|scroll)/.test(cs.overflowX))return{e,ax:'x'};if(e.scrollHeight>e.clientHeight+1&&/(auto|scroll)/.test(cs.overflowY))return{e,ax:'y'}}return null};
+addEventListener('pointerdown',ev=>{if(!ROT.on)return;const f=scr(ev.target);if(!f){sd=null;return}if(sd&&sd.raf)cancelAnimationFrame(sd.raf);sd={...f,x:ev.clientX,y:ev.clientY,sl:f.e.scrollLeft,st:f.e.scrollTop,drag:false,v:0,lt:performance.now(),lp:f.ax==='x'?ev.clientX:ev.clientY,id:ev.pointerId}},{capture:true,passive:true});
+addEventListener('pointermove',ev=>{if(!ROT.on||!sd||ev.pointerId!==sd.id)return;const dx=ev.clientX-sd.x,dy=ev.clientY-sd.y;if(!sd.drag&&Math.hypot(dx,dy)>8)sd.drag=true;if(!sd.drag)return;
+const now=performance.now(),cur=sd.ax==='x'?ev.clientX:ev.clientY,dt=Math.max(1,now-sd.lt);sd.v=.8*((cur-sd.lp)/dt)+.2*sd.v;sd.lp=cur;sd.lt=now;
+if(sd.ax==='x')sd.e.scrollLeft=sd.sl-dx;else sd.e.scrollTop=sd.st-dy},{capture:true,passive:true});
+const up=ev=>{if(!ROT.on||!sd||ev.pointerId!==sd.id)return;const s0=sd;if(s0.drag){let v=-s0.v*16;const e=s0.e,ax=s0.ax;const st=()=>{if(Math.abs(v)<.4)return;if(ax==='x')e.scrollLeft+=v;else e.scrollTop+=v;v*=.93;s0.raf=requestAnimationFrame(st)};s0.raf=requestAnimationFrame(st);
+const kill=e2=>{e2.stopPropagation();e2.preventDefault()};addEventListener('click',kill,{capture:true,once:true});setTimeout(()=>removeEventListener('click',kill,{capture:true}),400)}};
+addEventListener('pointerup',up,{capture:true,passive:true});addEventListener('pointercancel',up,{capture:true,passive:true})})();
+function rotWant(){const de=document.documentElement;return de.classList.contains('ingame')&&innerHeight>innerWidth&&matchMedia('(pointer:coarse)').matches}
+function rotUpd(){const de=document.documentElement;const want=rotWant();const pw=innerWidth,ph=innerHeight;
+if(want){const ch=!ROT.on||ROT.pw!==pw||ROT.ph!==ph;ROT.on=true;ROT.pw=pw;ROT.ph=ph;if(ch){de.classList.add('rot');de.style.setProperty('--rw',ph+'px');de.style.setProperty('--rh',pw+'px');de.style.setProperty('--pw0',pw+'px');de.style.setProperty('--apph',pw+'px')}}
+else if(ROT.on){ROT.on=false;de.classList.remove('rot');de.style.setProperty('--apph',Math.round(Math.min(innerHeight,window.visualViewport?visualViewport.height:1e9))+'px')}
+return ROT.on}
+</script>
 <script>
 'use strict';
 const COL={char:'#D9A93F',draw:'#5FA36E',prot:'#5E8FC4',atk:'#C8382A',rea:'#B8487F',spe:'#8E6CCB'};
@@ -1352,7 +1384,7 @@ async function banner(text,gold){if(!FXON())return;const b=$('#turnBanner');b.cl
 function shake(){if(!FXON())return;const a=$('#app');a.classList.remove('shake');void a.offsetWidth;a.classList.add('shake');const f=$('#flash');f.classList.remove('on');void f.offsetWidth;f.classList.add('on')}
 function hurt(p){if(!FXON())return;if(isMe(p)){shake();return}const el=document.querySelector(`.opp[data-p="${idxOf(p)}"]`);if(el){el.classList.remove('hurt');void el.offsetWidth;el.classList.add('hurt')}}
 function zoom(c){const z=$('#zoom');const mt=M[c.name];
-z.innerHTML=`<div class="zw">${cardHTML(c,{w:isL()?Math.min(200,Math.round((window.innerHeight-56)/1.42)):Math.min(210,window.innerWidth*.52)})}<div class="zt"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]} · DESTEDE ${mt.count}</i><b>${c.name}</b>${mt.text}</div><div class="zh">Kapatmak için dokun</div></div>`;
+z.innerHTML=`<div class="zw">${cardHTML(c,{w:isL()?Math.min(200,Math.round(((LV.H||innerHeight)-56)/1.42)):Math.min(210,window.innerWidth*.52)})}<div class="zt"><i style="color:${COL[mt.cat]}">${mt.type==='char'?'KARAKTER · '+mt.pts+' PUAN':CATN[mt.cat]} · DESTEDE ${mt.count}</i><b>${c.name}</b>${mt.text}</div><div class="zh">Kapatmak için dokun</div></div>`;
 z.classList.add('open');z.onclick=()=>z.classList.remove('open');sfx('tap')}
 function zoomScore(){const m=me();const hi=handInfo(m);const z=$('#zoom');
 z.innerHTML=`<div class="zw"><div class="zt"><i style="color:var(--gold)">PUANIN</i><b>${hi.total} puan</b>Elindeki karakterler: ${hi.sum}${hi.od?'<br>Hazine elinde: puanın ×2':''}<br><br><span style="color:var(--mut);font-size:13px">Oyun sonunda elinde kalan karakterlerin puanı toplanır. Rakiplerin elleri gizlidir; oyun sonunda açılır.</span></div><div class="zh">Kapatmak için dokun</div></div>`;
@@ -2015,7 +2047,7 @@ window.__game={startGame,STATS,CFG,NET,get G(){return G}};
 })();
 
 /* otomatik güncelleme */
-const BUILD='20261128-140933';
+const BUILD='20261128-161018';
 (function(){let bar=null;
 async function chk(){try{const r=await fetch(location.pathname+'?_='+Date.now(),{cache:'no-store'});if(!r.ok)return;const t=await r.text();const m=t.match(/const BUILD='([^']+)'/);if(!m||m[1]===BUILD)return;
 const busy=typeof G!=='undefined'&&G&&!G.over&&!document.getElementById('game').classList.contains('hidden');
@@ -2032,7 +2064,7 @@ b.onclick=e=>{e.stopPropagation();p.classList.toggle('open')};
 p.addEventListener('click',e=>{const t=e.target.closest('.ib');if(!t)return;if(!['btnStep','btnFast','btnSnd'].includes(t.id))setTimeout(()=>p.classList.remove('open'),0)});
 document.addEventListener('click',e=>{if(p.classList.contains('open')&&!p.contains(e.target)&&e.target!==b)p.classList.remove('open')})})();
 
-(()=>{const set=()=>{try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0}catch(e){}const sa=window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;const port=innerHeight>=innerWidth;const vv=window.visualViewport;const h=Math.round(Math.min(innerHeight,vv?vv.height:1e9));if(Math.abs((set.h||0)-h)>2){set.h=h;document.documentElement.style.setProperty('--apph',h+'px')}};
+(()=>{const set=()=>{try{window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0}catch(e){}const sa=window.navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;const port=innerHeight>=innerWidth;const vv=window.visualViewport;const h=ROT.on?innerWidth:Math.round(Math.min(innerHeight,vv?vv.height:1e9));if(Math.abs((set.h||0)-h)>2){set.h=h;document.documentElement.style.setProperty('--apph',h+'px')}};
 set();addEventListener('resize',set);if(window.visualViewport)visualViewport.addEventListener('resize',set);addEventListener('scroll',()=>{if(scrollY)window.scrollTo(0,0)},{passive:true});document.addEventListener('focusout',()=>setTimeout(set,250));setInterval(()=>{if(scrollY)set()},1500);addEventListener('orientationchange',()=>setTimeout(set,300));document.addEventListener('visibilitychange',()=>{if(!document.hidden)setTimeout(set,200)})})();
 
 (()=>{let tc=0,tt=0;document.addEventListener('click',e=>{if(!e.target.closest('#htitle'))return;const n=Date.now();tc=n-tt<700?tc+1:1;tt=n;if(tc>=5){tc=0;try{localStorage.setItem('ts_tani',localStorage.getItem('ts_tani')==='1'?'0':'1')}catch(_){}location.reload()}},true)})();
@@ -2046,9 +2078,10 @@ document.body.append(d,t,r);u();setInterval(u,1000)})();
 /* ================= YATAY YERLEŞİM ================= */
 function isL(){return document.documentElement.classList.contains('L')}
 const LV={};
-function safeIns(){if(window.__safe)return window.__safe;let p=document.getElementById('safeProbe');if(!p){p=document.createElement('div');p.id='safeProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';document.body.appendChild(p)}const s=getComputedStyle(p);return{t:parseFloat(s.paddingTop)||0,r:parseFloat(s.paddingRight)||0,b:parseFloat(s.paddingBottom)||0,l:parseFloat(s.paddingLeft)||0}}
+function safeIns(){const P=safeIns0();return ROT.on?{t:P.r,r:P.b,b:P.l,l:P.t}:P}
+function safeIns0(){if(window.__safe)return window.__safe;let p=document.getElementById('safeProbe');if(!p){p=document.createElement('div');p.id='safeProbe';p.style.cssText='position:fixed;left:0;top:0;width:0;height:0;visibility:hidden;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)';document.body.appendChild(p)}const s=getComputedStyle(p);return{t:parseFloat(s.paddingTop)||0,r:parseFloat(s.paddingRight)||0,b:parseFloat(s.paddingBottom)||0,l:parseFloat(s.paddingLeft)||0}}
 function layL(){const de=document.documentElement;const app=document.getElementById('app');if(!app)return;
-const W=app.clientWidth||innerWidth,H=app.clientHeight||innerHeight;const L=W>H&&W>=560&&H<=700;de.classList.toggle('L',L);
+rotUpd();const W=app.clientWidth||innerWidth,H=app.clientHeight||innerHeight;const L=W>H&&W>=560&&H<=700;de.style.setProperty('--vw1',(W/100)+'px');de.style.setProperty('--vh1',(H/100)+'px');de.classList.toggle('L',L);
 const narr=document.getElementById('narr'),hud=document.getElementById('hud'),tb=document.getElementById('table');
 if(!L){if(narr&&hud&&narr.parentNode!==hud)hud.appendChild(narr);layRe('P'+W+'x'+H);return}
 const s=safeIns();const M=Math.round(Math.max(s.l,s.r)+(Math.max(s.l,s.r)>0?2:12));const B=Math.round(Math.max(s.b,6));const T=Math.round(s.t);
@@ -2162,7 +2195,7 @@ P.paint=()=>{if(G.pick!==P)return;const R=zoneRect(true);z.style.left=R.l+'px';z
 g.classList.add('zfull');g.classList.remove('zmine');z.className='on full view';
 z.innerHTML=`<div class="zask"><div class="zh" style="justify-content:center"><b>${title}</b></div>${text?`<p>${text}</p>`:''}<div class="zb">${buttons.map((b,i)=>`<button data-i="${i}" class="${b.good?'good':''}" ${b.off?'disabled':''}>${b.label}${b.sub?`<small>${b.sub}</small>`:''}</button>`).join('')}</div></div>`;
 z.querySelectorAll('.zb button').forEach(b=>b.onclick=()=>{sfx('tap');endPick();res(+b.dataset.i)})};P.paint()})}
-(()=>{const g=document.getElementById('game');if(!g)return;const f=()=>document.documentElement.classList.toggle('ingame',!g.classList.contains('hidden'));f();new MutationObserver(f).observe(g,{attributes:true,attributeFilter:['class']})})();
+(()=>{const g=document.getElementById('game');if(!g)return;const f=()=>{const was=document.documentElement.classList.contains('ingame');document.documentElement.classList.toggle('ingame',!g.classList.contains('hidden'));if(was!==document.documentElement.classList.contains('ingame')){try{layL()}catch(e){}}};f();new MutationObserver(f).observe(g,{attributes:true,attributeFilter:['class']})})();
 addEventListener('resize',()=>setTimeout(layL,60));addEventListener('orientationchange',()=>{setTimeout(layL,350);setTimeout(layL,900)});document.addEventListener('visibilitychange',()=>{if(!document.hidden){setTimeout(layL,120);setTimeout(layL,700)}});addEventListener('pageshow',()=>setTimeout(layL,150));if(window.visualViewport)visualViewport.addEventListener('resize',()=>setTimeout(layL,60));
 document.addEventListener('DOMContentLoaded',layL);setTimeout(layL,0);
 (()=>{const r=document.createElement('div');r.id='rot';r.innerHTML='<div class="ph"></div><b>Telefonu yan çevir</b><p>Taht Savaşı yatay oynanır.<br>Ekran döndürme kilidi açıksa kapat<br><small>iPhone: Denetim Merkezi · Android: Hızlı Ayarlar</small></p>';document.body.appendChild(r)})();
